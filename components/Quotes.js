@@ -1,0 +1,59 @@
+'use client'
+
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import quotesData from '../app/quotes.json';
+
+export default function Quotes() {
+    const [currentQuote, setCurrentQuote] = useState(null);
+
+    const getRandomQuote = () => {
+        const randomIndex = Math.floor(Math.random() * quotesData.length);
+        return quotesData[randomIndex];
+    };
+
+    useEffect(() => {
+        // Set initial quote
+        setCurrentQuote(getRandomQuote());
+
+        // Change quote every 7 minutes
+        const interval = setInterval(() => {
+            setCurrentQuote(getRandomQuote());
+        }, 3000); // 7 minutes in milliseconds
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
+
+    if (!currentQuote) {
+        return (
+            <div className="min-h-[120px] flex items-center justify-center">
+                <p className="text-white/50">Loading...</p>
+            </div>
+        );
+    }
+
+    return (
+        <AnimatePresence mode="wait">
+            <motion.div
+                key={currentQuote.quote}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col gap-4 min-h-[120px] max-w-[70dvw]"
+            >
+                <motion.blockquote 
+                    className="text-xl italic text-white/90 text-wrap whitespace-pre-wrap"
+                >
+                    "{currentQuote.quote}"
+                </motion.blockquote>
+                <motion.cite 
+                    className="text-sm text-white/70 not-italic text-wrap whitespace-pre-wrap"
+                >
+                    — {currentQuote.author}
+                </motion.cite>
+            </motion.div>
+        </AnimatePresence>
+    );
+}
