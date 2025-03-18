@@ -24,9 +24,9 @@ export default function Hero () {
     
   return (
     <section className="grid place-items-center place-content-center gap-10 h-[100dvh] w-full overflow-hidden">
-        {/* <div className="">
+        <div className="">
             <Image src="/SCCLogo.jpeg" alt="hero" width={700} height={600} />
-        </div> */}
+        </div>
         <div className="relative w-full max-w-fit max-h-[80dvh]">
             <div ref={title} className="flex flex-row gap-5 text-8xl overflow-hidden">
                 <motion.span initial={{y : 100}}>U</motion.span>
