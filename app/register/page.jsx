@@ -45,6 +45,11 @@ export default function RegisterPage() {
                 body: JSON.stringify({ email, password }),
             });
 
+            if(response.status === 400){
+                setErrorState("User already exists");
+                return;
+            }
+
             if(!response.ok){
                 setErrorState("User registration failed");
                 return;
