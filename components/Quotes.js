@@ -44,12 +44,12 @@ export default function Quotes() {
                 className="flex flex-col gap-4 min-h-[120px] max-w-[70dvw]"
             >
                 <motion.blockquote 
-                    className="text-xl italic text-white/90 text-wrap whitespace-pre-wrap"
+                    className="text-xl italic text-wrap whitespace-pre-wrap text-black"
                 >
                     "{currentQuote.quote}"
                 </motion.blockquote>
                 <motion.cite 
-                    className="text-sm text-white/70 not-italic text-wrap whitespace-pre-wrap"
+                    className="text-sm not-italic text-wrap whitespace-pre-wrap text-black"
                 >
                     — {currentQuote.author}
                 </motion.cite>

@@ -15,11 +15,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${lexend.className} antialiased`}
-      >
+      <body className={`${lexend.className} antialiased`}>
+        <div className="grid-overlay" />
         <Navbar />
-        {children}
+        <main className="relative z-10">
+          {children}
+        </main>
       </body>
     </html>
   );
