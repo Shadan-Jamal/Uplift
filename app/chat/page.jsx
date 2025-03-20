@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 export default function ChatPage() {
     const [message, setMessage] = useState('');
@@ -27,7 +27,7 @@ export default function ChatPage() {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full border-t border-white/20 bg-black/30 backdrop-blur-md"
+                className="w-full border-t border-indigo-200/20 glass"
             >
                 <form 
                     onSubmit={handleSubmit}
@@ -38,10 +38,11 @@ export default function ChatPage() {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Type your query here..."
-                            className="w-full min-h-[60px] max-h-[180px] p-4 rounded-xl bg-white/10 
-                                     border border-white/20 text-white placeholder-white/50
-                                     focus:outline-none focus:border-white/50 focus:ring-1 focus:ring-white/50
-                                     resize-none"
+                            className="w-full min-h-[60px] max-h-[180px] p-4 rounded-xl 
+                                     bg-white/90 border border-indigo-200/50 
+                                     text-black placeholder-slate-500
+                                     focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400
+                                     resize-none shadow-lg"
                             rows={1}
                             style={{ 
                                 overflow: 'hidden', 
@@ -58,9 +59,11 @@ export default function ChatPage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        className="px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white
-                                 hover:bg-white/20 transition-colors duration-200
-                                 focus:outline-none focus:border-white/50 focus:ring-1 focus:ring-white/50"
+                        className="px-6 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 
+                                 text-white font-medium shadow-lg
+                                 hover:from-indigo-700 hover:to-purple-700 
+                                 transition-all duration-300
+                                 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
                     >
                         Send
                     </motion.button>

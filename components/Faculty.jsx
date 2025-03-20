@@ -15,8 +15,8 @@ export default function Faculty() {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Our Faculty</h2>
-        <p className="text-white/70 text-lg max-w-2xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Our Faculty</h2>
+        <p className="text-black/70 text-lg max-w-2xl mx-auto">
           Meet our dedicated team of professionals committed to supporting student mental health and well-being.
         </p>
       </motion.div>
@@ -31,7 +31,7 @@ export default function Faculty() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <div className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden hover:bg-white/20 transition-all duration-300">
+            <div className="bg-slate-400/50 backdrop-blur-md rounded-xl overflow-hidden hover:bg-white/20 transition-all duration-300">
               <div className="relative h-64 w-full">
                 <Image
                   src={member.image}
@@ -44,7 +44,7 @@ export default function Faculty() {
               
               <div className="p-6">
                 <motion.h3 
-                  className="text-xl font-semibold text-white mb-2"
+                  className="text-xl font-semibold text-black mb-2"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.2 + index * 0.1 }}
@@ -53,7 +53,7 @@ export default function Faculty() {
                 </motion.h3>
                 
                 <motion.p 
-                  className="text-white/70 mb-3"
+                  className="text-black/70 mb-3"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.3 + index * 0.1 }}
@@ -64,7 +64,7 @@ export default function Faculty() {
                 <motion.a
                   title={`Email ${member.mail}`}
                   href={`mailto:${member.mail}`}
-                  className="text-white/50 hover:text-white transition-colors duration-200 text-sm hover:"
+                  className="text-black/50 hover:text-black transition-colors duration-200 text-sm hover:"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
