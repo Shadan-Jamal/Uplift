@@ -19,7 +19,7 @@ export default function Quotes() {
         // Change quote every 7 minutes
         const interval = setInterval(() => {
             setCurrentQuote(getRandomQuote());
-        }, 3000); // 7 minutes in milliseconds
+        }, 24 * 60 * 60); 
 
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
@@ -41,10 +41,10 @@ export default function Quotes() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="flex flex-col gap-4 min-h-[120px] max-w-[70dvw]"
+                className="flex flex-col gap-4 min-h-[60px] max-w-full lg:max-h-[120px] lg:max-w-[70dvw]"
             >
                 <motion.blockquote 
-                    className="text-xl italic text-wrap whitespace-pre-wrap text-black"
+                    className="text-lg lg:text-xl italic text-wrap whitespace-pre-wrap text-black"
                 >
                     "{currentQuote.quote}"
                 </motion.blockquote>

@@ -8,27 +8,27 @@ const page = () => {
     const [loginChoice,setLoginChoice] = useState("");
 
     return (
-        <section className="flex flex-row justify-between items-center h-[100dvh] w-[100dvw]">
+        <section className="flex flex-row justify-between items-center h-[100dvh] w-[100dvw] bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
             <section className="w-1/2 h-full relative flex items-center justify-center overflow-hidden">
                 <Image 
                     src="/login-pics/login-bg.jpg" 
                     alt="login-bg" 
                     fill
-                    className="object-cover"
+                    className="object-cover opacity-80"
                     priority
                 />
             </section>
 
             <section className="w-1/2 h-full flex items-center justify-center">
-                <div className="w-full max-w-md bg-slate-200 rounded-xl shadow-2xl overflow-hidden">
-                    <div className="w-full flex border-b-2 border-black">
+                <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-2 border-[#a8738b]">
+                    <div className="w-full flex border-b-2 border-[#a8738b]">
                         <motion.button 
                             whileHover={{ scale: 1.1 }}
                             onClick={() => setLoginChoice("student")}
                             className={`flex-1 py-4 text-lg font-medium transition-colors duration-200 ${
                                 loginChoice === "student" 
-                                    ? "bg-black text-white" 
-                                    : "text-black hover:bg-black/5"
+                                    ? "bg-[#a8738b] text-white" 
+                                    : "text-[#a8738b] hover:bg-[#a8738b]/5"
                             }`}
                         >
                             Student
@@ -38,8 +38,8 @@ const page = () => {
                             onClick={() => setLoginChoice("")}
                             className={`flex-1 py-4 text-lg font-medium transition-colors duration-200 ${
                                 loginChoice === "" 
-                                    ? "bg-black text-white" 
-                                    : "text-black hover:bg-black/5"
+                                    ? "bg-[#a8738b] text-white" 
+                                    : "text-[#a8738b] hover:bg-[#a8738b]/5"
                             }`}
                         >
                             Council
@@ -61,7 +61,7 @@ const StudentLogin = () => {
     
     return (
         <div className="flex flex-col items-center gap-6">
-            <h1 className="text-3xl font-bold text-black">Login</h1>
+            <h1 className="text-3xl font-bold text-[#a8738b]">Login</h1>
             
             <div className="w-full space-y-6">
                 <div className="space-y-2">
@@ -70,8 +70,8 @@ const StudentLogin = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         type="email" 
                         placeholder="Email" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-black placeholder:text-gray-500 focus:outline-none transition-all duration-300 ${
-                            email ? "border-green-500" : "border-black"
+                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
+                            email ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
@@ -82,8 +82,8 @@ const StudentLogin = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         type="password" 
                         placeholder="Password" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-black placeholder:text-gray-500 focus:outline-none transition-all duration-300 ${
-                            password ? "border-green-500" : "border-black"
+                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
+                            password ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
@@ -91,15 +91,15 @@ const StudentLogin = () => {
                 <motion.button 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-black text-white rounded-lg hover:bg-black/90 transition-colors duration-200"
+                    className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                     Login
                 </motion.button>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#a8738b]">
                 Don't have an account?{" "}
-                <Link href="/register" className="text-blue-600 hover:underline">
+                <Link href="/register" className="text-[#9d92f] hover:text-[#86a4c2] transition-colors duration-200">
                     Register
                 </Link>
             </p>
@@ -113,7 +113,7 @@ const CouncilLogin = () => {
     
     return (
         <div className="flex flex-col items-center gap-6">
-            <h1 className="text-3xl font-bold text-black">Login</h1>
+            <h1 className="text-3xl font-bold text-[#a8738b]">Login</h1>
             
             <div className="w-full space-y-6">
                 <div className="space-y-2">
@@ -122,8 +122,8 @@ const CouncilLogin = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         type="email" 
                         placeholder="Email" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-black placeholder:text-gray-500 focus:outline-none transition-all duration-300 ${
-                            email ? "border-green-500" : "border-black"
+                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
+                            email ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
@@ -134,8 +134,8 @@ const CouncilLogin = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         type="password" 
                         placeholder="Password" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-black placeholder:text-gray-500 focus:outline-none transition-all duration-300 ${
-                            password ? "border-green-500" : "border-black"
+                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
+                            password ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
@@ -143,15 +143,15 @@ const CouncilLogin = () => {
                 <motion.button 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-black text-white rounded-lg hover:bg-black/90 transition-colors duration-200"
+                    className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                     Login
                 </motion.button>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#a8738b]">
                 Don't have an account?{" "}
-                <Link href="/register" className="text-blue-600 hover:underline">
+                <Link href="/register" className="text-[#9d92f] hover:text-[#86a4c2] transition-colors duration-200">
                     Register
                 </Link>
             </p>

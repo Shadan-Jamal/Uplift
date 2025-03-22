@@ -26,6 +26,15 @@ export default function Page() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="first-letter:text-3xl first-letter:font-bold text-indigo-900"
         >
+          Mental health, like physical health, is best addressed early. 2/3rd of people with mental health disorders don’t seek help (WHO). Be different. Recognizing mental health challenges and seeking help is a sign of strength, not embarrassment. Your mind and body are connected—prioritize both.
+        </motion.p>
+
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="first-letter:text-3xl first-letter:font-bold text-indigo-900"
+        >
           At St. Claret College (SCC) Bangalore, we believe that education is not just about academic success but also about overall well-being. Since our establishment in 2005 by the Claretian Missionaries, we have been committed to creating an environment where students feel supported, valued, and empowered—not just intellectually, but emotionally as well.
         </motion.p>
 
