@@ -2,6 +2,7 @@ import { Onest } from "next/font/google";
 
 import "./globals.css";
 import Navbar from "../components/Navbar";
+import { AuthProvider } from "./Providers";
 
 
 const onest = Onest({
@@ -18,11 +19,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${onest.className} antialiased`}>
-        <div className="grid-overlay " />
-        <Navbar />
-        <main className="relative z-10 bg-gradient-to-b from-[#eba1c2] via-[#f8fcff] to-[#b18deb] ">
-          {children}
-        </main>
+        <AuthProvider>
+          <div className="grid-overlay " />
+          <Navbar />
+          <main className="relative z-10 bg-gradient-to-b from-[#eba1c2] via-[#f8fcff] to-[#b18deb] ">
+            {children}
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );
