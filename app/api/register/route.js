@@ -16,7 +16,7 @@ export async function POST(req) {
                 { status: 400 }
             );
         }
-        await User.create({ email, password: hashedPW });
+        await User.create({email, password: hashedPW });
 
         return NextResponse.json(
             { message: "User registered successfully" },

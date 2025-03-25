@@ -81,27 +81,30 @@ export default function RegisterPage() {
     }
 
     return (
-        <section className="flex flex-row justify-between items-center h-[100dvh] w-[100dvw] bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
-            <section className="w-1/2 h-full relative flex items-center justify-center overflow-hidden">
-                <Image 
-                    src="/login-pics/login-bg.jpg" 
-                    alt="login-bg" 
-                    fill
-                    className="object-cover opacity-80"
-                    priority
-                />
+        <section className="md:flex md:flex-row md:justify-between md:items-center h-[100dvh] w-[100dvw]  bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
+
+            <section className="w-full md:w-1/2 h-full absolute md:relative">
+                <div className="flex items-center justify-center overflow-hidden">
+                    <Image 
+                        src="/login-pics/login-bg.jpg" 
+                        alt="login-bg" 
+                        fill
+                        className="object-cover blur-sm md:object-cover opacity-80"
+                        priority
+                        />
+                </div>
             </section>
 
-            <section className="w-1/2 h-full flex items-center justify-center">
-                <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-2 border-[#a8738b]">
-                    <div className="p-8">
+            <section className="w-[85dvw] md:w-1/2 h-full flex items-center justify-center container mx-auto">
+                <div className="max-w-md bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-2 border-[#a8738b]">
+                    <div className="px-7 py-6 md:p-8">
                         <motion.div 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             className="flex flex-col items-center gap-6"
                         >
-                            <h1 className="text-3xl font-bold text-[#a8738b]">Register</h1>
+                            <h1 className="text-2xl lg:text-3xl font-bold text-[#a8738b]">Register</h1>
                             
                             <div className="w-full space-y-6">
                                 <div className="space-y-2">

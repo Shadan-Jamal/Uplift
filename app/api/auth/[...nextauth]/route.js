@@ -18,7 +18,6 @@ const authOptions = {
                         return null
                     }
                     const pw = await bcrypt.compare(password,user.password)
-
                     if(!pw){
                         return null
                     }
@@ -26,13 +25,13 @@ const authOptions = {
                     return user;
                 }
                 catch(err){
-
+                    console.log(err)
                 }
             }
         })
     ],
     session : {
-        strategey : "jwt"
+        strategy : "jwt"
     },
     secret : process.env.NEXTAUTH_SECRET,
     pages : {

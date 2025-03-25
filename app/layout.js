@@ -1,5 +1,4 @@
 import { Onest } from "next/font/google";
-
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import { AuthProvider } from "./Providers";
@@ -11,7 +10,7 @@ const onest = Onest({
 })
 
 export const metadata = {
-  title: "Uplift",
+  title: "CARE",
   description: "Keep your spirits lifted!",
 };
 
