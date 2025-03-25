@@ -60,7 +60,6 @@ const StudentLogin = () => {
     const [error, setError] = useState("")
     
     const handleLogin = async () => {
-
         try{
             const res = await signIn("credentials",{
                 email : userData.email,
@@ -81,7 +80,7 @@ const StudentLogin = () => {
                 <div className="space-y-2">
                     <input 
                         value={userData.email}
-                        onChange={(e) => setUserData(...userData , {email : e.target.value})}
+                        onChange={(e) => setUserData({...userData, email: e.target.value})}
                         type="email" 
                         placeholder="Email" 
                         className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
@@ -93,7 +92,7 @@ const StudentLogin = () => {
                 <div className="space-y-2">
                     <input 
                         value={userData.password}
-                        onChange={(e) => setUserData(...userData , {password : e.target.value})}
+                        onChange={(e) => setUserData({...userData , password : e.target.value})}
                         type="password" 
                         placeholder="Password" 
                         className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${

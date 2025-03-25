@@ -15,9 +15,11 @@ export default function RegisterPage() {
         showConfirmPassword: false});
     const error = useRef();
     const [errorState, setErrorState] = useState("");
+    const btnRef = useRef(null)
     const router = useRouter();
 
     const handleRegister = async () => {
+        btnRef.current.disabled = true;
         try{
             if(email === "" || password === "" || confirmPassword === ""){
                 error.current = true;
@@ -31,7 +33,13 @@ export default function RegisterPage() {
                 return;
             }
 
-            if(!email.includes("claretcollege.edu.in") || !email.includes('@')){
+            if(!email.includes('@')){
+                error.current = true;
+                setErrorState("Invalid Email");
+                return;
+            }
+
+            if(!email.includes("claretcollege.edu.in")){
                 error.current = true;
                 setErrorState("Please use your college email");
                 return;
@@ -127,9 +135,9 @@ export default function RegisterPage() {
                                         }
                                     </button>
                                 </div>
-
-                                <div className={`space-y-2 flex justify-center items-center border-b-2 
-                                ${confirmPassword === "" && "border-[#a8738b]"}
+                        
+                                <div className={`space-y-2 flex justify-center items-center border-b-2
+                                ${confirmPassword === "" && "border-b-[#a8738b]"}
                                 ${confirmPassword === password ? "border-green-500" : "border-red-500"} pr-3`}>
                                     <input 
                                         value={confirmPassword}
@@ -152,6 +160,7 @@ export default function RegisterPage() {
                                 {errorState === "User registered successfully" ? <p className="text-green-500">{errorState}</p> : <p className="text-red-500">{errorState}</p>}
                                 
                                 <motion.button
+                                    ref={btnRef}
                                     onClick={handleRegister}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}

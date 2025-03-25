@@ -15,7 +15,7 @@ export default function Faculty() {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Our Faculty</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">The Council</h2>
         <p className="text-black/70 text-lg max-w-2xl mx-auto">
           Meet our dedicated team of professionals committed to supporting student mental health and well-being.
         </p>
@@ -31,7 +31,7 @@ export default function Faculty() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <div className="bg-slate-400/50 backdrop-blur-md rounded-xl overflow-hidden hover:bg-white/20 transition-all duration-300">
+            <div className="bg-[#eba1c2]/30 backdrop-blur-md rounded-xl overflow-hidden hover:bg-[#ffbef6] transition-all duration-300">
               <div className="relative h-64 w-full">
                 <Image
                   src={member.image}

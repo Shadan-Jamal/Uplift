@@ -97,13 +97,13 @@ export default function Hero() {
                     <div 
                     ref={claretTagline}
                     className="w-[100dvw] h-auto flex flex-wrap justify-center items-center gap-2 lg:gap-5 px-3 py-5 overflow-hidden">
-                        {['CLARET','CENTRE','FOR','MENTAL','WELL-BEING'].map((term,idx) => {
+                        {['Claret','Centre','For','Mental','Well-Being'].map((term,idx) => {
                             return <motion.div 
                             key={idx}
                             initial={{y : 100, opacity : 0}}
                             className="w-fit h-fit"
                             >
-                                <p className="text-2xl md:text-3xl lg:text-6xl text-[#86a4c2] font-extrabold">{term}</p>
+                                <p className="text-2xl md:text-3xl lg:text-6xl text-[#86a4c2] font-light">{term}</p>
                             </motion.div>
                         })}
                     </div>
@@ -116,7 +116,7 @@ export default function Hero() {
                         className="px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full border-2 border-indigo-200 shadow-lg"
                     >
                         <p className="text-sm font-semibold text-indigo-900 tracking-wide">
-                            Department of Psychology • Claret College
+                            Department of Psychology • St. Claret College, Autonomous
                         </p>
                     </motion.div>
                     
