@@ -1,45 +1,122 @@
+// https://www.embla-carousel.com/examples/predefined/#parallax
+
 "use client";
-import { motion } from "framer-motion";
-import { events_data } from "./data/events-data";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useEffect } from "react";
+import { events_data } from "./data/events-data";
 
 export default function Events() {
-  // const controls = useAnimation();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
-  // useEffect(() => {
-  //   const loopAnimation = async () => {
-  //     while (true) {
-  //       await controls.start({ x: `-${events_data.length * 40}%`, transition: { duration: 10, ease: "linear" } });
-  //       controls.set({ x: "0%" });
-  //     }
-  //   };
-  //   loopAnimation();
-  // }, [controls]);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % events_data.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset, velocity) => {
+    return Math.abs(offset) * velocity;
+  };
+
+  const paginate = (newDirection) => {
+    setDirection(newDirection);
+    setCurrentIndex((prevIndex) => (prevIndex + newDirection + events_data.length) % events_data.length);
+  };
 
   return (
-    <section id="events" className="min-h-[60dvh] min-w-[100dvw] container mx-auto px-10 py-20">
-      <div className="w-full h-max mb-5">
-        <div className="w-fit">
-          <h1 className="text-6xl text-black font-bold">Care Events</h1>
-        </div>
+    <div className="h-screen w-full relative overflow-hidden bg-gray-100">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <AnimatePresence initial={false} custom={direction}>
+
+          <motion.div
+            key={currentIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 }
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="absolute w-full h-full flex items-center justify-center"
+          >
+            <div className="relative w-full max-w-4xl mx-auto px-4">
+              <div className="relative aspect-[16/9] w-full">
+                <Image
+                quality={100}
+                  src={events_data[currentIndex].src}
+                  alt={events_data[currentIndex].description}
+                  fill
+                  className="object-cover rounded-lg shadow-2xl"
+                  priority
+                />
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mt-4 text-center"
+              >
+                <p className="text-xl font-semibold text-gray-800">
+                  {events_data[currentIndex].description}
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-      <div id="image-section" className="w-full px-5 py-7">
-        <div className="grid grid-cols-4 grid-flow-row-dense place-content-center place-items-center gap-2">
-          {events_data.map((event, index) => (
-            <motion.div 
+      
+      {/* Navigation Dots */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
+        {events_data.map((_, index) => (
+          <button
             key={index}
-            className="h-fit w-full">
-              <Image 
-              quality={100} 
-              src={event.src} 
-              width={400} height={400} 
-              className="rounded-lg w-full 
-              hover:col-span-2" alt={`Event ${index}`} />
-            </motion.div>
-          ))}
-        </div>
+            onClick={() => {
+              setDirection(index > currentIndex ? 1 : -1);
+              setCurrentIndex(index);
+            }}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentIndex ? "bg-blue-600 scale-125" : "bg-gray-400"
+            }`}
+          />
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

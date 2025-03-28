@@ -38,13 +38,14 @@ export default function Navbar() {
 
                 <Link href="/#events" scroll className="text-[#a8738b] hover:text-[#9d92f] font-bold hover:scale-105 transition-all duration-100">Events</Link>
               </div>
+
               <div 
               role="button"
               className="transition-all ease-out">
 
                 <Link href="/login" className="rounded-lg px-4 py-2 text-white transition-all duration-100 bg-[#a8738b] hover:opacity-90 shadow-lg hover:shadow-xl"> Login </Link>
                 
-                <div 
+                {/* <div 
                 role="button"
                 onClick={() => openLoginModal(!loginModal)}
                 className="rounded-full bg-red-400/50 p-1 hover:bg-rose-400 hover:cursor-pointer">
@@ -63,14 +64,14 @@ export default function Navbar() {
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
-                </div>
+                </div> */}
 
-                {loginModal && <div className="absolute z-[99999] right-0 -bottom-28 min-w-[13em] max-h-[20em] bg-white">
+                {/* {loginModal && <div className="absolute z-[99999] right-0 -bottom-28 min-w-[13em] max-h-[20em] bg-white">
                   <div className="w-full h-[80%] p-5">
                     <p className="text-black text-lg">Name : {userName}</p>
                     <button onClick={() => signOut()} className="text-white bg-red-500 px-3 py-2 text-center w-full">Log Out</button>
                   </div>
-                </div>}
+                </div>} */}
               </div>
               </>
               {/* } */}

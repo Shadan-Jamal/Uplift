@@ -3,6 +3,7 @@ import Hero from "../components/Hero";
 import Faculty from "../components/Faculty";
 import Events from "../components/Events";
 import Affirmation from "../components/Affirmation";
+import AboutCollege from "../components/AboutCollege";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Events />
       <Faculty />
+      <AboutCollege />
     </section>
   );
 }

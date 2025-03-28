@@ -26,7 +26,7 @@ export default function Page() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="first-letter:text-3xl first-letter:font-bold text-indigo-900"
         >
-          Mental health, like physical health, is best addressed early. 2/3rd of people with mental health disorders don’t seek help (WHO). Be different. Recognizing mental health challenges and seeking help is a sign of strength, not embarrassment. Your mind and body are connected—prioritize both.
+          The Claret Centre for Mental Well-being (CARE) at St. Claret College (Autonomous), under the aegis of the Department of Psychology, stands as a dedicated hub committed to fostering mental health and overall well-being. It provides a safe and confidential space where students, faculty, and the broader community can access essential mental health services. By addressing critical concerns and bridging gaps in mental health support, CARE ensures that individuals receive the guidance they need in a supportive and understanding environment.
         </motion.p>
 
         <motion.p 
@@ -35,19 +35,19 @@ export default function Page() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="first-letter:text-3xl first-letter:font-bold text-indigo-900"
         >
-          At St. Claret College (SCC) Bangalore, we believe that education is not just about academic success but also about overall well-being. Since our establishment in 2005 by the Claretian Missionaries, we have been committed to creating an environment where students feel supported, valued, and empowered—not just intellectually, but emotionally as well.
+          With a broad spectrum of objectives, CARE actively promotes mental health awareness and emotional resilience. It offers personalized counseling services tailored to the unique needs of individuals, providing them with professional guidance to navigate personal and academic challenges. Through life skills development programs, CARE fosters emotional intelligence, resilience, and decision-making abilities, empowering individuals to handle stress and adversity effectively. Its community outreach initiatives aim to break down societal stigma, creating open spaces for dialogue and encouraging people to seek help without hesitation.
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="text-indigo-800"
+          className="first-letter:text-3xl first-letter:font-bold text-indigo-800"
         >
-          We understand that mental health plays a crucial role in shaping a student's journey. College life can be exciting, but it also comes with challenges, pressures, and transitions. That's why we have built a strong support system to help our students navigate these experiences. Our campus is home to professional counseling services, wellness programs, mindfulness sessions, and stress management workshops, all designed to promote emotional resilience and a balanced lifestyle.
+          To further its mission, CARE regularly organizes workshops, seminars, and educational sessions designed to enhance awareness of mental health issues. These interactive events not only provide knowledge but also cultivate a culture of understanding and empathy. A key highlight of CARE’s efforts is its annual celebration of World Mental Health Day, a vibrant occasion featuring competitions, activities, and creative engagements that promote awareness while fostering a sense of belonging and community. Through these initiatives, CARE becomes more than just a support system—it transforms into a beacon of hope and encouragement, ensuring that mental health is prioritized, respected, and celebrated. As conversations around well-being continue to evolve, CARE remains steadfast in its commitment to creating an inclusive and compassionate environment where no one feels alone on their journey to mental wellness.
         </motion.p>
 
-        <motion.p
+        {/* <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
@@ -90,7 +90,8 @@ export default function Page() {
           className="font-medium text-indigo-900"
         >
           At SCC, we firmly believe that a healthy mind is the key to success. We are dedicated to fostering a culture where mental health is prioritized, and students feel empowered to grow, thrive, and achieve their dreams. Welcome to a college experience that cares about you.
-        </motion.p>
+        </motion.p> */}
+
       </motion.div>
 
       {/* Decorative elements */}
