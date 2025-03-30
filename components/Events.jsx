@@ -48,6 +48,9 @@ export default function Events() {
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-gray-100">
+      <header className="text-3xl md:text-4xl lg:text-6xl w-full text-center py-4 text-black">
+        <span className="text-purple-700">CARE</span> Events
+      </header>
       <div className="absolute inset-0 flex items-center justify-center">
         <AnimatePresence initial={false} custom={direction}>
 
@@ -74,16 +77,16 @@ export default function Events() {
                 paginate(-1);
               }
             }}
-            className="absolute w-full h-full flex items-center justify-center"
+            className="absolute max-w-[75%] h-full flex items-center justify-center"
           >
             <div className="relative w-full max-w-4xl mx-auto px-4">
               <div className="relative aspect-[16/9] w-full">
                 <Image
-                quality={100}
+                  quality={100}
                   src={events_data[currentIndex].src}
                   alt={events_data[currentIndex].description}
                   fill
-                  className="object-cover rounded-lg shadow-2xl"
+                  className="object-contain rounded-lg shadow-2xl"
                   priority
                 />
               </div>

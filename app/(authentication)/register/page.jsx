@@ -19,7 +19,6 @@ export default function RegisterPage() {
     const router = useRouter();
 
     const handleRegister = async () => {
-        btnRef.current.disabled = true;
         try{
             if(email === "" || password === "" || confirmPassword === ""){
                 error.current = true;
@@ -62,6 +61,11 @@ export default function RegisterPage() {
                 setErrorState("User registration failed");
                 return;
             }
+
+            btnRef.current.disabled = true;
+            btnRef.current.style.backgroundColor = "gray";
+            btnRef.current.style.cursor = "not-allowed";
+
             error.current = false;
             const data = await response.json();
             console.log(data.message);
@@ -77,7 +81,11 @@ export default function RegisterPage() {
             error.current = true;
             setErrorState("User registration failed");
             console.log(error);
+            btnRef.current.disabled = false;
+            btnRef.current.style.backgroundColor = "#a8738b";
+            btnRef.current.style.cursor = "pointer";
         }
+        console.log(btnRef.current);
     }
 
     return (
@@ -95,8 +103,8 @@ export default function RegisterPage() {
                 </div>
             </section>
 
-            <section className="w-[85dvw] md:w-1/2 h-full flex items-center justify-center container mx-auto">
-                <div className="max-w-md bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-2 border-[#a8738b]">
+            <section className="w-[80dvw] md:w-1/2 h-full flex items-center justify-center container mx-auto">
+                <div className="w-full max-w-md bg-white/80 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border-2 border-[#a8738b]">
                     <div className="px-7 py-6 md:p-8">
                         <motion.div 
                             initial={{ opacity: 0, y: 20 }}
@@ -167,7 +175,7 @@ export default function RegisterPage() {
                                     onClick={handleRegister}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                    className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer"
                                 >
                                     Register
                                 </motion.button>

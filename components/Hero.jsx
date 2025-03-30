@@ -25,7 +25,7 @@ export default function Hero() {
 
             await claretTaglineAnimate("div",
                 {y : 0,opacity : 1},
-                {duration : 0.4, delay : stagger(0.1), ease : "easeOut"}
+                {duration : 0.4, delay : stagger(0.1), ease : "backOut"}
             )
             
             await contentAnimate(content.current,
@@ -69,27 +69,27 @@ export default function Hero() {
                             <motion.span
                                 whileHover={{y : -20}}
                                 animate={{ y : 0}}
-                                className="text-[#86a4c2] hover:cursor-default"
+                                className="text-purple-700 hover:cursor-default"
                             >C</motion.span>
                             <motion.span 
                                 whileHover={{y : -20}}
                                 animate={{ y : 0}}
-                                className="text-[#86a4c2] hover:cursor-default"
+                                className="text-purple-700 hover:cursor-default"
                             >A</motion.span>
                             <motion.span 
                                 whileHover={{y : -20}}
                                 animate={{ y : 0}}
-                                className="text-[#86a4c2] hover:cursor-default"
+                                className="text-purple-700 hover:cursor-default"
                             >R</motion.span>
                             <motion.span 
                                 whileHover={{y : -20}}
                                 animate={{ y : 0}}
-                                className="text-[#86a4c2] hover:cursor-default"
+                                className="text-purple-700 hover:cursor-default"
                             >E</motion.span>
                         </div>
                         <motion.div ref={titleLine}
                             initial={{ width: 0 }}
-                            className="h-1 absolute bottom-0 left-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full"
+                            className="h-1 absolute bottom-0 left-0 bg-gradient-to-r from-indigo-600 to-purple-500 rounded-full"
                         />
                     </div>
 
@@ -103,7 +103,7 @@ export default function Hero() {
                             initial={{y : 100, opacity : 0}}
                             className="w-fit h-fit"
                             >
-                                <p className="text-2xl md:text-3xl lg:text-6xl text-[#86a4c2] font-light">{term}</p>
+                                <p className="text-2xl md:text-3xl lg:text-6xl text-purple-400 font-light">{term}</p>
                             </motion.div>
                         })}
                     </div>

@@ -4,8 +4,8 @@ import Image from "next/image";
 export default function AboutCollege() {
   return (
     <div className="flex flex-col items-center space-x-4 p-4 h-[80dvh]">
-        <div className="flex justify-start w-full">
-            {/* <h1 className="text-5xl text-black underline text-center">About SCC</h1> */}
+        <div className="flex self-start w-fit md:ml-36 border-b-2 border-b-black">
+            <h1 className="text-5xl text-black text-center">About SCC</h1>
         </div>
         <div className="flex justify-center items-center gap-14 w-full h-full">
             <Image src={"/Colleg-front-view.jpg"} width={500} height={500} className="rounded-2xl border-2 border-[#]" />
