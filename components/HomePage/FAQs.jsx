@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { faqData } from "./data/faq-data";
+import { faqData } from "../data/faq-data";
 
 export default function FAQs() {
   const [openIndex, setOpenIndex] = useState(null);

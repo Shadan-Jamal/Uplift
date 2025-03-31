@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "motion/react";
-import { affirmations } from "./data/affirmations"
+import { affirmations } from "../data/affirmations"
 import { useEffect } from "react";
 
 export default function Affirmation() {

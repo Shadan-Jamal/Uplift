@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { events_data } from "./data/events-data";
+import { events_data } from "../data/events-data";
 
 export default function Events() {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,11 +1,11 @@
-import Hero from "../components/Hero";
+import Hero from "../components/HomePage/Hero";
 // import About from "@/components/About";
-import Faculty from "../components/Faculty";
-import Events from "../components/Events";
-import Affirmation from "../components/Affirmation";
-import AboutCollege from "../components/AboutCollege";
-import Footer from "../components/Footer";
-import FAQs from "../components/FAQs";
+import Faculty from "../components/HomePage/Faculty";
+import Events from "../components/HomePage/Events";
+import Affirmation from "../components/HomePage/Affirmation";
+import AboutCollege from "../components/HomePage/AboutCollege";
+import Footer from "../components/HomePage/Footer";
+import FAQs from "../components/HomePage/FAQs";
 
 export default function Home() {
   return (

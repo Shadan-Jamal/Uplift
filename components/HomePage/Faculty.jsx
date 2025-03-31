@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { faculty } from "../public/faculty/faculty.js";
+import { faculty } from "../../public/faculty/faculty.js";
 import Image from "next/image";
 
 export default function Faculty() {
