@@ -32,9 +32,15 @@ export default function RegisterPage() {
                 return;
             }
 
+            if(password.length < 8){
+                error.current = true;
+                setErrorState("Password must be at least 8 characters long");
+                return;
+            }
+
             if(!email.includes('@')){
                 error.current = true;
-                setErrorState("Invalid Email");
+                setErrorState("Invalid Email Format");
                 return;
             }
 

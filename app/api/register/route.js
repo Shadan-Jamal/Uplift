@@ -6,17 +6,44 @@ import bcrypt from "bcryptjs";
 export async function POST(req) {
     try {
         const { email, password } = await req.json();
-        const hashedPW = await bcrypt.hash(password, 10);
-        await connectToDB();
-        const existingUser = await User.findOne({ email });
         
-        if (existingUser) {
+        // Validate input
+        if (!email || !password) {
             return NextResponse.json(
-                { message: "User already exists" },
+                { message: "Email and password are required" },
                 { status: 400 }
             );
         }
-        await User.create({email, password: hashedPW });
+
+        // Validate email format
+        if (!email.includes('@') || !email.includes('.')) {
+            return NextResponse.json(
+                { message: "Invalid email format" },
+                { status: 400 }
+            );
+        }
+
+        // Hash password
+        const hashedPW = await bcrypt.hash(password, 10);
+        
+        // Connect to database
+        await connectToDB();
+        
+        // Check for existing user
+        const existingUser = await User.findOne({email});
+        console.log(existingUser)
+        if (existingUser) {
+            return NextResponse.json(
+                { message: "A user with this email already exists" },
+                { status: 400 }
+            );
+        }
+
+        // Create new user
+        const user = await User.create({
+            email: email.toLowerCase(),
+            password: hashedPW
+        });
 
         return NextResponse.json(
             { message: "User registered successfully" },
@@ -24,8 +51,10 @@ export async function POST(req) {
         );
     } catch (error) {
         console.error("Registration error:", error);
+
+        // Handle other errors
         return NextResponse.json(
-            { message: "User registration failed" },
+            { message: "An error occurred during registration" },
             { status: 500 }
         );
     }

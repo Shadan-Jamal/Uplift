@@ -7,6 +7,8 @@ export default function page() {
     const [selections, setSelections] = useState({});
     const [totalScore, setTotalScore] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [showScore, setShowScore] = useState(false);
+    const [countdown, setCountdown] = useState(5);
 
     const questions = [
         "Not feeling like doing anything or enjoying things.",
@@ -29,22 +31,29 @@ export default function page() {
 
     const handleScore = (score) => {
         setSelections(prev => {
-            const currentScore = prev[currentQuestion] || 0;
-            const newScore = prev[currentQuestion] === score ? 0 : score;
-            
-            setTotalScore(prev => prev - currentScore + newScore);
-            
+            // If clicking the same option again, remove the selection
             if (prev[currentQuestion] === score) {
                 const newSelections = { ...prev };
                 delete newSelections[currentQuestion];
+                // Update total score by subtracting the removed score
+                setTotalScore(prev => prev - score);
                 return newSelections;
             }
             
-            return {
+            // If selecting a new option
+            const currentScore = prev[currentQuestion] || 0;
+            const newSelections = {
                 ...prev,
                 [currentQuestion]: score
             };
+            
+            // Update total score by subtracting the old score and adding the new score
+            setTotalScore(prev => prev - currentScore + score);
+            
+            return newSelections;
         });
+        console.log(selections)
+        console.log(totalScore)
     }
 
     const handleNext = () => {
@@ -54,12 +63,48 @@ export default function page() {
     }
 
     const handleSubmit = () => {
-        console.log('Final selections:', selections);
-        console.log('Total score:', totalScore);
+        setShowScore(true);
+        // Start countdown
+        const timer = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    window.location.href = '/';
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    }
+
+    if (showScore) {
+        return (
+            <section className="min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#86a4c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+                
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#86a4c2]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+                    <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#b18deb]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#f8fcff]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+                </div>
+
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-[#a8738b] max-w-md w-full mx-auto"
+                >
+                    <h2 className="text-3xl font-bold text-[#86a4c2] mb-4">Your Score</h2>
+                    <div className="text-6xl font-bold text-[#a8738b] mb-6">{totalScore}</div>
+                    <p className="text-lg text-gray-600 mb-4">
+                        Redirecting to home page in {countdown} seconds...
+                    </p>
+                </motion.div>
+            </section>
+        );
     }
 
     return (
-        <section className="min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#86a4c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
+        <section className="min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#e4f3ff] from-80% to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
             {/* Decorative background elements */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
             
@@ -76,7 +121,7 @@ export default function page() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-5xl font-bold text-[#86a4c2] mb-4">
+                    <h1 className="text-5xl font-bold text-[#6caafa] mb-4">
                         Mental Health Analysis
                     </h1>
                     <p className="text-xl text-[#a8738b] font-medium">Take the first step toward self-awareness</p>
@@ -132,7 +177,7 @@ export default function page() {
                                     }`}
                                 onClick={() => handleScore(category.score)}
                             >
-                                <div className="font-medium text-lg mb-2 ">{category.label}</div>
+                                <div className="font-medium text-lg mb-2">{category.label}</div>
                             </motion.button>
                         ))}
                     </div>
@@ -144,7 +189,7 @@ export default function page() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleSubmit}
-                            disabled={!selections[currentQuestion]}
+                            disabled={selections[currentQuestion] === undefined}
                             className="px-8 py-3 bg-[#a8738b] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
                         >
                             Submit Assessment
@@ -154,7 +199,7 @@ export default function page() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleNext}
-                            disabled={!selections[currentQuestion]}
+                            disabled={selections[currentQuestion] === undefined}
                             className="px-8 py-3 bg-[#a8738b] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
                         >
                             Next Question
