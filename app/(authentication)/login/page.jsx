@@ -62,11 +62,12 @@ const page = () => {
 
 const StudentLogin = () => {
     const [userData, setUserData] = useState({email : "", password : ""})
-    const [error, setError] = useState("")
+    const [error, setError] = useState(null)
     const router  = useRouter()
-
+    const [isLoading, setIsLoading] = useState(false)  
     const handleLogin = async () => {
         try{
+            setIsLoading(true)
             const res = await signIn("credentials",{ 
                 email : userData.email,
                 password : userData.password,
@@ -77,7 +78,6 @@ const StudentLogin = () => {
                 setError("Invalid credentials.")
                 return
             }
-
             router.replace("/")
         }
         catch(error){
@@ -114,24 +114,21 @@ const StudentLogin = () => {
                     />
                 </div>
                 
-                {error && error !== "" ? <div
+                {error!= null && <div
                 className="w-full h-fit"
-                >
-                    <p className="w-fit text-md text-white bg-red-500 py-2 px-3 rounded-lg">{error}</p>
-                </div>
-                :
-                <div className="w-full h-fit">
-                    <p className="w-fit text-md text-white bg-green-500 py-2 px-3 rounded-lg">{error}</p>
+                >   
+                    {error === "Invalid credentials." && <p className="w-fit text-md text-white bg-red-500 py-2 px-3 rounded-lg">{error}</p>}
                 </div>
                 }
 
                 <motion.button
+                    disabled={isLoading}
                     onClick={handleLogin} 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className={`w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                    Login
+                    {isLoading ? "Logging in..." : "Login"}
                 </motion.button>
             </div>
 

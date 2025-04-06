@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+// Check if the model already exists to prevent model recompilation error
+const User = mongoose.models.User || mongoose.model("User", new mongoose.Schema({
+    userId: {
+        type: String,
+        required: [true, "User ID is required"],
+        // unique: true,
+        trim: true,
+        match: /^SCC[A-Z0-9]{5}$/ // Ensures format: SCC followed by 5 alphanumeric characters
+    },
     email: {
         type: String,
         required: [true, "Email is required"],
-        unique: true,
+        // unique: true,
         trim: true,
         lowercase: true,
     },
@@ -19,12 +27,11 @@ const userSchema = new mongoose.Schema({
     }
 }, { 
     timestamps: true,
-    collection: 'users' // Explicitly set collection name
-});
+    collection: 'users'
+}));
 
-// Add index for email
-// userSchema.index({ email: 1 }, { unique: true });
-
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+// Add indexes
+User.schema.index({ email: 1 }, { unique: true });
+User.schema.index({ userId: 1 }, { unique: true });
 
 export default User;

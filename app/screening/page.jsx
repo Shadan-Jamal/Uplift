@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function page() {
     const [selections, setSelections] = useState({});
-    const [totalScore, setTotalScore] = useState(0);
+    // const [totalScore, setTotalScore] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [countdown, setCountdown] = useState(5);
+    const scoreRef = useRef(0);
 
     const questions = [
         "Not feeling like doing anything or enjoying things.",
@@ -28,15 +29,23 @@ export default function page() {
         { label: "More than half the days", score: 2 },
         { label: "Nearly every day", score: 3 }
     ];
+    
+    const handleNext = () => {
+        if (currentQuestion < questions.length - 1) {
+            setCurrentQuestion(prev => prev + 1);
+        }
+    }
 
     const handleScore = (score) => {
+        console.log(score)
         setSelections(prev => {
             // If clicking the same option again, remove the selection
             if (prev[currentQuestion] === score) {
                 const newSelections = { ...prev };
                 delete newSelections[currentQuestion];
                 // Update total score by subtracting the removed score
-                setTotalScore(prev => prev - score);
+                scoreRef.current = scoreRef.current - score;
+                // setTotalScore(prev => prev - score);
                 return newSelections;
             }
             
@@ -48,33 +57,29 @@ export default function page() {
             };
             
             // Update total score by subtracting the old score and adding the new score
-            setTotalScore(prev => prev - currentScore + score);
-            
+            scoreRef.current = scoreRef.current - currentScore + score;
+            // setTotalScore(prev => prev - currentScore + score);
+            console.log(newSelections)
             return newSelections;
         });
-        console.log(selections)
-        console.log(totalScore)
+        // console.log(selections)
+        // console.log(score.current)
     }
 
-    const handleNext = () => {
-        if (currentQuestion < questions.length - 1) {
-            setCurrentQuestion(prev => prev + 1);
-        }
-    }
 
     const handleSubmit = () => {
         setShowScore(true);
         // Start countdown
-        const timer = setInterval(() => {
-            setCountdown(prev => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    window.location.href = '/';
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
+        // const timer = setInterval(() => {
+        //     setCountdown(prev => {
+        //         if (prev <= 1) {
+        //             clearInterval(timer);
+        //             window.location.href = '/';
+        //             return 0;
+        //         }
+        //         return prev - 1;
+        //     });
+        // }, 1000);
     }
 
     if (showScore) {
@@ -94,7 +99,7 @@ export default function page() {
                     className="text-center bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border-2 border-[#a8738b] max-w-md w-full mx-auto"
                 >
                     <h2 className="text-3xl font-bold text-[#86a4c2] mb-4">Your Score</h2>
-                    <div className="text-6xl font-bold text-[#a8738b] mb-6">{totalScore}</div>
+                    <div className="text-6xl font-bold text-[#a8738b] mb-6">{scoreRef.current / 2}</div>
                     <p className="text-lg text-gray-600 mb-4">
                         Redirecting to home page in {countdown} seconds...
                     </p>
@@ -183,7 +188,7 @@ export default function page() {
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-end items-center">
                     {currentQuestion === questions.length - 1 ? (
                         <motion.button
                             whileHover={{ scale: 1.02 }}

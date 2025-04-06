@@ -1,24 +1,15 @@
 "use client";
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import AffirmationCard from '../../../components/CounselorDashboard/AffirmationCard';
-import EventCard from '../../../components/CounselorDashboard/EventCard';
-import ChatCard from '../../../components/CounselorDashboard/ChatCard';
+import Link from 'next/link';
 
 export default function CounselorDashboard() {
-  const [expandedCard, setExpandedCard] = useState(null);
-  const [viewMode, setViewMode] = useState({affirmation: 'add', event: 'add'}); // 'add' or 'view'
-
-  const toggleCard = (cardType) => {
-    setExpandedCard(expandedCard === cardType ? null : cardType);
-  };
-
   return (
     <section className="relative min-h-[100dvh] w-[100dvw] overflow-hidden bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
       {/* Decorative elements */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
       <div className="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center gap-12 py-20">
         {/* Header */}
@@ -41,151 +32,69 @@ export default function CounselorDashboard() {
             </div>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-black">
-            Admin Dashboard
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Counselor Dashboard
           </h2>
         </div>
 
-        {/* Cards Grid */}
+        {/* Navigation Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
-          {/* Affirmations Section */}
-          <div className="col-span-1">
+          {/* Affirmations Card */}
+          <Link href="/counselor/dashboard/affirmations">
             <motion.div 
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border-2 border-[#a8738b]/20"
-              layout
+              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="w-16 h-16 bg-[#a8738b]/10 rounded-full flex items-center justify-center group-hover:bg-[#a8738b]/20 transition-colors duration-300">
+                  <svg className="w-8 h-8 text-[#a8738b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
                 <h3 className="text-2xl font-bold text-[#a8738b]">Affirmations</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setViewMode({...viewMode, affirmation: 'add'})}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
-                      viewMode.affirmation === 'add' 
-                        ? 'bg-[#a8738b] text-white' 
-                        : 'bg-white/50 text-[#a8738b] hover:bg-[#a8738b]/10'
-                    }`}
-                  >
-                    Add New
-                  </button>
-                  <button
-                    onClick={() => setViewMode({...viewMode, affirmation: 'view'})}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
-                      viewMode.affirmation === 'view' 
-                        ? 'bg-[#a8738b] text-white' 
-                        : 'bg-white/50 text-[#a8738b] hover:bg-[#a8738b]/10'
-                    }`}
-                  >
-                    View All
-                  </button>
-                </div>
+                <p className="text-gray-600">Manage and create positive affirmations to support mental well-being.</p>
               </div>
-              
-              <AnimatePresence mode="wait">
-                {viewMode.affirmation === 'add' ? (
-                  <motion.div
-                    key="add"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <AffirmationCard />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="view"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-4"
-                  >
-                    {/* Placeholder for affirmations list */}
-                    <div className="bg-white/50 rounded-lg p-4">
-                      <p className="text-[#a8738b] font-medium">Daily Motivation</p>
-                      <p className="text-sm text-gray-600">Added on: 2024-03-20</p>
-                    </div>
-                    <div className="bg-white/50 rounded-lg p-4">
-                      <p className="text-[#a8738b] font-medium">Self Care Reminder</p>
-                      <p className="text-sm text-gray-600">Added on: 2024-03-19</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
-          </div>
+          </Link>
 
-          {/* Events Section */}
-          <div className="col-span-1">
+          {/* Events Card */}
+          <Link href="/counselor/dashboard/events">
             <motion.div 
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border-2 border-[#a8738b]/20"
-              layout
+              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-[#a8738b]">Events</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setViewMode({...viewMode, event: 'add'})}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
-                      viewMode.event === 'add' 
-                        ? 'bg-[#a8738b] text-white' 
-                        : 'bg-white/50 text-[#a8738b] hover:bg-[#a8738b]/10'
-                    }`}
-                  >
-                    Add New
-                  </button>
-                  <button
-                    onClick={() => setViewMode({...viewMode, event: 'view'})}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
-                      viewMode.event === 'view' 
-                        ? 'bg-[#a8738b] text-white' 
-                        : 'bg-white/50 text-[#a8738b] hover:bg-[#a8738b]/10'
-                    }`}
-                  >
-                    View All
-                  </button>
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="w-16 h-16 bg-[#a8738b]/10 rounded-full flex items-center justify-center group-hover:bg-[#a8738b]/20 transition-colors duration-300">
+                  <svg className="w-8 h-8 text-[#a8738b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
                 </div>
+                <h3 className="text-2xl font-bold text-[#a8738b]">Events</h3>
+                <p className="text-gray-600">Schedule and manage therapeutic events, workshops and seminars.</p>
               </div>
-              
-              <AnimatePresence mode="wait">
-                {viewMode.event === 'add' ? (
-                  <motion.div
-                    key="add"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <EventCard />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="view"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-4"
-                  >
-                    {/* Placeholder for events list */}
-                    <div className="bg-white/50 rounded-lg p-4">
-                      <p className="text-[#a8738b] font-medium">Stress Management Workshop</p>
-                      <p className="text-sm text-gray-600">Date: 2024-03-25</p>
-                    </div>
-                    <div className="bg-white/50 rounded-lg p-4">
-                      <p className="text-[#a8738b] font-medium">Group Therapy Session</p>
-                      <p className="text-sm text-gray-600">Date: 2024-03-28</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
-          </div>
+          </Link>
 
-          {/* Chat Section */}
-          <div className="col-span-1">
-            <ChatCard />
-          </div>
+          {/* Chat Card */}
+          <Link href="/counselor/dashboard/chat">
+            <motion.div 
+              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="w-16 h-16 bg-[#a8738b]/10 rounded-full flex items-center justify-center group-hover:bg-[#a8738b]/20 transition-colors duration-300">
+                  <svg className="w-8 h-8 text-[#a8738b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-[#a8738b]">Chat</h3>
+                <p className="text-gray-600">Connect with students through secure and anonymous messaging.</p>
+              </div>
+            </motion.div>
+          </Link>
         </div>
       </div>
     </section>
