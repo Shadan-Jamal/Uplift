@@ -4,22 +4,48 @@ import mongoose from "mongoose";
 const User = mongoose.models.User || mongoose.model("User", new mongoose.Schema({
     userId: {
         type: String,
-        required: [true, "User ID is required"],
-        // unique: true,
+        unique: true,
         trim: true,
-        match: /^SCC[A-Z0-9]{5}$/ // Ensures format: SCC followed by 5 alphanumeric characters
+        validate: {
+            validator: function(v) {
+                return /^SCC[A-Z0-9]{5}$/.test(v);
+            },
+            message: props => `${props.value} is not a valid user ID!`
+        }
     },
     email: {
         type: String,
         required: [true, "Email is required"],
-        // unique: true,
+        unique: true,
         trim: true,
         lowercase: true,
+        validate: {
+            validator: function(v) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid email!`
+        }
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        minlength: [6, "Password must be at least 6 characters long"]
+        minlength: [8, "Password must be at least 8 characters long"]
+    },
+    verificationCode: {
+        type: String,
+        default: null
+    },
+    verificationCodeExpires: {
+        type: Date,
+        default: null
+    },
+    resetCode: {
+        type: String,
+        default: null
+    },
+    resetCodeExpires: {
+        type: Date,
+        default: null
     },
     createdAt: {
         type: Date,
@@ -32,6 +58,6 @@ const User = mongoose.models.User || mongoose.model("User", new mongoose.Schema(
 
 // Add indexes
 User.schema.index({ email: 1 }, { unique: true });
-User.schema.index({ userId: 1 }, { unique: true });
+// User.schema.index({ userId: 1 }, { unique: true });
 
 export default User;

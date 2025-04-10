@@ -114,6 +114,12 @@ const StudentLogin = () => {
                     />
                 </div>
                 
+                <div className="flex justify-end">
+                    <Link href="/forgot-password" className="text-sm text-[#a8738b] hover:text-[#86a4c2] transition-colors duration-200">
+                        Forgot Password?
+                    </Link>
+                </div>
+                
                 {error!= null && <div
                 className="w-full h-fit"
                 >   
@@ -134,7 +140,7 @@ const StudentLogin = () => {
 
             <p className="text-sm text-[#a8738b]">
                 Don't have an account?{" "}
-                <Link href="/register" className="text-[#9d92f] hover:text-[#86a4c2] transition-colors duration-200">
+                <Link href="/register" className="text-[#a8738b] hover:text-[#86a4c2] transition-colors duration-200">
                     Register
                 </Link>
             </p>
@@ -174,6 +180,12 @@ const CouncilLogin = () => {
                         }`}
                     />
                 </div>
+                
+                <div className="flex justify-end">
+                    <Link href="/forgot-password" className="text-sm text-[#a8738b] hover:text-[#86a4c2] transition-colors duration-200">
+                        Forgot Password?
+                    </Link>
+                </div>
 
                 <motion.button 
                     whileHover={{ scale: 1.02 }}
@@ -186,7 +198,7 @@ const CouncilLogin = () => {
 
             <p className="text-sm text-[#a8738b]">
                 Don't have an account?{" "}
-                <Link href="/register" className="text-[#9d92f] hover:text-[#86a4c2] transition-colors duration-200">
+                <Link href="/register" className="text-[#a8738b] hover:text-[#86a4c2] transition-colors duration-200">
                     Register
                 </Link>
             </p>

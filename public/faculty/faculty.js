@@ -35,4 +35,16 @@ export const faculty = [
         mail: "smrithi@claretcollege.edu.in",
         designation: "Assistant Professor",
     },
+    {
+        name: "Ms. Angelin Roja A",
+        image: "/faculty/Angelin_Roja_A_inner.jpg",
+        mail: "angelin@claretcollege.edu.in",
+        designation: "Assistant Professor",
+    },
+    {
+        name: "Mr. Saptarshee Mazumdar",
+        image: "/faculty/Saptarshee_Mazumdar_inner.jpg",
+        mail: "saptarshee@claretcollege.edu.in",
+        designation: "Assistant Professor",
+    },
 ]

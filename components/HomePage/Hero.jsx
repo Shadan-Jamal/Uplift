@@ -4,7 +4,7 @@ import { delay, stagger } from "framer-motion";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
 import Image from "next/image";
-import Quotes from "../Quotes";
+import Quotes from "./Quotes";
 
 export default function Hero() {
     const [titleLine, titleLineAnimate] = useAnimate();

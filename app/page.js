@@ -13,10 +13,10 @@ export default function Home() {
     <section>
       {/* <Affirmation /> */}
         <Hero />
+        <AboutCollege />
         <Services />
         <Events />
         <Faculty />
-        <AboutCollege />
         <FAQs />
         <Footer />
     </section>

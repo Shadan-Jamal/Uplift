@@ -1,45 +1,82 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
-export default function RegisterPage() {
+export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [otp, setOtp] = useState("");
     const [showPW, setPW] = useState({
         showPassword: false, 
         showConfirmPassword: false
     });
-    const [step, setStep] = useState(1); // 1: email/password, 2: OTP verification
-    const [timer, setTimer] = useState(60);
-    const [isResending, setIsResending] = useState(false);
+    const [step, setStep] = useState(1); // 1: email verification, 2: password reset
+    const [verificationCode, setVerificationCode] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const error = useRef();
     const [errorState, setErrorState] = useState("");
     const btnRef = useRef(null);
     const router = useRouter();
 
-    // Timer effect for OTP expiration
-    useEffect(() => {
-        let interval;
-        if (step === 2 && timer > 0) {
-            interval = setInterval(() => {
-                setTimer((prev) => prev - 1);
-            }, 1000);
-        } else if (timer === 0) {
-            setErrorState("OTP expired. Please request a new one.");
-        }
-        return () => clearInterval(interval);
-    }, [step, timer]);
-
-    const handleRequestOTP = async () => {
+    const handleEmailVerification = async () => {
         try {
-            if (email === "" || password === "" || confirmPassword === "") {
+            if (email === "") {
+                error.current = true;
+                setErrorState("Please enter your email");
+                return;
+            }
+
+            if (!email.includes('@')) {
+                error.current = true;
+                setErrorState("Invalid Email Format");
+                return;
+            }
+
+            if (!email.includes("claretcollege.edu.in")) {
+                error.current = true;
+                setErrorState("Please use your college email");
+                return;
+            }
+
+            setIsLoading(true);
+            
+            // Call the API to request a verification code
+            const response = await fetch("/api/forgot-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    email, 
+                    action: "request" 
+                }),
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                setErrorState(data.message || "Failed to send verification code");
+                setIsLoading(false);
+                return;
+            }
+
+            setErrorState("");
+            setStep(2);
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            setErrorState("Email verification failed. Please try again.");
+            console.log(error);
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        try {
+            if (password === "" || confirmPassword === "") {
                 error.current = true;
                 setErrorState("Please fill all the fields");
                 return;
@@ -57,145 +94,75 @@ export default function RegisterPage() {
                 return;
             }
 
-            if (!email.includes('@')) {
-                error.current = true;
-                setErrorState("Invalid Email Format");
-                return;
-            }
-
-            if (!email.includes("claretcollege.edu.in")) {
-                error.current = true;
-                setErrorState("Please use your college email");
-                return;
-            }
-
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    email, 
-                    password,
-                    action: "request-otp" 
-                }),
-            });
-
-            if (response.status === 400) {
-                const data = await response.json();
-                setErrorState(data.message || "Failed to send OTP");
-                return;
-            }
-
-            if (!response.ok) {
-                setErrorState("Failed to send verification code");
-                return;
-            }
-
-            const data = await response.json();
-            setErrorState(data.message);
-            setStep(2);
-            setTimer(60);
-            toast.success("Verification code sent to your email");
-        } catch (error) {
-            error.current = true;
-            setErrorState("Failed to send verification code");
-            console.log(error);
-        }
-    };
-
-    const handleResendOTP = async () => {
-        if (isResending) return;
-        
-        setIsResending(true);
-        try {
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    email, 
-                    action: "request-otp" 
-                }),
-            });
-
-            if (!response.ok) {
-                const data = await response.json();
-                setErrorState(data.message || "Failed to resend OTP");
-                return;
-            }
-
-            setTimer(60);
-            setErrorState("");
-            toast.success("New verification code sent");
-        } catch (error) {
-            setErrorState("Failed to resend verification code");
-        } finally {
-            setIsResending(false);
-        }
-    };
-
-    const handleRegister = async () => {
-        try {
-            if (otp === "") {
+            if (verificationCode === "") {
                 error.current = true;
                 setErrorState("Please enter the verification code");
                 return;
             }
 
-            const response = await fetch("/api/register", {
+            setIsLoading(true);
+            
+            // First verify the code
+            const verifyResponse = await fetch("/api/forgot-password", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ 
                     email, 
-                    password,
-                    otp,
-                    action: "verify-otp" 
+                    action: "verify",
+                    verificationCode 
                 }),
             });
 
-            if (response.status === 400) {
-                const data = await response.json();
-                setErrorState(data.message || "Invalid verification code");
+            const verifyData = await verifyResponse.json();
+            
+            if (!verifyResponse.ok) {
+                setErrorState(verifyData.message || "Invalid verification code");
+                setIsLoading(false);
+                return;
+            }
+            
+            // Then reset the password
+            const resetResponse = await fetch("/api/forgot-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    email, 
+                    action: "reset",
+                    newPassword: password
+                }),
+            });
+
+            const resetData = await resetResponse.json();
+            
+            if (!resetResponse.ok) {
+                setErrorState(resetData.message || "Failed to reset password");
+                setIsLoading(false);
                 return;
             }
 
-            if (!response.ok) {
-                setErrorState("Registration failed");
-                return;
-            }
-
-            btnRef.current.disabled = true;
-            btnRef.current.style.backgroundColor = "gray";
-            btnRef.current.style.cursor = "not-allowed";
-
-            error.current = false;
-            const data = await response.json();
-            setErrorState(data.message);
+            setErrorState("Password reset successful");
             setEmail("");
             setPassword("");
             setConfirmPassword("");
-            setOtp("");
-            toast.success("Registration successful! Redirecting to login...");
+            setVerificationCode("");
+            setIsLoading(false);
+            
             setTimeout(() => {
                 router.push("/login");
-            }, 3000);
+            }, 2000);
         } catch (error) {
-            error.current = true;
-            setErrorState("Registration failed");
+            setIsLoading(false);
+            setErrorState("Password reset failed. Please try again.");
             console.log(error);
-            btnRef.current.disabled = false;
-            btnRef.current.style.backgroundColor = "#a8738b";
-            btnRef.current.style.cursor = "pointer";
         }
     };
 
     return (
         <section className="md:flex md:flex-row md:justify-between md:items-center h-[100dvh] w-[100dvw] bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
-
             <section className="w-full md:w-1/2 h-full absolute md:relative">
                 <div className="flex items-center justify-center overflow-hidden">
                     <Image 
@@ -217,7 +184,9 @@ export default function RegisterPage() {
                             transition={{ duration: 0.5 }}
                             className="flex flex-col items-center gap-6"
                         >
-                            <h1 className="text-2xl lg:text-3xl font-bold text-[#a8738b]">Register</h1>
+                            <h1 className="text-2xl lg:text-3xl font-bold text-[#a8738b]">
+                                {step === 1 ? "Forgot Password" : "Reset Password"}
+                            </h1>
                             
                             <div className="w-full space-y-6">
                                 {step === 1 ? (
@@ -234,12 +203,39 @@ export default function RegisterPage() {
                                             />
                                         </div>
 
+                                        {errorState && <p className="text-red-500">{errorState}</p>}
+                                        
+                                        <motion.button
+                                            ref={btnRef}
+                                            onClick={handleEmailVerification}
+                                            disabled={isLoading}
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            className={`w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        >
+                                            {isLoading ? "Sending..." : "Send Verification Code"}
+                                        </motion.button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="space-y-2">
+                                            <input 
+                                                value={verificationCode}
+                                                onChange={(e) => setVerificationCode(e.target.value)}
+                                                type="text" 
+                                                placeholder="Verification Code" 
+                                                className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
+                                                    verificationCode ? "border-green-500" : "border-[#a8738b]"
+                                                }`}
+                                            />
+                                        </div>
+
                                         <div className={`space-y-2 flex justify-center items-center border-b-2 ${password ? "border-green-500" : "border-[#a8738b]"} pr-3`}>
                                             <input 
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 type={`${showPW.showPassword ? "text" : "password"}`} 
-                                                placeholder="Password" 
+                                                placeholder="New Password" 
                                                 className={`w-full p-3 bg-transparent text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300`}
                                             />
 
@@ -261,7 +257,7 @@ export default function RegisterPage() {
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 type={`${showPW.showConfirmPassword ? "text" : "password"}`}
-                                                placeholder="Confirm Password" 
+                                                placeholder="Confirm New Password" 
                                                 className={`w-full p-3 bg-transparent text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300`}
                                             />
                                             <button 
@@ -275,73 +271,24 @@ export default function RegisterPage() {
                                             </button>
                                         </div>
 
-                                        {errorState && <p className="text-red-500">{errorState}</p>}
+                                        {errorState && <p className={`${errorState === "Password reset successful" ? "text-green-500" : "text-red-500"}`}>{errorState}</p>}
                                         
                                         <motion.button
                                             ref={btnRef}
-                                            onClick={handleRequestOTP}
+                                            onClick={handlePasswordReset}
+                                            disabled={isLoading}
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
-                                            className="w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer"
+                                            className={`w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                                         >
-                                            Send Verification Code
+                                            {isLoading ? "Resetting..." : "Reset Password"}
                                         </motion.button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="space-y-2">
-                                            <p className="text-center text-[#a8738b]">
-                                                We've sent a verification code to <span className="font-semibold">{email}</span>
-                                            </p>
-                                            <input 
-                                                value={otp}
-                                                onChange={(e) => setOtp(e.target.value)}
-                                                type="text" 
-                                                placeholder="Enter verification code" 
-                                                className="w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 border-[#a8738b]"
-                                                maxLength={6}
-                                            />
-                                            <div className="flex justify-between items-center text-sm">
-                                                <span className="text-[#a8738b]">
-                                                    {timer > 0 ? `Code expires in ${timer}s` : "Code expired"}
-                                                </span>
-                                                <button 
-                                                    onClick={handleResendOTP}
-                                                    disabled={timer > 0 || isResending}
-                                                    className={`text-[#a8738b] hover:text-[#86a4c2] transition-colors duration-200 ${(timer > 0 || isResending) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                                >
-                                                    {isResending ? "Sending..." : "Resend code"}
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {errorState && <p className="text-red-500">{errorState}</p>}
-                                        
-                                        <div className="flex gap-3">
-                                            <motion.button
-                                                onClick={() => setStep(1)}
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                className="w-1/3 py-3 bg-gray-300 text-[#a8738b] rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer"
-                                            >
-                                                Back
-                                            </motion.button>
-                                            <motion.button
-                                                ref={btnRef}
-                                                onClick={handleRegister}
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                className="w-2/3 py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer"
-                                            >
-                                                Verify & Register
-                                            </motion.button>
-                                        </div>
                                     </>
                                 )}
                             </div>
 
                             <p className="text-sm text-[#a8738b]">
-                                Already registered?{" "}
+                                Remember your password?{" "}
                                 <Link href="/login" className="text-[#9d92f] hover:text-[#86a4c2] transition-colors duration-200">
                                     Login
                                 </Link>
@@ -352,4 +299,4 @@ export default function RegisterPage() {
             </section>
         </section>
     );
-}
+} 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import quotesData from '../app/quotes.json';
+import quotesData from "../data/quotes.json";
 
 export default function Quotes() {
     const [currentQuote, setCurrentQuote] = useState(null);

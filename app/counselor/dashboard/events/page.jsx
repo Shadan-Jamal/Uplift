@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import EventCard from '../../../../components/EventCard';
-import EventForm from '../../../../components/EventForm';
-import Modal from '../../../../components/Modal';
+import EventCard from '../../../../components/EventPage/EventCard';
+import EventForm from '../../../../components/EventPage/EventForm';
+import Modal from '../../../../components/EventPage/Modal';
 import { toast } from 'react-hot-toast';
 
 export default function EventsPage() {
