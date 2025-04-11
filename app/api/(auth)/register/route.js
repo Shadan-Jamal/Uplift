@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { connectToDB } from "../../../lib/mongo";
-import User from "../../../models/user";
+import { connectToDB } from "../../../../lib/mongo";
+import User from "../../../../models/user";
 import bcrypt from "bcryptjs";
-import { sendVerificationEmail } from "../../../lib/email";
+import { sendVerificationEmail } from "../../../../lib/email";
 
 // Function to generate random ID
 function generateUserId() {

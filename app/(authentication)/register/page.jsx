@@ -17,7 +17,7 @@ export default function RegisterPage() {
         showConfirmPassword: false
     });
     const [step, setStep] = useState(1); // 1: email/password, 2: OTP verification
-    const [timer, setTimer] = useState(60);
+    const [timer, setTimer] = useState(120);
     const [isResending, setIsResending] = useState(false);
     const error = useRef();
     const [errorState, setErrorState] = useState("");
@@ -95,7 +95,7 @@ export default function RegisterPage() {
             const data = await response.json();
             setErrorState(data.message);
             setStep(2);
-            setTimer(60);
+            setTimer(120);
             toast.success("Verification code sent to your email");
         } catch (error) {
             error.current = true;
@@ -126,7 +126,7 @@ export default function RegisterPage() {
                 return;
             }
 
-            setTimer(60);
+            setTimer(120);
             setErrorState("");
             toast.success("New verification code sent");
         } catch (error) {

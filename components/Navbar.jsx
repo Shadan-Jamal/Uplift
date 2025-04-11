@@ -19,9 +19,17 @@ export default function Navbar() {
     const fetchUserData = async () => {
       if (email) {
         try {
-          const response = await fetch(`/api/user?email=${email}`);
+          // First try to fetch from user API
+          let response = await fetch(`/api/user?email=${email}`);
+          let data = await response.json();
+          
+          // If user not found, try counselor API
+          if (response.status === 404) {
+            response = await fetch(`/api/counselor?email=${email}`);
+            data = await response.json();
+          }
+          
           if (response.ok) {
-            const data = await response.json();
             setUserData(data);
           }
         } catch (error) {
@@ -42,7 +50,7 @@ export default function Navbar() {
 
   return (
     <nav className={`fixed top-0 z-50 flex flex-row justify-center items-center w-full h-fit py-3`}>
-      <div className="flex md:flex-row md:justify-center md:items-center w-full max-w-[90vw] h-fit pr-10 py-3 gap-5 bg-white/90 backdrop-blur-3xl rounded-full shadow-lg border-2 border-[#a8738b]/80 md:relative">
+      <div className="flex md:flex-row md:justify-center md:items-center w-full max-w-[90vw] h-fit pr-10 py-1 gap-5 bg-white/90 backdrop-blur-3xl rounded-full shadow-lg border-2 border-[#a8738b]/80 md:relative">
         <>
           <div className="md:grow flex justify-start items-center gap-10 pl-10">
             {isDashboardRoute ? (
@@ -86,8 +94,24 @@ export default function Navbar() {
               {showProfile && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
                   <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm text-gray-500">User ID</p>
-                    <p className="font-medium text-[#a8738b]">{userData?.userId || 'Loading...'}</p>
+                    {userData?.userId && (
+                      <>
+                        <p className="text-sm text-gray-500">User ID</p>
+                        <p className="font-medium text-[#a8738b]">{userData?.userId}</p>
+                      </>
+                    )}
+                    {userData?.name && (
+                      <>
+                        <p className="text-sm text-gray-500 mt-2">Name</p>
+                        <p className="font-medium text-[#a8738b]">{userData.name}</p>
+                      </>
+                    )}
+                    {userData?.email && userData?.userType === "counselor" && (
+                      <>
+                        <p className="text-sm text-gray-500 mt-2">Email</p>
+                        <p className="font-medium text-[#a8738b]">{userData.email}</p>
+                      </>
+                    )}
                   </div>
                   <button
                     onClick={handleLogout}
@@ -114,9 +138,9 @@ export default function Navbar() {
           ) : (
             <div
               role="button"
-              className="transition-all ease-out"
+              className={`transition-all ease-out ${!session?.user && 'my-2'}`}
             >
-              <Link href="/login" className="rounded-lg px-4 py-2 text-white transition-all duration-100 bg-[#a8738b] hover:opacity-90 shadow-lg hover:shadow-xl"> Login </Link>
+              <Link href="/login" className={`rounded-lg px-4 py-2 text-white transition-all duration-100 bg-[#a8738b] hover:opacity-90 shadow-lg hover:shadow-xl`}> Login </Link>
             </div>
           )}
         </>

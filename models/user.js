@@ -6,19 +6,13 @@ const User = mongoose.models.User || mongoose.model("User", new mongoose.Schema(
         type: String,
         unique: true,
         trim: true,
-        validate: {
-            validator: function(v) {
-                return /^SCC[A-Z0-9]{5}$/.test(v);
-            },
-            message: props => `${props.value} is not a valid user ID!`
-        }
     },
     email: {
         type: String,
         required: [true, "Email is required"],
-        unique: true,
         trim: true,
         lowercase: true,
+        unique: true,
         validate: {
             validator: function(v) {
                 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -57,7 +51,7 @@ const User = mongoose.models.User || mongoose.model("User", new mongoose.Schema(
 }));
 
 // Add indexes
-User.schema.index({ email: 1 }, { unique: true });
+// User.schema.index({ email: 1 });
 // User.schema.index({ userId: 1 }, { unique: true });
 
 export default User;

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { connectToDB } from "../../../lib/mongo";
-import User from "../../../models/user";
+import { connectToDB } from "../../../../lib/mongo";
+import User from "../../../../models/user";
+import Counselor from "../../../../models/counselor";
 import bcrypt from "bcryptjs";
-import { sendVerificationEmail } from "../../../lib/email";
+import { sendVerificationEmail } from "../../../../lib/email";
 
 // Function to generate a random verification code
 function generateVerificationCode() {
@@ -38,10 +39,17 @@ export async function POST(req) {
             );
         }
 
-        // Check if user exists
-        const user = await User.findOne({ email: email.toLowerCase() });
+        // Check if user exists in either collection
+        let user = await User.findOne({ email: email.toLowerCase() });
+        let userType = 'student';
+        
         if (!user) {
-            console.log("User not found");
+            user = await Counselor.findOne({ email: email.toLowerCase() });
+            userType = 'counselor';
+        }
+
+        if (!user) {
+            console.log("User not found in either collection");
             return NextResponse.json(
                 { message: "No account found with this email" },
                 { status: 404 }

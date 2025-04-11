@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function page() {
     const [selections, setSelections] = useState({});
-    // const [totalScore, setTotalScore] = useState(0);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [countdown, setCountdown] = useState(5);
@@ -30,6 +29,25 @@ export default function page() {
         { label: "Nearly every day", score: 3 }
     ];
     
+    const getScoreColor = (score) => {
+        if (score >= 1 && score <= 4) {
+            return {"label" : "Minimal", "color" : "bg-red-300"};
+
+        } else if (score >= 5 && score <= 9) {
+            return {"label" : "Mild", "color" : "bg-red-400"};
+
+        } else if (score >= 10 && score <= 14) {
+            return {"label" : "Moderate", "color" : "bg-red-500/70"};
+
+        } else if (score >= 15 && score <= 19) {
+            return {"label" : "Moderately Severe", "color" : "bg-red-500"};
+
+        } else if (score >= 20 && score <= 27) {
+            return {"label" : "Severe", "color" : "bg-red-600"};
+
+        }
+    }
+
     const handleNext = () => {
         if (currentQuestion < questions.length - 1) {
             setCurrentQuestion(prev => prev + 1);
@@ -58,28 +76,25 @@ export default function page() {
             
             // Update total score by subtracting the old score and adding the new score
             scoreRef.current = scoreRef.current - currentScore + score;
-            // setTotalScore(prev => prev - currentScore + score);
             console.log(newSelections)
             return newSelections;
         });
-        // console.log(selections)
-        // console.log(score.current)
     }
 
 
     const handleSubmit = () => {
         setShowScore(true);
         // Start countdown
-        // const timer = setInterval(() => {
-        //     setCountdown(prev => {
-        //         if (prev <= 1) {
-        //             clearInterval(timer);
-        //             window.location.href = '/';
-        //             return 0;
-        //         }
-        //         return prev - 1;
-        //     });
-        // }, 1000);
+        const timer = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    window.location.href = '/';
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
     }
 
     if (showScore) {
@@ -100,14 +115,15 @@ export default function page() {
                 >
                     <h2 className="text-3xl font-bold text-[#86a4c2] mb-4">Your Score</h2>
                     <div className="text-6xl font-bold text-[#a8738b] mb-6">{scoreRef.current / 2}</div>
-                    <p className="text-lg text-gray-600 mb-4">
+                    <div className={`${getScoreColor(scoreRef.current / 2).color} px-5 py-3 rounded-lg text-white`}>{getScoreColor(scoreRef.current / 2).label}</div>
+                    <p className="text-lg text-gray-600 mt-4">
                         Redirecting to home page in {countdown} seconds...
                     </p>
                 </motion.div>
             </section>
         );
     }
-
+    
     return (
         <section className="min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#e4f3ff] from-80% to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
             {/* Decorative background elements */}
@@ -215,112 +231,3 @@ export default function page() {
         </section>
     );
 }
-
-
-// "use client";
-
-// import { useRef, useState } from "react";
-
-
-// export default function page() {
-//     const [selections, setSelections] = useState({});
-//     const [totalScore, setTotalScore] = useState(0);
-
-//     const handleScore = (rowIndex, score) => {
-//         setSelections(prev => {
-//             // If this question already has a selection, subtract its score
-//             const currentScore = prev[rowIndex] || 0;
-//             const newScore = prev[rowIndex] === score ? 0 : score;
-            
-//             // Update total score
-//             setTotalScore(prev => prev - currentScore + newScore);
-            
-//             // If clicking the same circle again, remove the selection
-//             if (prev[rowIndex] === score) {
-//                 const newSelections = { ...prev };
-//                 delete newSelections[rowIndex];
-//                 return newSelections;
-//             }
-            
-//             // Otherwise, update the selection
-//             return {
-//                 ...prev,
-//                 [rowIndex]: score
-//             };
-//         });
-//     }
-
-//     console.log(totalScore)
-//     console.log(selections)
-
-//   return (
-//     <section className="w-[100dvw] h-[100dvh] container mx-auto">
-//         <div className="w-full h-fit pt-10 px-8 flex justify-around items-end lg:mb-5">
-//             <h1 className="text-start text-3xl pt-11 lg:pt-12">Take the first step toward self-awareness.</h1>
-//             <button
-//                     disabled={Object.keys(selections).length === 9}
-//                     className="px-8 py-3 bg-[#a8738b] text-black rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl"
-//                 >
-//                     Done
-//                 </button>
-//         </div>
-//         <div className="grid grid-cols-6 gap-0 w-full h-max">
-            
-//             <div className="col-span-2 grid grid-rows-10">
-//                 <div className="row-span-1 w-full  h-full flex items-center px-4 border-b">
-//                     <p className="text-lg font-medium text-black">Problems:</p>
-//                 </div>
-
-//                 {[
-//                     "Little interest or pleasure in doing things?",
-//                     "Feeling down, depressed, or hopeless?",
-//                     "Trouble falling or staying asleep, or sleeping too much?",
-//                     "Feeling tired or having little energy?",
-//                     "Poor appetite or overeating?",
-//                     "Feeling bad about yourself?",
-//                     "Trouble concentrating on things?",
-//                     "Moving or speaking slowly or being fidgety/restless?",
-//                     "Thoughts of self-harm?"
-//                 ].map((question, index) => (
-//                     <div key={index} className="row-span-1 w-full border-b h-full flex items-center px-4">
-//                         <p className="text-lg text-black">{index + 1}. {question}</p>
-//                     </div>
-//                 ))}
-//             </div>
-
-//             {[
-//                 { label: "Not at all", score: 0 },
-//                 { label: "Several days", score: 1 },
-//                 { label: "More than half the days", score: 2 },
-//                 { label: "Nearly every day", score: 3 }
-//             ].map((category, colIndex) => (
-//                 <div key={colIndex} className="col-span-1 grid grid-rows-10">
-//                     <div className="row-span-1  flex flex-col justify-center items-center gap-1 p-2">
-//                         <h3 className="font-medium text-black text-sm text-center">{category.label}</h3>
-//                         <p className="text-sm text-gray-500">Score: {category.score}</p>
-//                     </div>
-
-//                     <div className="row-span-9 grid grid-rows-9">   
-//                         {[...Array(9)].map((_, rowIndex) => (
-//                             <div
-//                                 key={rowIndex}
-//                                 className="row-span-1 flex items-center justify-center"
-//                             >
-//                                 <button
-//                                     className={`w-6 h-6 rounded-full border-2 
-//                                         ${selections[rowIndex] === category.score 
-//                                             ? 'border-[#a8738b] bg-[#a8738b]' 
-//                                             : 'border-[#a8738b] hover:bg-[#a8738b] hover:border-transparent'
-//                                         } 
-//                                         focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:ring-offset-2 transition-all duration-200`}
-//                                     onClick={() => handleScore(rowIndex, category.score)}
-//                                 />
-//                             </div>
-//                         ))}
-//                     </div>
-//                 </div>
-//             ))}
-//         </div>
-//     </section>
-//   )
-// }

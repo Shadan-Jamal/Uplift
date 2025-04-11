@@ -31,7 +31,7 @@ export const faculty = [
     },
     {
         name: "Ms. Smrithi Manamohan",
-        image: "/faculty/Smrithi_Manamohan_inner.jpeg",
+        image: "/faculty/Smrithi_Manamohan_inner.jpg",
         mail: "smrithi@claretcollege.edu.in",
         designation: "Assistant Professor",
     },
