@@ -18,6 +18,19 @@ const counselorSchema = new mongoose.Schema({
         required: true,
         minlength: [8, "Password must be at least 8 characters long"]
     },
+    studentsInConversation: {
+        type: [{
+            studentId: {
+                type: String,
+                required: true
+            },
+            lastMessage: {
+                type: Date,
+                default: Date.now
+            }
+        }],
+        default: []
+    },
     resetCode: {
         type: String,
         default: null

@@ -2,33 +2,32 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { connectToDB } from '../../../../lib/mongo';
-import Message from '../../../../models/message';
-import User from '../../../../models/user';
+import Counselor from '../../../../models/counselor';
 
 export async function GET(request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== 'counselor') {
+    if (!session || session.user.type !== 'counselor') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const body = await request.json();
+    const { email } = body;
+
     await connectToDB();
-    const MessageModel = Message();
 
-    // Find all unique students who have sent messages to this counselor
-    const messages = await MessageModel.find({
-      receiverId: session.user.userId,
-      receiverType: 'counselor'
-    }).distinct('senderId');
+    // Find the counselor and get their students in conversation
+    const counselor = await Counselor.findOne({email});
+    console.log(counselor)
+    if (!counselor) {
+      return NextResponse.json({ error: 'Counselor not found' }, { status: 404 });
+    }
 
-    // Fetch student details
-    const students = await User.find({
-      userId: { $in: messages },
-      role: 'student'
-    }).select('userId name email');
-
-    console.log(students)
-    return NextResponse.json(students);
+    // Return the students in conversation
+    if(!counselor.studentsInConversation || counselor.studentsInConversation.length === 0) {
+      return NextResponse.json({ message: 'No students in conversation' }, { status: 200 });
+    }
+    return NextResponse.json(counselor.studentsInConversation);
   } catch (error) {
     console.error('Error fetching students:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

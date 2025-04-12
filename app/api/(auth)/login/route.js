@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDB } from "../../../../lib/mongo";
 import User from "../../../../models/user";
+import Counselor from "../../../../models/counselor";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -9,6 +10,7 @@ export async function POST(req) {
         // Parse request body
         const body = await req.json();
         const { email, password, userType } = body;
+        console.log(body)
         
         console.log(`Login attempt for ${userType} with email: ${email}`);
 
@@ -34,8 +36,13 @@ export async function POST(req) {
         }
 
         // Find user by email
-        const user = await User.findOne({ email: email.toLowerCase() });
-        
+        let user;
+        if (userType === "student") {
+            user = await User.findOne({ email: email.toLowerCase() });
+        } else {
+            user = await Counselor.findOne({ email: email.toLowerCase() });
+        }
+
         if (!user) {
             console.log("User not found");
             return NextResponse.json(
@@ -46,6 +53,7 @@ export async function POST(req) {
 
         // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log("Password validation result:", isPasswordValid);
         
         if (!isPasswordValid) {
             console.log("Invalid password");
@@ -54,7 +62,7 @@ export async function POST(req) {
                 { status: 401 }
             );
         }
-
+        console.log(user)
         // Generate JWT token
         const token = jwt.sign(
             { 

@@ -26,9 +26,10 @@ export default function UserChat({ selectedFaculty }) {
       try {
         setLoading(true);
 
-        const response = await fetch(`/api/chat/messages?userId=${selectedFaculty.userId}`);
+        const response = await fetch(`/api/chat/messages?mail=${selectedFaculty.mail}`);
         if (response.ok) {
           const data = await response.json();
+
           setMessages(data);
         }
       } catch (error) {
@@ -49,7 +50,7 @@ export default function UserChat({ selectedFaculty }) {
     // Register user with socket
     if (session?.user) {
       newSocket.emit('user_connected', {
-        userId: session.user.userId,
+        userId: session.user.id,
         userType: 'student'
       });
     }
@@ -70,11 +71,10 @@ export default function UserChat({ selectedFaculty }) {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedFaculty || !session) return;
-    console.log("Session", session)
-    console.log(selectedFaculty)
+
     const messageData = {
       text: newMessage,
-      senderId: session.user.userId,
+      senderId: session.user.id,
       receiverId: selectedFaculty.mail,
       timestamp: new Date().toLocaleString({ hour: 'numeric', minute: 'numeric', hour12: true }),
       senderName: session.user.name || 'Student',
@@ -82,7 +82,6 @@ export default function UserChat({ selectedFaculty }) {
       senderType: 'student',
       receiverType: 'counselor'
     };
-    console.log(messageData)
     try {
       // Send message to API
       const response = await fetch('/api/chat/messages', {
@@ -92,7 +91,7 @@ export default function UserChat({ selectedFaculty }) {
         },
         body: JSON.stringify({
           text: newMessage,
-          receiverId: selectedFaculty.userId,
+          receiverId: selectedFaculty.name,
           receiverType: 'counselor'
         }),
       });
@@ -111,7 +110,7 @@ export default function UserChat({ selectedFaculty }) {
       console.error('Error sending message:', error);
     }
   };
-
+  console.log('Messages ', messages)
   if (!selectedFaculty) {
     return (
       <div className="w-3/4 h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
@@ -153,7 +152,7 @@ export default function UserChat({ selectedFaculty }) {
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`flex ${message.senderId === session?.user?.userId ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${message.senderId === session?.user?.id ? 'justify-end' : 'justify-start'}`}
           >
             <div
               className={`max-w-[70%] rounded-lg p-3 ${

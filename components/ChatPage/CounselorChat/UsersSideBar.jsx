@@ -8,12 +8,13 @@ export default function UsersSideBar({ selectedStudent, onSelectStudent }) {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
+  console.log(session?.user)
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/chat/students?counselorId=${session?.user?.userId}`);
+        const response = await fetch(`/api/chat/students?counselorMail=${session?.user?.email}`);
         if (response.ok) {
           const data = await response.json();
           setStudents(data);
@@ -25,11 +26,12 @@ export default function UsersSideBar({ selectedStudent, onSelectStudent }) {
       }
     };
 
-    if (session?.user?.userId) {
+    if (session?.user?.email) {
       fetchStudents();
     }
-  }, [session?.user?.userId]);
+  }, [session?.user?.email]);
 
+  console.log(students)
   return (
     <div className="w-1/4 h-full bg-white/90 backdrop-blur-3xl border-r border-[#a8738b]/20 overflow-y-auto">
       <div className="p-4">

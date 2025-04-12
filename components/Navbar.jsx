@@ -12,20 +12,19 @@ export default function Navbar() {
   const [userData, setUserData] = useState(null);
   const { data: session } = useSession();
   const pathname = usePathname();
-  const email = session?.user?.email;
 
   // Fetch user data when session is available
   useEffect(() => {
     const fetchUserData = async () => {
-      if (email) {
+      if (session) {
         try {
           // First try to fetch from user API
-          let response = await fetch(`/api/user?email=${email}`);
+          let response = await fetch(`/api/user?id=${session?.user?.id}`);
           let data = await response.json();
           
           // If user not found, try counselor API
           if (response.status === 404) {
-            response = await fetch(`/api/counselor?email=${email}`);
+            response = await fetch(`/api/counselor?email=${session?.user?.email}`);
             data = await response.json();
           }
           
@@ -39,7 +38,7 @@ export default function Navbar() {
     };
 
     fetchUserData();
-  }, [email]);
+  }, [session]);
 
   // Check if we're on the dashboard route
   const isDashboardRoute = pathname?.startsWith('/counselor/dashboard');
@@ -94,10 +93,10 @@ export default function Navbar() {
               {showProfile && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
                   <div className="px-4 py-2 border-b border-gray-100">
-                    {userData?.userId && (
+                    {userData?.id && (
                       <>
                         <p className="text-sm text-gray-500">User ID</p>
-                        <p className="font-medium text-[#a8738b]">{userData?.userId}</p>
+                        <p className="font-medium text-[#a8738b]">{userData?.id}</p>
                       </>
                     )}
                     {userData?.name && (

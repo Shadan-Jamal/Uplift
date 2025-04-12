@@ -97,6 +97,7 @@ const StudentLogin = () => {
             const res = await signIn("credentials",{ 
                 email : userData.email,
                 password : userData.password,
+                userType: "student",
                 redirect : false,
             })
 
@@ -191,6 +192,7 @@ const CouncilLogin = () => {
             const res = await signIn("credentials", {
                 email: email,
                 password: password,
+                userType: "counselor",
                 redirect: false,
             });
 
