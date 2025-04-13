@@ -20,7 +20,7 @@ const counselorRoutes = [
 
 // Define student-only routes
 const studentRoutes = [
-  '/',  // Add home route as student-only
+  '/',
   '/chat',
 ];
 
@@ -35,15 +35,24 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
   
   // Get the token using NextAuth's getToken function
-  const token = await getToken({ req: request });
+  const token = await getToken({ 
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET
+  });
   
+  console.log('Middleware - Current path:', pathname);
+  console.log('Middleware - Token exists:', !!token);
+  if (token) {
+    console.log('Middleware - User type:', token.type);
+  }
+
   // If it's a public route, allow access without token
   if (publicRoutes.includes(pathname)) {
     // If user is authenticated and trying to access login/register pages, redirect to appropriate dashboard
     if (token) {
-      if (token.userType === 'student') {
+      if (token.type === 'student') {
         return NextResponse.redirect(new URL('/', request.url));
-      } else if (token.userType === 'counselor') {
+      } else if (token.type === 'counselor') {
         return NextResponse.redirect(new URL('/counselor/dashboard', request.url));
       }
     }
@@ -60,7 +69,7 @@ export async function middleware(request) {
   
   // If there's a token, check user type and route access
   if (token) {
-    const userType = token.userType;
+    const userType = token.type;
     
     // For counselors
     if (userType === 'counselor') {

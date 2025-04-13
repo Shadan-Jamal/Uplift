@@ -22,7 +22,9 @@ export default function UserChat({ selectedFaculty }) {
   useEffect(() => {
     if (!selectedFaculty) return;
     if(!session) return;
-    if(messages.length > 0) return;
+
+    // Clear messages when faculty changes
+    setMessages([]);
 
     const fetchMessages = async () => {
       try {
@@ -30,7 +32,7 @@ export default function UserChat({ selectedFaculty }) {
         const response = await fetch(`/api/chat/messages?email=${selectedFaculty.email}`);
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          console.log('Fetched messages:', data);
           setMessages(Array.isArray(data) ? data : []);
         }
       } catch (error) {
@@ -69,21 +71,23 @@ export default function UserChat({ selectedFaculty }) {
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
       console.log("Received message:", message);
-      setMessages(prev => {
-        const currentMessages = Array.isArray(prev) ? prev : [];
-        if (
-          (message.studentId === session?.user?.id && message.facultyId === selectedFaculty?.email) ||
-          (message.facultyId === selectedFaculty?.email && message.studentId === session?.user?.id)
-        ) {
+      // Only add message if it's for the current conversation
+      if (
+        (message.studentId === session?.user?.id && message.facultyId === selectedFaculty?.email) ||
+        (message.facultyId === selectedFaculty?.email && message.studentId === session?.user?.id)
+      ) {
+        setMessages(prev => {
+          const currentMessages = Array.isArray(prev) ? prev : [];
           return [...currentMessages, message];
-        }
-        return currentMessages;
-      });
+        });
+      }
     });
     
     // Cleanup on unmount
-    return () => newSocket.disconnect();
-  }, [selectedFaculty, session?.user?.id]);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [selectedFaculty, session?.user?.id]); // Remove messages from dependencies
 
   useEffect(() => {
     scrollToBottom();
