@@ -16,6 +16,7 @@ export default function UserChat({ selectedStudent }) {
     if (!selectedStudent) return;
     if(!session) return;
     if(messages.length > 0) return;
+    
     // Fetch existing messages
     const fetchMessages = async () => {
       try {
@@ -30,14 +31,25 @@ export default function UserChat({ selectedStudent }) {
     };
 
     fetchMessages();
-
   }, [selectedStudent, session?.user?.email, messages]);
   
   useEffect(() => {
     if (!selectedStudent) return;
     if(!session) return;
     
-    const newSocket = io(`${process.env.BACKEND_URL}`);
+    // Initialize socket connection with dynamic URL
+    const socketUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://care-backend-y23p.onrender.com'
+      : 'http://localhost:3001';
+    
+    console.log('Connecting to socket at:', socketUrl);
+    const newSocket = io(socketUrl, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000,
+    });
+    
     setSocket(newSocket);
     
     // Register user with socket
@@ -52,15 +64,11 @@ export default function UserChat({ selectedStudent }) {
     newSocket.on('receive_message', (message) => {
       console.log("Received message:", message);
       setMessages(prev => {
-        // Ensure prev is an array
         const currentMessages = Array.isArray(prev) ? prev : [];
-        // Check if this message is for the current conversation
         if (
           (message.studentId === selectedStudent?.studentId && message.facultyId === session?.user?.email) ||
           (message.facultyId === session?.user?.email && message.studentId === selectedStudent?.studentId)
         ) {
-          console.log("Current Messages:", currentMessages);
-          console.log("Adding message to state:", message);
           return [...currentMessages, message];
         }
         return currentMessages;
@@ -70,8 +78,7 @@ export default function UserChat({ selectedStudent }) {
     return () => {
       newSocket.disconnect();
     };
-
-  },[messages])
+  }, [selectedStudent, session?.user?.email]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

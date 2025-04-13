@@ -17,7 +17,7 @@ export default function UserChat({ selectedFaculty }) {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
+  console.log(session?.user)
   // Fetch existing messages when a faculty is selected
   useEffect(() => {
     if (!selectedFaculty) return;
@@ -25,13 +25,12 @@ export default function UserChat({ selectedFaculty }) {
     if(messages.length > 0) return;
 
     const fetchMessages = async () => {
-
       try {
         setLoading(true);
         const response = await fetch(`/api/chat/messages?email=${selectedFaculty.email}`);
         if (response.ok) {
           const data = await response.json();
-          // Ensure messages is always an array
+          console.log(data)
           setMessages(Array.isArray(data) ? data : []);
         }
       } catch (error) {
@@ -44,8 +43,19 @@ export default function UserChat({ selectedFaculty }) {
 
     fetchMessages();
     
-    // Initialize socket connection
-    const newSocket = io(`${process.env.BACKEND_URL}`);
+    // Initialize socket connection with dynamic URL
+    const socketUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://care-backend-y23p.onrender.com'
+      : 'http://localhost:3001';
+    
+    console.log('Connecting to socket at:', socketUrl);
+    const newSocket = io(socketUrl, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000,
+    });
+    
     setSocket(newSocket);
     
     // Register user with socket
@@ -60,9 +70,7 @@ export default function UserChat({ selectedFaculty }) {
     newSocket.on('receive_message', (message) => {
       console.log("Received message:", message);
       setMessages(prev => {
-        // Ensure prev is an array
         const currentMessages = Array.isArray(prev) ? prev : [];
-        // Check if this message is for the current conversation
         if (
           (message.studentId === session?.user?.id && message.facultyId === selectedFaculty?.email) ||
           (message.facultyId === selectedFaculty?.email && message.studentId === session?.user?.id)
@@ -74,7 +82,7 @@ export default function UserChat({ selectedFaculty }) {
     });
     
     // Cleanup on unmount
-    return () => newSocket.close();
+    return () => newSocket.disconnect();
   }, [selectedFaculty, session?.user?.id]);
 
   useEffect(() => {

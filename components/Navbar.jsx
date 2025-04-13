@@ -11,7 +11,7 @@ export default function Navbar() {
   const [userData, setUserData] = useState(null);
   const { data: session } = useSession();
   const pathname = usePathname();
-
+  console.log(session)
   // Fetch user data when session is available
   useEffect(() => {
     const fetchUserData = async () => {
