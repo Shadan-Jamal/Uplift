@@ -5,9 +5,9 @@ import User from "../../../models/user";
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
-        const id = searchParams.get('id');
+        const email = searchParams.get('email');
 
-        if (!id) {
+        if (!email) {
             return NextResponse.json(
                 { message: "Id is required" },
                 { status: 400 }
@@ -16,7 +16,7 @@ export async function GET(request) {
 
         await connectToDB();
 
-        const user = await User.findOne({ id })
+        const user = await User.findOne({ email })
             .select('userId email -_id'); // Only select userId and email, exclude _id
 
         if (!user) {

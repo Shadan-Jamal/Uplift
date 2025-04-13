@@ -11,8 +11,8 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { email } = body;
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get('email');
 
     await connectToDB();
 

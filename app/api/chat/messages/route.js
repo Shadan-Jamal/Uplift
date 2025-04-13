@@ -14,22 +14,30 @@ export async function GET(request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const otherUserId = searchParams.get('userId');
+    let otherUserId = searchParams.get('email');
+    if (!otherUserId) {
+      otherUserId = searchParams.get('userId');
+    }
     if (!otherUserId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     await connectToDB();
 
-    // Fetch messages between the current user and the other user
-    const messages = await Message.find({
+    // Find the conversation between the current user and the other user
+    const conversation = await Message.findOne({
       $or: [
-        { senderId: session.user.id, receiverId: otherUserId },
-        { senderId: otherUserId, receiverId: session.user.id }
+        { studentId: session.user.id, facultyId: otherUserId },
+        { studentId: otherUserId, facultyId: session.user.email }
       ]
-    }).sort({ timestamp: 1 });
+    });
 
-    return NextResponse.json(messages);
+    if (!conversation) {
+      return NextResponse.json({ conversation: [] });
+    }
+
+    return NextResponse.json(conversation.conversation);
+    
   } catch (error) {
     console.error('Error fetching messages:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -45,27 +53,27 @@ export async function POST(request) {
 
     const body = await request.json();
     const { text, receiverId, receiverType } = body;
-    console.log(body)
     if (!text || !receiverId || !receiverType) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await connectToDB();
+    console.log(session?.user)
+    // Determine student and faculty IDs based on user types
+    const studentId = session.user.type === 'student' ? session.user.id : receiverId;
+    const facultyId = session.user.type === 'counselor' ? session.user.email : receiverId;
 
     // If sender is a student and receiver is a counselor, add student to counselor's conversation list
     if (session.user.type === 'student' && receiverType === 'counselor') {
       const student = await User.findOne({ userId: session.user.id });
-      const counselor = await Counselor.findOne({ name: receiverId });
-      console.log(`User: ${student}, Counselor: ${counselor}`);
+      const counselor = await Counselor.findOne({ email: receiverId });
 
       if (student && counselor) {
         try {
-          // Initialize studentsInConversation if it doesn't exist
           if (!counselor.studentsInConversation) {
             counselor.studentsInConversation = [];
           }
 
-          // Check if student is already in conversation list
           const studentExists = counselor.studentsInConversation.some(
             s => s.studentId === student.userId
           );
@@ -77,7 +85,6 @@ export async function POST(request) {
             });
             await counselor.save();
           }
-          console.log(counselor)
         } catch (error) {
           console.error('Error saving counselor:', error);
           return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -85,19 +92,23 @@ export async function POST(request) {
       }
     }
 
+    // Find or create conversation document
+    const conversation = await Message.findOneAndUpdate(
+      { studentId, facultyId },
+      {
+        $push: {
+          conversation: {
+            text,
+            senderId : session.user.type === 'student' ? session.user.id : session.user.email,
+            timestamp: new Date()
+          }
+        },
+        $set: { lastMessage: new Date() }
+      },
+      { upsert: true, new: true }
+    );
 
-    // Create new message
-    const message = await Message.create({
-      text,
-      senderId: session.user.id,
-      senderType: session.user.type,
-      receiverId,
-      receiverType,
-      timestamp: new Date()
-    });
-
-    console.log(message)
-    return NextResponse.json(message);
+    return NextResponse.json(conversation.conversation[conversation.conversation.length - 1]);
   } catch (error) {
     console.error('Error creating message:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

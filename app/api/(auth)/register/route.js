@@ -70,6 +70,7 @@ export async function POST(req) {
 
             // Check for existing user
             const existingUser = await User.findOne({ email: email.toLowerCase() });
+            console.log(existingUser)
             if (existingUser) {
                 console.log("User already exists");
                 return NextResponse.json(

@@ -20,33 +20,34 @@ export default function UserChat({ selectedFaculty }) {
 
   // Fetch existing messages when a faculty is selected
   useEffect(() => {
+    if (!selectedFaculty) return;
+    if(!session) return;
+    if(messages.length > 0) return;
+
     const fetchMessages = async () => {
-      if (!selectedFaculty || !session) return;
-      
+
       try {
         setLoading(true);
-
-        const response = await fetch(`/api/chat/messages?mail=${selectedFaculty.mail}`);
+        const response = await fetch(`/api/chat/messages?email=${selectedFaculty.email}`);
         if (response.ok) {
           const data = await response.json();
-
-          setMessages(data);
+          // Ensure messages is always an array
+          setMessages(Array.isArray(data) ? data : []);
         }
       } catch (error) {
         console.error('Error fetching messages:', error);
+        setMessages([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchMessages();
-  }, [selectedFaculty, session]);
-
-  useEffect(() => {
+    
     // Initialize socket connection
     const newSocket = io('http://localhost:3001');
     setSocket(newSocket);
-
+    
     // Register user with socket
     if (session?.user) {
       newSocket.emit('user_connected', {
@@ -57,12 +58,24 @@ export default function UserChat({ selectedFaculty }) {
 
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
-      setMessages(prev => [...prev, message]);
+      console.log("Received message:", message);
+      setMessages(prev => {
+        // Ensure prev is an array
+        const currentMessages = Array.isArray(prev) ? prev : [];
+        // Check if this message is for the current conversation
+        if (
+          (message.studentId === session?.user?.id && message.facultyId === selectedFaculty?.email) ||
+          (message.facultyId === selectedFaculty?.email && message.studentId === session?.user?.id)
+        ) {
+          return [...currentMessages, message];
+        }
+        return currentMessages;
+      });
     });
-
+    
     // Cleanup on unmount
     return () => newSocket.close();
-  }, [session]);
+  }, [selectedFaculty, session?.user?.id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -74,14 +87,16 @@ export default function UserChat({ selectedFaculty }) {
 
     const messageData = {
       text: newMessage,
+      studentId: session.user.id,
       senderId: session.user.id,
-      receiverId: selectedFaculty.mail,
+      facultyId: selectedFaculty.email,
       timestamp: new Date().toLocaleString({ hour: 'numeric', minute: 'numeric', hour12: true }),
       senderName: session.user.name || 'Student',
       receiverName: selectedFaculty.name,
       senderType: 'student',
       receiverType: 'counselor'
     };
+
     try {
       // Send message to API
       const response = await fetch('/api/chat/messages', {
@@ -91,7 +106,7 @@ export default function UserChat({ selectedFaculty }) {
         },
         body: JSON.stringify({
           text: newMessage,
-          receiverId: selectedFaculty.name,
+          receiverId: selectedFaculty.email,
           receiverType: 'counselor'
         }),
       });
@@ -99,9 +114,6 @@ export default function UserChat({ selectedFaculty }) {
       if (response.ok) {
         // Emit message through socket
         socket.emit('send_message', messageData);
-
-        // Add message to local state
-        setMessages(prev => [...prev, messageData]);
         setNewMessage('');
       } else {
         console.error('Failed to send message');
@@ -110,7 +122,7 @@ export default function UserChat({ selectedFaculty }) {
       console.error('Error sending message:', error);
     }
   };
-  console.log('Messages ', messages)
+  console.log("Messages in student chat", messages)
   if (!selectedFaculty) {
     return (
       <div className="w-3/4 h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
@@ -141,13 +153,13 @@ export default function UserChat({ selectedFaculty }) {
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">{selectedFaculty.name}</h3>
-          <p className="text-sm text-gray-500">{selectedFaculty.mail}</p>
+          <p className="text-sm text-gray-500">{selectedFaculty.email}</p>
         </div>
       </div>
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message, index) => (
+        {messages.length > 0 && messages.map((message, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
@@ -156,7 +168,7 @@ export default function UserChat({ selectedFaculty }) {
           >
             <div
               className={`max-w-[70%] rounded-lg p-3 ${
-                message.senderId === session?.user?.userId
+                message.senderId === session?.user?.id
                   ? 'bg-[#eba1c2]/30 text-gray-900'
                   : 'bg-gray-100 text-gray-900'
               }`}

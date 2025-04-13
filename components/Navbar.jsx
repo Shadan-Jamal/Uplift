@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const [loginModal, openLoginModal] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [userData, setUserData] = useState(null);
   const { data: session } = useSession();
@@ -18,15 +17,17 @@ export default function Navbar() {
     const fetchUserData = async () => {
       if (session) {
         try {
-          // First try to fetch from user API
-          let response = await fetch(`/api/user?id=${session?.user?.id}`);
-          let data = await response.json();
-          
-          // If user not found, try counselor API
-          if (response.status === 404) {
+          let response, data; 
+          if(session?.user?.type === "counselor"){
             response = await fetch(`/api/counselor?email=${session?.user?.email}`);
             data = await response.json();
           }
+
+          else{
+            response =  await fetch(`/api/user?email=${session?.user?.email}`);
+            data = await response.json();
+          }
+          
           
           if (response.ok) {
             setUserData(data);
@@ -36,18 +37,20 @@ export default function Navbar() {
         }
       }
     };
-
+    
     fetchUserData();
   }, [session]);
 
+  
   // Check if we're on the dashboard route
   const isDashboardRoute = pathname?.startsWith('/counselor/dashboard');
+  const isLoginRoute = pathname === '/login' || pathname === '/register';
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
   };
-
-  return (
+  console.log(userData)
+  return (isLoginRoute ? null :
     <nav className={`fixed top-0 z-50 flex flex-row justify-center items-center w-full h-fit py-3`}>
       <div className="flex md:flex-row md:justify-center md:items-center w-full max-w-[90vw] h-fit pr-10 py-1 gap-5 bg-white/90 backdrop-blur-3xl rounded-full shadow-lg border-2 border-[#a8738b]/80 md:relative">
         <>
@@ -93,10 +96,10 @@ export default function Navbar() {
               {showProfile && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
                   <div className="px-4 py-2 border-b border-gray-100">
-                    {userData?.id && (
+                    {userData?.userId && session?.user?.type === "student" && (
                       <>
                         <p className="text-sm text-gray-500">User ID</p>
-                        <p className="font-medium text-[#a8738b]">{userData?.id}</p>
+                        <p className="font-medium text-[#a8738b]">{userData.userId}</p>
                       </>
                     )}
                     {userData?.name && (

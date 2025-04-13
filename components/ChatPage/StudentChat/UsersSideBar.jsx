@@ -13,7 +13,7 @@ export default function UsersSideBar({ selectedFaculty, onSelectFaculty }) {
         <div className="space-y-2">
           {faculty.map((member) => (
             <motion.div
-              key={member.mail}
+              key={member.email}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectFaculty(member)}

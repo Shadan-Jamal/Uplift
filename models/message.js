@@ -1,26 +1,41 @@
 import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema({
-  senderId: {
+  studentId: {
     type: String,
     required: true
   },
-  receiverId: {
+  facultyId: {
     type: String,
     required: true
   },
-  text: {
-    type: String,
-    required: true
-  },
-  timestamp: {
+  conversation: [{
+    text: {
+      type: String,
+      required: true
+    },
+    senderId: {
+      type: String,
+      required: true
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    read: {
+      type: Boolean,
+      default: false
+    }
+  }],
+  lastMessage: {
     type: Date,
     default: Date.now
-  },
-  read: {
-    type: Boolean,
-    default: false
   }
+}, {
+  timestamps: true
 });
+
+// Create a compound index for efficient querying
+messageSchema.index({ studentId: 1, facultyId: 1 }, { unique: true });
 
 export default mongoose.models.Message || mongoose.model('Message', messageSchema); 

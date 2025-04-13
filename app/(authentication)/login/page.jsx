@@ -9,29 +9,7 @@ import toast from "react-hot-toast"
 
 const page = () => {
     const [loginChoice, setLoginChoice] = useState("student")
-    const [userData, setUserData] = useState({email : "", password : ""})
-    const [error, setError] = useState(null)
     const router  = useRouter()
-    // const [isLoading, setIsLoading] = useState(false)  
-    // const handleLogin = async () => {
-    //     try{
-    //         setIsLoading(true)
-    //         const res = await signIn("credentials",{ 
-    //             email : userData.email,
-    //             password : userData.password,
-    //             redirect : false,
-    //         })
-
-    //         if(res.error){
-    //             setError("Invalid credentials.")
-    //             return
-    //         }
-    //         router.replace("/")
-    //     }
-    //     catch(error){
-    //         console.log(error)
-    //     }
-    // }
 
     return (
         <section className="md:flex md:flex-row md:justify-between md:items-center h-[100dvh] w-[100dvw] bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
@@ -102,8 +80,8 @@ const StudentLogin = () => {
             })
 
             if(res.error){
-                setError("Invalid credentials.")
-
+                console.log(res.error)
+                setError(res.error)
                 return
             }
             router.replace("/")
@@ -197,18 +175,20 @@ const CouncilLogin = () => {
             });
 
             if (res.error) {
-                setError("Invalid credentials.");
+                console.log("Login error:", res.error);
+                setError(res.error);
                 return;
             }
             router.replace("/counselor/dashboard");
         } catch (error) {
-            console.log(error);
+            console.error("Login error:", error);
+            setError(error.message || "An unexpected error occurred");
         }
-        finally{
-            setIsLoading(false)
+        finally {
+            setIsLoading(false);
         }
     };
-
+    console.log(error)
     return (
         <div className="flex flex-col items-center gap-6">
             <h1 className="text-3xl font-bold text-[#a8738b]">Login</h1>
@@ -244,10 +224,10 @@ const CouncilLogin = () => {
                     </Link>
                 </div>
 
-                {error!= null && <div
+                {<div
                 className="w-full h-fit"
                 >   
-                    {error === "Invalid credentials." && <p className="w-fit text-md text-white bg-red-500 py-2 px-3 rounded-lg">{error}</p>}
+                    {<p className="w-fit text-md text-white bg-red-500 py-2 px-3 rounded-lg">{error}</p>}
                 </div>
                 }
                 
