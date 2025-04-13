@@ -45,7 +45,7 @@ export default function UserChat({ selectedFaculty }) {
     fetchMessages();
     
     // Initialize socket connection
-    const newSocket = io('http://localhost:3001');
+    const newSocket = io(`${process.env.BACKEND_URL}`);
     setSocket(newSocket);
     
     // Register user with socket

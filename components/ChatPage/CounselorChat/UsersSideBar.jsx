@@ -15,7 +15,7 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
   useEffect(() => {
     if (!session) return;
     // Initialize socket connection
-    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001');
+    const newSocket = io(`${process.env.BACKEND_URL}`);
     setSocket(newSocket);
 
     // Register user with socket
