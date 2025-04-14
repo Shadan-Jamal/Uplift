@@ -32,7 +32,11 @@ const publicRoutes = [
 ];
 
 export async function middleware(request) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
+  
+  // Debug: Log the full URL and search params
+  console.log('Middleware - Full URL:', request.url);
+  console.log('Middleware - Search Params:', Object.fromEntries(searchParams));
   
   // Get the token using NextAuth's getToken function
   const token = await getToken({ 
@@ -40,16 +44,23 @@ export async function middleware(request) {
     secret: process.env.NEXTAUTH_SECRET
   });
   
-  console.log('Middleware - Current path:', pathname);
-  console.log('Middleware - Token exists:', !!token);
-  if (token) {
-    console.log('Middleware - User type:', token.type);
-  }
-
+  // Debug: Log token details
+  console.log('Middleware - Token:', token ? {
+    exists: true,
+    type: token.type,
+    id: token.id,
+    email: token.email
+  } : { exists: false });
+  
+  // Debug: Log environment variables
+  console.log('Middleware - NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+  console.log('Middleware - NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET);
+  
   // If it's a public route, allow access without token
   if (publicRoutes.includes(pathname)) {
     // If user is authenticated and trying to access login/register pages, redirect to appropriate dashboard
     if (token) {
+      console.log('Middleware - Redirecting authenticated user from public route');
       if (token.type === 'student') {
         return NextResponse.redirect(new URL('/', request.url));
       } else if (token.type === 'counselor') {
@@ -61,8 +72,8 @@ export async function middleware(request) {
   
   // If there's no token and it's a protected route, redirect to login
   if (!token && protectedRoutes.some(route => pathname.startsWith(route))) {
+    console.log('Middleware - No token found, redirecting to login');
     const loginUrl = new URL('/login', request.url);
-    // Add the current path as a redirect parameter
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
@@ -70,15 +81,18 @@ export async function middleware(request) {
   // If there's a token, check user type and route access
   if (token) {
     const userType = token.type;
+    console.log('Middleware - Checking route access for user type:', userType);
     
     // For counselors
     if (userType === 'counselor') {
       // If trying to access student routes or home, redirect to dashboard
       if (pathname === '/' || studentRoutes.includes(pathname)) {
+        console.log('Middleware - Redirecting counselor from student route');
         return NextResponse.redirect(new URL('/counselor/dashboard', request.url));
       }
       // If already on counselor routes, allow access
       if (counselorRoutes.some(route => pathname.startsWith(route))) {
+        console.log('Middleware - Allowing counselor access to counselor route');
         return NextResponse.next();
       }
     }
@@ -87,10 +101,12 @@ export async function middleware(request) {
     if (userType === 'student') {
       // If trying to access counselor routes, redirect to home
       if (counselorRoutes.some(route => pathname.startsWith(route))) {
+        console.log('Middleware - Redirecting student from counselor route');
         return NextResponse.redirect(new URL('/', request.url));
       }
       // If on student routes or home, allow access
       if (studentRoutes.includes(pathname) || pathname === '/') {
+        console.log('Middleware - Allowing student access to student route');
         return NextResponse.next();
       }
     }

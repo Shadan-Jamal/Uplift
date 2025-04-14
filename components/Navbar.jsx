@@ -44,7 +44,7 @@ export default function Navbar() {
   
   // Check if we're on the dashboard route
   const isDashboardRoute = pathname?.startsWith('/counselor/dashboard');
-  const isLoginRoute = pathname === '/login' || pathname === '/register';
+  const isLoginRoute = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password';
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
