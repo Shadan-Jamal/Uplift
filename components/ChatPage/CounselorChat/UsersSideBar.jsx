@@ -15,9 +15,8 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
   useEffect(() => {
     if (!session) return;
     // Initialize socket connection
-    const socketurl =  process.env.NODE_ENV === 'production' 
-    ? 'https://care-backend-y23p.onrender.com'
-    : 'http://localhost:3001'
+    const socketurl =  'https://care-backend-y23p.onrender.com'
+    // : 'http://localhost:3001'
 
     const newSocket = io(socketurl, {
       reconnection: true,

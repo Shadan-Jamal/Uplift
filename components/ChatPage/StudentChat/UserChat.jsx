@@ -46,9 +46,8 @@ export default function UserChat({ selectedFaculty }) {
     fetchMessages();
     
     // Initialize socket connection with dynamic URL
-    const socketUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://care-backend-y23p.onrender.com'
-      : 'http://localhost:3001';
+    const socketUrl = 'https://care-backend-y23p.onrender.com'
+      // : 'http://localhost:3001';
     
     console.log('Connecting to socket at:', socketUrl);
     const newSocket = io(socketUrl, {
