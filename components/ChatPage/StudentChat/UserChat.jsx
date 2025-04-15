@@ -47,15 +47,22 @@ export default function UserChat({ selectedFaculty }) {
     fetchMessages();
     
     // Initialize socket connection with dynamic URL
-    // const socketUrl = 'https://care-backend-y23p.onrender.com'
-      const socketUrl = SOCKET_URL;
-    
-    console.log('Connecting to socket at:', socketUrl);
+    // const socketUrl = "http://localhost:3001";
+    const socketUrl = SOCKET_URL.SOCKET_URL;
+
+    console.log("Socket URL", SOCKET_URL)
+    console.log('Connecting to socket at:', SOCKET_URL);
     const newSocket = io(socketUrl, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true
+      },
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 10000,
+      transports: ['websocket', 'polling']
     });
     
     setSocket(newSocket);

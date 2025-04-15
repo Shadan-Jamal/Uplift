@@ -18,9 +18,14 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
     if (!session) return;
     // Initialize socket connection
     // const socketurl =  'https://care-backend-y23p.onrender.com'
-     const socketUrl = SOCKET_URL;
+    const socketUrl = SOCKET_URL.SOCKET_URL;
 
     const newSocket = io(socketUrl, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true
+      },
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
