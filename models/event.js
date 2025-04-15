@@ -1,34 +1,43 @@
 import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema({
-    name: {
+    title: {
         type: String,
-        required: true,
+        required: [true, 'Event title is required'],
         trim: true
     },
     description: {
         type: String,
-        required: true,
+        required: [true, 'Event description is required'],
         trim: true
     },
     date: {
         type: Date,
-        required: true
+        required: [true, 'Event date is required']
     },
     venue: {
         type: String,
-        required: true,
+        required: [true, 'Event venue is required'],
         trim: true
     },
     poster: {
         type: String, // URL to the stored image
-        required: true
     },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
 }, { timestamps: true , collection: 'events'});
+
+// Update the updatedAt field before saving
+eventSchema.pre('save', function(next) {
+    this.updatedAt = Date.now();
+    next();
+});
 
 const Event = mongoose.models.Event || mongoose.model("Event", eventSchema);
 

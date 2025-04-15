@@ -19,7 +19,7 @@ export default function Quotes() {
         // Change quote every 7 minutes
         const interval = setInterval(() => {
             setCurrentQuote(getRandomQuote());
-        }, 24 * 60 * 60); 
+        }, 10 * 1000); 
 
         // Cleanup interval on component unmount
         return () => clearInterval(interval);

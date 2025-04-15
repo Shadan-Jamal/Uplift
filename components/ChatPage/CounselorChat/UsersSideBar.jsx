@@ -115,7 +115,9 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
                   selectedStudent?.studentId === student.studentId
                     ? 'bg-[#a8738b]/20'
                     : ''
-                }`}
+                } flex items-center justify-between gap-4`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 onClick={() => onSelectStudent(student)}
               >
                 <div className="w-12 h-12 rounded-full bg-[#a8738b] flex items-center justify-center text-white font-semibold text-lg">
@@ -124,11 +126,11 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-gray-900 truncate">
+                  <h3 className="text-md font-medium text-gray-900 truncate">
                     {`${student.studentId}`}
                   </h3>
                 </div>
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                {/* <div className="w-2 h-2 rounded-full bg-green-500"></div> */}
               </motion.div>
             ))}
           </div>

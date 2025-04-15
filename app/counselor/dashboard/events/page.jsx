@@ -12,46 +12,21 @@ export default function EventsPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState(null);
 
   // Fetch all events
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      // In a real app, this would be an API call
-      // For now, we'll use mock data
-      const mockEvents = [
-        {
-          _id: '1',
-          title: 'Stress Management Workshop',
-          description: 'Learn effective techniques to manage stress in your daily life.',
-          venue: 'Main Conference Room',
-          date: '2024-03-25',
-        },
-        {
-          _id: '2',
-          title: 'Group Therapy Session',
-          description: 'Join our supportive group therapy session to share experiences and gain insights.',
-          venue: 'Therapy Room 2',
-          date: '2024-03-28',
-        },
-        {
-          _id: '3',
-          title: 'Mindfulness Meditation',
-          description: 'Practice mindfulness meditation techniques to improve focus and reduce anxiety.',
-          venue: 'Meditation Hall',
-          date: '2024-04-05',
-        },
-      ];
-      
-      // Simulate API delay
-      setTimeout(() => {
-        setEvents(mockEvents);
-        setLoading(false);
-      }, 500);
+      const response = await fetch('/api/events');
+      if (!response.ok) {
+        throw new Error('Failed to fetch events');
+      }
+      const data = await response.json();
+      setEvents(data.events);
     } catch (error) {
       console.error('Error fetching events:', error);
       toast.error('Failed to load events');
+    } finally {
       setLoading(false);
     }
   };
@@ -61,56 +36,33 @@ export default function EventsPage() {
     fetchEvents();
   }, []);
 
-  // Open modal for adding a new event
-  const handleAddEvent = () => {
-    setEditingEvent(null);
-    setIsModalOpen(true);
+  // Handle new event addition
+  const handleEventAdded = (newEvent) => {
+    setEvents(prev => [newEvent, ...prev]);
+    toast.success('Event added successfully');
   };
 
-  // Open modal for editing an existing event
-  const handleEditEvent = (event) => {
-    setEditingEvent(event);
-    setIsModalOpen(true);
-  };
-
-  // Close the modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingEvent(null);
-  };
-
-  // Handle form submission (add or update)
-  const handleSubmitEvent = (formData) => {
-    if (editingEvent) {
-      // Update existing event
-      const updatedEvents = events.map(event => 
-        event._id === editingEvent._id 
-          ? { ...event, ...formData } 
-          : event
-      );
-      setEvents(updatedEvents);
-      toast.success('Event updated successfully');
-    } else {
-      // Add new event
-      const newEvent = {
-        _id: Date.now().toString(),
-        ...formData
-      };
-      setEvents([newEvent, ...events]);
-      toast.success('Event added successfully');
-    }
-    
-    handleCloseModal();
-  };
-
-  // Delete an event
-  const handleDeleteEvent = (id) => {
+  // Handle event deletion
+  const handleDeleteEvent = async (id) => {
     if (!confirm('Are you sure you want to delete this event?')) {
       return;
     }
-    
-    setEvents(events.filter(event => event._id !== id));
-    toast.success('Event deleted successfully');
+
+    try {
+      const response = await fetch(`/api/events/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete event');
+      }
+
+      setEvents(prev => prev.filter(event => event._id !== id));
+      toast.success('Event deleted successfully');
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      toast.error('Failed to delete event');
+    }
   };
 
   return (
@@ -129,7 +81,7 @@ export default function EventsPage() {
             <h1 className="text-3xl font-bold text-gray-800">Events Management</h1>
           </div>
           <button
-            onClick={handleAddEvent}
+            onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors shadow-md"
           >
             Add New Event
@@ -155,7 +107,6 @@ export default function EventsPage() {
                   description={event.description}
                   venue={event.venue}
                   date={event.date}
-                  onEdit={() => handleEditEvent(event)}
                   onDelete={() => handleDeleteEvent(event._id)}
                 />
               ))}
@@ -167,13 +118,11 @@ export default function EventsPage() {
       {/* Event Form Modal */}
       <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={editingEvent ? 'Edit Event' : 'Add New Event'}
+        onClose={() => setIsModalOpen(false)}
       >
         <EventForm
-          event={editingEvent}
-          onSubmit={handleSubmitEvent}
-          onCancel={handleCloseModal}
+          onClose={() => setIsModalOpen(false)}
+          onEventAdded={handleEventAdded}
         />
       </Modal>
     </section>

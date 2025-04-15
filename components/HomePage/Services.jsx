@@ -1,25 +1,26 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Services() {
   const services = [
     {
       title: "Professional Dialogue",
       description: "Connect with experienced counselors for personalized support and guidance through confidential one-on-one sessions.",
-      imagePlaceholder: "/services/dialogue.png",
+      image: "/dialogue.jpeg",
       delay: 0.2
     },
     {
       title: "Mental Health Events",
       description: "Join engaging workshops and awareness programs designed to promote holistic well-being and mental health awareness.",
-      imagePlaceholder: "/services/events.png",
+      image: "/event.png",
       delay: 0.4
     },
     {
       title: "Self-Screening",
       description: "Take a comprehensive mental health assessment to better understand your emotional well-being and get personalized recommendations.",
-      imagePlaceholder: "/services/screening.png",
+      image: "/test.png",
       delay: 0.6
     }
   ];
@@ -67,10 +68,16 @@ export default function Services() {
             >
               {/* Service Card */}
               <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border-2 border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300">
-                {/* Image Placeholder */}
-                <div className="relative w-full h-48 mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-[#a8738b]/10 to-purple-100/50">
+                {/* Image */}
+                <div className="relative w-full h-56 mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-[#a8738b]/10 to-purple-100/50">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[#a8738b]/40 text-sm">Image placeholder</span>
+                    <Image 
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      className="object-cover"
+                      priority={index < 3}
+                    />
                   </div>
                 </div>
 

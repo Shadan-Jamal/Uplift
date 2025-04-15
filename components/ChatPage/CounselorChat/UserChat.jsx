@@ -7,20 +7,22 @@ import { io } from 'socket.io-client';
 import SOCKET_URL from '../../../lib/config.js';
 
 export default function UserChat({ selectedStudent }) {
+  const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const messagesEndRef = useRef(null);
+  console.log(selectedStudent)
 
   useEffect(() => {
     if (!selectedStudent) return;
     if(!session) return;
-    if(messages.length > 0) return;
     
     // Fetch existing messages
     const fetchMessages = async () => {
       try {
+        setLoading(true)
         const response = await fetch(`/api/chat/messages?userId=${selectedStudent.studentId}`);
         if (response.ok) {
           const data = await response.json();
@@ -29,17 +31,18 @@ export default function UserChat({ selectedStudent }) {
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
+      finally {
+        setLoading(false)
+      }
     };
 
     fetchMessages();
-  }, [selectedStudent, session?.user?.email, messages]);
+  }, [selectedStudent, session?.user?.email]);
   
   useEffect(() => {
     if (!selectedStudent) return;
     if(!session) return;
     
-    // Initialize socket connection with dynamic URL
-    // const socketUrl = "http://localhost:3001";
     const socketUrl = SOCKET_URL.SOCKET_URL;
     
     console.log('Connecting to socket at:', socketUrl);
@@ -141,13 +144,18 @@ export default function UserChat({ selectedStudent }) {
       </div>
     );
   }
-
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#a8738b]"></div>
+      </div>
+    );
+  }
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {/* Chat header */}
       <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold">{selectedStudent.studentName}</h2>
-        <p className="text-sm text-gray-500">{selectedStudent.studentEmail}</p>
+        <h2 className="text-lg font-semibold text-black spacing">{selectedStudent.studentId}</h2>
       </div>
 
       {/* Messages container */}
@@ -164,7 +172,7 @@ export default function UserChat({ selectedStudent }) {
             <div
               className={`max-w-[70%] rounded-lg p-3 ${
                 message.senderId === session?.user?.email
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-[#eba1c2]/30 text-gray-900'
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
@@ -179,7 +187,7 @@ export default function UserChat({ selectedStudent }) {
       </div>
 
       {/* Message input */}
-      <form onSubmit={handleSendMessage} className="p-4 border-t">
+      <form onSubmit={handleSendMessage} className="pl-4">
         <div className="flex space-x-2">
           <input
             type="text"

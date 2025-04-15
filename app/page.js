@@ -1,5 +1,4 @@
 import Hero from "../components/HomePage/Hero";
-// import About from "@/components/About";
 import Faculty from "../components/HomePage/Faculty";
 import Events from "../components/HomePage/Events";
 import Services from "../components/HomePage/Services";

@@ -8,6 +8,7 @@ const protectedRoutes = [
   '/counselor/dashboard/chat',
   '/counselor/dashboard/events',
   '/counselor/dashboard/affirmations',
+  '/screening'
 ];
 
 // Define counselor-only routes
@@ -22,6 +23,7 @@ const counselorRoutes = [
 const studentRoutes = [
   '/',
   '/chat',
+  '/screening'
 ];
 
 // Define public routes that don't need redirection
@@ -125,5 +127,6 @@ export const config = {
     '/forgot-password',
     '/chat/:path*',
     '/counselor/dashboard/:path*',
+    '/screening/:path*',
   ],
 }; 

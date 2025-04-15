@@ -8,17 +8,17 @@ import Quotes from "./Quotes";
 import Affirmation from "./Affirmation";
 
 export default function Hero() {
-    const [titleLine, titleLineAnimate] = useAnimate();
+    // const [titleLine, titleLineAnimate] = useAnimate();
     const [title, titleAnimate] = useAnimate();
     const [content, contentAnimate] = useAnimate();
     const [claretTagline,claretTaglineAnimate] = useAnimate();
 
     useEffect(() => {
         const animate = async () => {
-            await titleLineAnimate(titleLine.current, 
-                { width: "100%" }, 
-                { duration: 1, type: "spring", ease: "easeIn" }
-            );
+            // await titleLineAnimate(titleLine.current, 
+            //     { width: "100%" }, 
+            //     { duration: 1, type: "spring", ease: "easeIn" }
+            // );
             await titleAnimate("span", 
                 { y: 0, opacity: 1 }, 
                 { delay: stagger(0.1), duration: 0.5 }
@@ -42,15 +42,8 @@ export default function Hero() {
 
     return (
         <section className="relative min-h-[100dvh] w-[100dvw] overflow-hidden bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb] backdrop-blur-3xl">
-            {/* Animated background elements */}
-            {/* <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-            </div> */}
 
             {/* Decorative elements */}
-            <Affirmation />
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
             <div className="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center gap-12 py-20">
@@ -89,10 +82,10 @@ export default function Hero() {
                                 className="text-purple-700 hover:cursor-default"
                             >E</motion.span>
                         </div>
-                        <motion.div ref={titleLine}
+                        {/* <motion.div ref={titleLine}
                             initial={{ width: 0 }}
                             className="h-1 absolute bottom-0 left-0 bg-gradient-to-r from-indigo-600 to-purple-500 rounded-full"
-                        />
+                        /> */}
                     </div>
 
 
@@ -111,17 +104,21 @@ export default function Hero() {
                     </div>
                     
                     {/* Department Badge */}
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3}}
-                        className="px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full border-2 border-indigo-200 shadow-lg"
-                    >
-                        <p className="text-sm font-semibold text-indigo-900 tracking-wide">
-                            Department of Psychology • St. Claret College, Autonomous
-                        </p>
-                    </motion.div>
-                    
+                    <div className="flex flex-row items-center gap-4">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3}}
+                            className="px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full border-2 border-indigo-200 shadow-lg"
+                        >
+                            <p className="text-md font-semibold text-indigo-900 tracking-wide">
+                                Department of Psychology • St. Claret College, Autonomous
+                            </p>
+                        </motion.div>
+
+                        {/* Affirmation Card */}
+                        <Affirmation />
+                    </div>
                     {/* Quote Section with Enhanced Styling */}
                     <div ref={content} className="max-w-[80dvw] md:max-w-2xl lg:max-w-3xl mt-3 lg:mt-8 bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-5 lg:p-8 shadow-xl border-2 border-[#a8738b]">
                         <div className="flex items-center gap-4">

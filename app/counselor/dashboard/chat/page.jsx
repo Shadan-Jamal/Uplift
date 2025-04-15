@@ -25,7 +25,7 @@ export default function ChatPage() {
         </div>
 
         {/* Content */}
-        <div className="max-w-full max-h-full mx-auto border-2 border-black">
+        <div className="max-w-full max-h-full mx-auto border rounded-lg shadow-lg bg-white/90 backdrop-blur-3xl overflow-hidden">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

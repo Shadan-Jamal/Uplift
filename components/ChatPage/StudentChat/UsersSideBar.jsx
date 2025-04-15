@@ -38,7 +38,7 @@ export default function UsersSideBar({ selectedFaculty, onSelectFaculty }) {
                   {member.designation}
                 </p>
               </div>
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              {/* <div className="w-2 h-2 rounded-full bg-green-500"></div> */}
             </motion.div>
           ))}
         </div>

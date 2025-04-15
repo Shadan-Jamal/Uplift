@@ -16,13 +16,13 @@ export default function Faculty() {
         className="text-center mb-16"
       >
         <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Meet Our Team</h2>
-        <p className="text-black/70 text-lg max-w-2xl mx-auto">
-          Meet our dedicated team of professionals committed to supporting student mental health and well-being.
+        <p className="text-black/70 text-xl max-w-2xl mx-auto">
+          Commited to support mental health and well-being.
         </p>
       </motion.div>
 
       {/* Faculty Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {faculty.map((member, index) => (
           <motion.div
             key={member.email}
@@ -62,14 +62,14 @@ export default function Faculty() {
                 </motion.p>
                 
                 <motion.a
-                  title={`Email ${member.mail}`}
-                  href={`mailto:${member.mail}`}
+                  title={`Email ${member.email}`}
+                  href={`mailto:${member.email}`}
                   className="text-black/50 hover:text-black transition-colors duration-200 text-sm hover:"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                 >
-                  {member.mail}
+                  {member.email}
                 </motion.a>
               </div>
             </div>

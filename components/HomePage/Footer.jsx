@@ -7,8 +7,6 @@ export default function Footer() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle the form submission
-    // For now, we'll just log it and clear the form
     console.log("Query submitted:", query);
     setQuery("");
   };
@@ -26,12 +24,12 @@ export default function Footer() {
                 </h3>
             </div>
             <div className="space-y-2">
-              <p className="text-gray-300">St. Claret College</p>
+              <p className="text-gray-300">St. Claret College, Autonomous</p>
               <p className="text-gray-300">Department of Psychology</p>
               <p className="text-gray-300">
                 1st Floor, Main Building
               </p>
-              <p className="text-gray-300">Bangalore - 560034</p>
+              <p className="text-gray-300">Bangalore - 560013</p>
             </div>
           </div>
 
@@ -40,9 +38,9 @@ export default function Footer() {
             <h3 className="text-xl font-semibold text-blue-400">Contact Us</h3>
             <div className="space-y-2">
               <p className="text-gray-300">Department Head</p>
-              <p className="text-gray-300">Dr. [Department Head Name]</p>
-              <p className="text-gray-300">Phone: +91 [Phone Number]</p>
-              <p className="text-gray-300">Email: [Department Email]</p>
+              <p className="text-gray-300">Ms. Angela Jean Mary E.</p>
+              <p className="text-gray-300">Phone No: +91 9986799828</p>
+              <p className="text-gray-300">Email: angela@claretcollege.edu.in</p>
             </div>
           </div>
 
@@ -78,14 +76,9 @@ export default function Footer() {
             <p className="text-gray-400 text-sm">
               © {new Date().getFullYear()} St. Claret College. All rights reserved.
             </p>
-            {/* <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                Terms of Service
-              </a>
-            </div> */}
+            <p className="text-gray-400 text-sm">
+              Designed and Developed by the Department of Computer Science, St. Claret College.
+            </p>
           </div>
         </div>
       </div>

@@ -2,20 +2,23 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function ScreeningModal() {
+export default function ScreeningModal({ isOpen, onClose }) {
   const router = useRouter();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(isOpen);
 
+  useEffect(() => {
+    setShowModal(isOpen);
+  }, [isOpen]);
 
-const handleTakeTest = () => {
-    setShowModal(false);
+  const handleTakeTest = () => {
     router.push("/screening");
   };
 
   const handleSkip = () => {
-    setShowModal(true)
+    setShowModal(false);
+    onClose();
     // Store in localStorage that user has seen the modal
     localStorage.setItem("screeningModalShown", "true");
   };
