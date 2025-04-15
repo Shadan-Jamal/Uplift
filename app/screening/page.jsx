@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function page() {
     const [selections, setSelections] = useState({});
@@ -9,6 +10,7 @@ export default function page() {
     const [showScore, setShowScore] = useState(false);
     const [countdown, setCountdown] = useState(5);
     const scoreRef = useRef(0);
+    const router = useRouter();
 
     const questions = [
         "Not feeling like doing anything or enjoying things.",
@@ -81,21 +83,65 @@ export default function page() {
         });
     }
 
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setShowScore(true);
-        // Start countdown
-        const timer = setInterval(() => {
-            setCountdown(prev => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    window.location.href = '/';
-                    return 0;
-                }
-                return prev - 1;
+        
+        // Prepare the answers array
+        const answers = questions.map((question, index) => ({
+            question,
+            answer: selections[index] || 0
+        }));
+
+        try {
+            // Submit to API
+            const response = await fetch('/api/screening', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    score: scoreRef.current / 2,
+                    level: getScoreColor(scoreRef.current / 2).label,
+                    answers
+                }),
             });
-        }, 1000);
-    }
+
+            if (!response.ok) {
+                throw new Error('Failed to submit screening results');
+            }
+
+            // Store in localStorage
+            localStorage.setItem("screeningCompleted", "true");
+            localStorage.setItem("screeningScore", (scoreRef.current / 2).toString());
+            localStorage.setItem("screeningLevel", getScoreColor(scoreRef.current / 2).label);
+
+            // Start countdown
+            const timer = setInterval(() => {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        router.push('/');
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        } catch (error) {
+            console.error('Error submitting screening:', error);
+            // Still show the score and redirect, but log the error
+            setShowScore(true);
+            const timer = setInterval(() => {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        router.push('/');
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+    };
 
     if (showScore) {
         return (
@@ -145,7 +191,7 @@ export default function page() {
                     <h1 className="text-5xl font-bold text-[#6caafa] mb-4">
                         Mental Health Analysis
                     </h1>
-                    <p className="text-xl text-[#a8738b] font-medium">Take the first step toward self-awareness</p>
+                    <p className="text-xl text-[#a8738b] font-medium">Please read the statements and indicate how often have you been bothered by any of the following in the last 2 weeks:</p>
                 </motion.div>
 
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-6 border-2 border-[#a8738b] relative overflow-hidden">

@@ -1,10 +1,11 @@
 "use client";
 
-import { delay, stagger } from "framer-motion";
+import { stagger } from "framer-motion";
 import { motion, useAnimate } from "framer-motion";
 import { useEffect } from "react";
 import Image from "next/image";
 import Quotes from "./Quotes";
+import Affirmation from "./Affirmation";
 
 export default function Hero() {
     const [titleLine, titleLineAnimate] = useAnimate();
@@ -49,6 +50,7 @@ export default function Hero() {
             </div> */}
 
             {/* Decorative elements */}
+            <Affirmation />
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
             <div className="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center gap-12 py-20">

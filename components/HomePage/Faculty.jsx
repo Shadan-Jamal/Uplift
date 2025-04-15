@@ -15,7 +15,7 @@ export default function Faculty() {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">The Council</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Meet Our Team</h2>
         <p className="text-black/70 text-lg max-w-2xl mx-auto">
           Meet our dedicated team of professionals committed to supporting student mental health and well-being.
         </p>
