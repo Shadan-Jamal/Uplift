@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
+import SOCKET_URL from '../../../lib/config.js';
 
 export default function UserChat({ selectedStudent }) {
   const { data: session } = useSession();
@@ -38,8 +39,8 @@ export default function UserChat({ selectedStudent }) {
     if(!session) return;
     
     // Initialize socket connection with dynamic URL
-    const socketUrl = 'https://care-backend-y23p.onrender.com'
-      // : 'http://localhost:3001';
+    // const socketUrl = 'https://care-backend-y23p.onrender.com'
+      const socketUrl = SOCKET_URL;
     
     console.log('Connecting to socket at:', socketUrl);
     const newSocket = io(socketUrl, {

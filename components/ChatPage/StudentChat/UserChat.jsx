@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { io } from 'socket.io-client';
 import { useSession } from 'next-auth/react';
+import SOCKET_URL from "../../../lib/config.js"
 
 export default function UserChat({ selectedFaculty }) {
   const [messages, setMessages] = useState([]);
@@ -46,8 +47,8 @@ export default function UserChat({ selectedFaculty }) {
     fetchMessages();
     
     // Initialize socket connection with dynamic URL
-    const socketUrl = 'https://care-backend-y23p.onrender.com'
-      // : 'http://localhost:3001';
+    // const socketUrl = 'https://care-backend-y23p.onrender.com'
+      const socketUrl = SOCKET_URL;
     
     console.log('Connecting to socket at:', socketUrl);
     const newSocket = io(socketUrl, {

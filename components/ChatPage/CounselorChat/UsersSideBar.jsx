@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
+import SOCKET_URL from '../../../lib/config.js';
+
 
 export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
   const { data: session } = useSession();
@@ -15,16 +17,16 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
   useEffect(() => {
     if (!session) return;
     // Initialize socket connection
-    const socketurl =  'https://care-backend-y23p.onrender.com'
-    // : 'http://localhost:3001'
+    // const socketurl =  'https://care-backend-y23p.onrender.com'
+     const socketUrl = SOCKET_URL;
 
-    const newSocket = io(socketurl, {
+    const newSocket = io(socketUrl, {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 10000,
     });
-    console.log('Connecting to socket at:', socketurl);
+    console.log('Connecting to socket at:', socketUrl);
     setSocket(newSocket);
 
     // Register user with socket

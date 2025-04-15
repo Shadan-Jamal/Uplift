@@ -82,8 +82,32 @@ export async function POST(req) {
             // Generate verification code
             const verificationCode = generateVerificationCode();
             
+            // Generate unique userId
+            let userId;
+            let isUnique = false;
+            let attempts = 0;
+            const maxAttempts = 5;
+
+            while (!isUnique && attempts < maxAttempts) {
+                userId = generateUserId();
+                const existingUserId = await User.findOne({ userId });
+                if (!existingUserId) {
+                    isUnique = true;
+                }
+                attempts++;
+            }
+
+            if (!isUnique) {
+                console.error("Failed to generate unique userId after", maxAttempts, "attempts");
+                return NextResponse.json(
+                    { message: "Failed to generate unique user ID" },
+                    { status: 500 }
+                );
+            }
+            
             // Store verification code in user document
             const user = await User.create({
+                userId,
                 email: email.toLowerCase(),
                 verificationCode,
                 verificationCodeExpires: new Date(Date.now() + 60000), // 60 seconds from now
