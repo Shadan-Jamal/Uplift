@@ -193,9 +193,9 @@ export default function UserChat({ selectedFaculty }) {
               }`}
             >
               <p className="text-sm text-gray-900">{message.text}</p>
-              <p className="text-xs mt-1 text-gray-500">
+              {/* <p className="text-xs mt-1 text-gray-500">
                 {new Date(message.timestamp).toLocaleTimeString()}
-              </p>
+              </p> */}
             </div>
           </motion.div>
         ))}

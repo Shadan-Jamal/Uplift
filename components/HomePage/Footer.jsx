@@ -68,6 +68,8 @@ export default function Footer() {
               </motion.button>
             </form>
           </div>
+
+          
         </div>
 
         {/* Bottom Bar */}

@@ -1,5 +1,3 @@
-// https://www.embla-carousel.com/examples/predefined/#parallax
-
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -86,7 +84,7 @@ export default function Events() {
                   src={events_data[currentIndex].src}
                   alt={events_data[currentIndex].description}
                   fill
-                  className="object-contain rounded-lg shadow-2xl"
+                  className="object-contain rounded-lg shadow-2xl bg-blend-color-burn"
                   priority
                 />
               </div>
