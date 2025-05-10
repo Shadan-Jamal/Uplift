@@ -31,13 +31,13 @@ export default function Faculty() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <div className="bg-[#eba1c2]/30 backdrop-blur-md rounded-xl overflow-hidden hover:bg-[#ffbef6] transition-all duration-300">
-              <div className="relative h-64 w-full">
+            <div className="bg-[#eba1c2]/30 backdrop-blur-md rounded-xl overflow-hidden hover:bg-[#ffbef6] transition-all duration-300 w-10/12 md:w-full mx-auto ">
+              <div className="relative h-64 w-full rounded-2xl">
                 <Image
                   src={member.image}
                   alt={member.name}
                   fill
-                  className="object-contain"
+                  className="object-contain "
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>

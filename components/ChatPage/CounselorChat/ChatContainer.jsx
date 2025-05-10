@@ -6,14 +6,22 @@ import UserChat from './UserChat';
 
 export default function ChatContainer() {
   const [selectedStudent, setSelectedStudent] = useState(null);
-  console.log(selectedStudent)
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
   return (
     <div className="flex h-[100dvh]">
       <UsersSideBar
         selectedStudent={selectedStudent}
         onSelectStudent={setSelectedStudent}
+        isSideBarOpen={isSideBarOpen}
+        setIsSideBarOpen={setIsSideBarOpen}
       />
-      <UserChat selectedStudent={selectedStudent} />
+      
+      <UserChat 
+        selectedStudent={selectedStudent} 
+        isSideBarOpen={isSideBarOpen}
+        setIsSideBarOpen={setIsSideBarOpen}
+      />
     </div>
   );
 } 

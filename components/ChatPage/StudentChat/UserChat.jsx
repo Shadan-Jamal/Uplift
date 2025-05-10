@@ -7,13 +7,17 @@ import { io } from 'socket.io-client';
 import { useSession } from 'next-auth/react';
 import SOCKET_URL from "../../../lib/config.js"
 
-export default function UserChat({ selectedFaculty }) {
+export default function UserChat({ 
+  selectedFaculty, 
+  isSideBarOpen
+}) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const { data: session } = useSession();
+  const [isFacultyOnline, setIsFacultyOnline] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -74,6 +78,12 @@ export default function UserChat({ selectedFaculty }) {
         userType: 'student'
       });
     }
+
+    // Listen for faculty status changes
+    newSocket.on('counselor_status_change', (onlineFacultyIds) => {
+      console.log('Received faculty status change in chat:', onlineFacultyIds);
+      setIsFacultyOnline(onlineFacultyIds.includes(selectedFaculty.email));
+    });
 
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
@@ -141,10 +151,10 @@ export default function UserChat({ selectedFaculty }) {
       console.error('Error sending message:', error);
     }
   };
-  console.log("Messages in student chat", messages)
+  
   if (!selectedFaculty) {
     return (
-      <div className="w-3/4 h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
+      <div className={`w-full md:w-3/4 h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
         <p className="text-gray-500 text-lg">Select a faculty member to start chatting</p>
       </div>
     );
@@ -152,27 +162,32 @@ export default function UserChat({ selectedFaculty }) {
 
   if (loading) {
     return (
-      <div className="w-3/4 h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
+      <div className={`w-full md:w-3/4 h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#a8738b]"></div>
       </div>
     );
   }
 
   return (
-    <div className="w-3/4 h-full flex flex-col bg-white/90 backdrop-blur-3xl">
+    <div className={`w-full md:w-3/4 h-full flex flex-col ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl relative`}>
       {/* Chat Header */}
       <div className="p-4 border-b border-[#a8738b]/20 flex items-center gap-3">
-        <div className="relative w-12 h-12 rounded-full overflow-hidden">
-          <Image
-            src={selectedFaculty.image}
-            alt={selectedFaculty.name}
-            fill
-            className="object-cover"
-          />
+        <div className="relative">
+          <div className="relative w-12 h-12 rounded-full overflow-hidden">
+            <Image
+              src={selectedFaculty.image}
+              alt={selectedFaculty.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {isFacultyOnline && (
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+          )}
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">{selectedFaculty.name}</h3>
-          <p className="text-sm text-gray-500">{selectedFaculty.email}</p>
+          <p className="text-sm text-gray-500">{isFacultyOnline ? 'Online' : 'Offline'}</p>
         </div>
       </div>
 
@@ -213,6 +228,7 @@ export default function UserChat({ selectedFaculty }) {
             className="flex-1 p-2 rounded-lg border text-gray-900 placeholder:text-gray-500 border-[#a8738b]/20 focus:outline-none focus:border-[#a8738b]"
           />
           <motion.button
+            onClick={handleSendMessage}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"

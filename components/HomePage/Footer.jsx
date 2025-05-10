@@ -14,7 +14,7 @@ export default function Footer() {
   return (
     <footer id="contact" className="bg-gray-900 text-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
           {/* College Address Section */}
           <div className="space-y-4">
             <div className="flex justify-start items-center gap-2">
@@ -27,9 +27,9 @@ export default function Footer() {
               <p className="text-gray-300">St. Claret College, Autonomous</p>
               <p className="text-gray-300">Department of Psychology</p>
               <p className="text-gray-300">
-                1st Floor, Main Building
+                1st Floor, Admin Block
               </p>
-              <p className="text-gray-300">Bangalore - 560013</p>
+              <p className="text-gray-300">Bengaluru - 560013</p>
             </div>
           </div>
 
@@ -39,13 +39,12 @@ export default function Footer() {
             <div className="space-y-2">
               <p className="text-gray-300">Department Head</p>
               <p className="text-gray-300">Ms. Angela Jean Mary E.</p>
-              <p className="text-gray-300">Phone No: +91 9986799828</p>
               <p className="text-gray-300">Email: angela@claretcollege.edu.in</p>
             </div>
           </div>
 
           {/* Query Form Section */}
-          <div className="space-y-4">
+          <div className="space-y-4 col-span-2 lg:col-span-1">
             <h3 className="text-xl font-semibold text-blue-400">Have a Query?</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

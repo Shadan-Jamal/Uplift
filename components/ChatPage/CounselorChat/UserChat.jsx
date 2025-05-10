@@ -6,14 +6,14 @@ import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
 import SOCKET_URL from '../../../lib/config.js';
 
-export default function UserChat({ selectedStudent }) {
+export default function UserChat({ selectedStudent, isSideBarOpen }) {
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const messagesEndRef = useRef(null);
-  console.log(selectedStudent)
+  const [isStudentOnline, setIsStudentOnline] = useState(false);
 
   useEffect(() => {
     if (!selectedStudent) return;
@@ -68,6 +68,13 @@ export default function UserChat({ selectedStudent }) {
         userType: 'counselor'
       });
     }
+    
+    // Listen for student status changes
+    newSocket.on('student_status_change', (onlineStudentIds) => {
+      console.log('Received student status change in chat:', onlineStudentIds);
+      console.log(selectedStudent.studentId, onlineStudentIds)
+      setIsStudentOnline(onlineStudentIds.includes(selectedStudent.studentId));
+    });
     
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
@@ -139,23 +146,38 @@ export default function UserChat({ selectedStudent }) {
   console.log("Messages in counselor chat", messages)
   if (!selectedStudent) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className={`w-full h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
         <p className="text-gray-500">Select a student to start chatting</p>
       </div>
     );
   }
   if (loading) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">
+      <div className={`w-full h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#a8738b]"></div>
       </div>
     );
   }
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
       {/* Chat header */}
       <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold text-black spacing">{selectedStudent.studentId}</h2>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-12 h-12 rounded-full bg-[#a8738b] flex items-center justify-center text-white font-semibold text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            {isStudentOnline && (
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+            )}
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-black spacing">{selectedStudent.studentId}</h2>
+            <p className="text-sm text-gray-500">{isStudentOnline ? 'Online' : 'Offline'}</p>
+          </div>
+        </div>
       </div>
 
       {/* Messages container */}
@@ -187,7 +209,7 @@ export default function UserChat({ selectedStudent }) {
       </div>
 
       {/* Message input */}
-      <form onSubmit={handleSendMessage} className="pl-4">
+      <form onSubmit={handleSendMessage} className="p-4">
         <div className="flex space-x-2">
           <input
             type="text"
