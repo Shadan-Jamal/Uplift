@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ScreeningModal from "./ScreeningModal";
+import Notification from './Notification';
 
 export default function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
@@ -158,6 +159,7 @@ export default function Navbar() {
 
                 {/* Auth Buttons */}
                 <div className="flex items-center space-x-4">
+                  {session && <Notification />}
                   {session ? (
                     <div className="relative">
                       <motion.button

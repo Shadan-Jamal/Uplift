@@ -106,54 +106,54 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent }) {
   // Desktop view
   if(typeof window !== 'undefined') {
     if(window.innerWidth > 800) {
-      return (
-        <div className="w-1/4 h-full flex flex-col bg-white/90 backdrop-blur-3xl">
-          <div className="p-4 border-b border-[#a8738b]/20">
-            <h2 className="text-lg font-semibold text-gray-900">Students</h2>
+  return (
+    <div className="w-1/4 h-full flex flex-col bg-white/90 backdrop-blur-3xl">
+      <div className="p-4 border-b border-[#a8738b]/20">
+        <h2 className="text-lg font-semibold text-gray-900">Students</h2>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {students.message ? (
+          <div className="p-4 text-center text-gray-500">
+            No students have sent messages yet
           </div>
-          <div className="flex-1 overflow-y-auto">
-            {students.message ? (
-              <div className="p-4 text-center text-gray-500">
-                No students have sent messages yet
-              </div>
-            ) : (
-              <div className="divide-y divide-[#a8738b]/20">
-                {students.map((student) => (
-                  <motion.div
-                    key={student.studentId}
-                    whileHover={{ backgroundColor: 'rgba(168, 115, 139, 0.1)' }}
-                    className={`p-4 cursor-pointer ${
-                      selectedStudent?.studentId === student.studentId
-                        ? 'bg-[#a8738b]/20'
-                        : ''
-                    } flex items-center justify-between gap-4`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    onClick={() => onSelectStudent(student)}
-                  >
+        ) : (
+          <div className="divide-y divide-[#a8738b]/20">
+            {students.map((student) => (
+              <motion.div
+                key={student.studentId}
+                whileHover={{ backgroundColor: 'rgba(168, 115, 139, 0.1)' }}
+                className={`p-4 cursor-pointer ${
+                  selectedStudent?.studentId === student.studentId
+                    ? 'bg-[#a8738b]/20'
+                    : ''
+                } flex items-center justify-between gap-4`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={() => onSelectStudent(student)}
+              >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-12 h-12 rounded-full bg-[#a8738b] flex items-center justify-center text-white font-semibold text-lg">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                          </svg>
+                <div className="w-12 h-12 rounded-full bg-[#a8738b] flex items-center justify-center text-white font-semibold text-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
                         </div>
                         {onlineStudents.has(student.studentId) && (
                           <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                         )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-md font-medium text-gray-900 truncate">
-                          {`${student.studentId}`}
-                        </h3>
-                      </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-md font-medium text-gray-900 truncate">
+                    {`${student.studentId}`}
+                  </h3>
+                </div>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+              </motion.div>
+            ))}
           </div>
-        </div>
+        )}
+      </div>
+    </div>
       );
     }
   }
