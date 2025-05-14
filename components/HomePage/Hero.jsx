@@ -51,10 +51,10 @@ export default function Hero() {
                 <div className="flex flex-col items-center gap-8">
                     {/* Logo and Title */}
                     <div className="relative flex items-center gap-6">
-                        <div className="relative w-24 h-24">
+                        <div className="relative w-32 h-32">
                             <Image 
-                                src="/cats12-Photoroom.png" 
-                                alt="Mental Health Support" 
+                                src="/care_logo.png" 
+                                alt="CARE Logo" 
                                 fill
                                 className="object-contain drop-shadow-lg"
                                 priority

@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ScreeningModal from "./ScreeningModal";
 import Notification from './Notification';
+import Image from "next/image";
 
 export default function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
@@ -52,7 +53,6 @@ export default function Navbar() {
   }, [session]);
   
   // Check if we're on the dashboard route
-  const isDashboardRoute = pathname?.startsWith('/counselor/dashboard');
   const isLoginRoute = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password';
 
   const handleLogout = async () => {
@@ -106,56 +106,103 @@ export default function Navbar() {
             <div className="container mx-auto px-4">
               <div className="flex items-center justify-between h-16">
                 {/* Logo */}
-                <Link href="/" className="text-2xl font-bold text-[#a8738b]">
-                  CARE
+                <Link href="/" className="flex items-center gap-2">
+                  <div className="relative w-8 h-8">
+                    <Image 
+                      src="/care_logo.png" 
+                      alt="CARE Logo" 
+                      fill 
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                  <span className="text-2xl font-bold text-[#a8738b]">CARE</span>
                 </Link>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center space-x-8">
-                {isDashboardRoute ? (
-                    <Link 
-                      href="/counselor/dashboard" 
-                      className="text-[#a8738b] hover:scale-125 hover:text-[#9d92f] font-medium transition-colors"
-                    >
-                      Dashboard
-                    </Link>
+                  {session?.user?.type === "counselor" ? (
+                    <>
+                      <Link 
+                        href="/counselor/dashboard" 
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/counselor/dashboard' ? 'font-bold' : ''
+                        }`}
+                      >
+                        Dashboard
+                      </Link>
+                      <Link 
+                        href="/counselor/dashboard/chat" 
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/counselor/dashboard/chat' ? 'font-bold' : ''
+                        }`}
+                      >
+                        Chat
+                      </Link>
+                      <Link 
+                        href="/counselor/dashboard/events" 
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/counselor/dashboard/events' ? 'font-bold' : ''
+                        }`}
+                      >
+                        Events
+                      </Link>
+                      <Link 
+                        href="/counselor/dashboard/events" 
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/counselor/dashboard/events' ? 'font-bold' : ''
+                        }`}
+                      >
+                        Affirmations
+                      </Link>
+                    </>
                   ) : (
                     <>
                       <Link 
                         href="/" 
-                        className="text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium"
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/' ? 'font-bold' : ''
+                        }`}
                       >
                         Home
                       </Link>
                       <Link 
                         href="/chat" 
-                        className="text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium"
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/chat' ? 'font-bold' : ''
+                        }`}
                       >
                         Chat
                       </Link>
                       <Link 
                         href="/about" 
-                        className="text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium"
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/about' ? 'font-bold' : ''
+                        }`}
                       >
                         About
                       </Link>
                       <Link 
                         href="/events" 
-                        className="text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium"
+                        className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                          pathname === '/events' ? 'font-bold' : ''
+                        }`}
                       >
                         Events
                       </Link>
                       {session?.user?.type === "student" && (
                         <Link 
                           href="/screening" 
-                          className="text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium"
+                          className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
+                            pathname === '/screening' ? 'font-bold' : ''
+                          }`}
                         >
                           Screening
                         </Link>
                       )}
-                  </>
-                )}
-              </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Auth Buttons */}
                 <div className="flex items-center space-x-4">
@@ -285,21 +332,57 @@ export default function Navbar() {
                 className="md:hidden bg-white border-t border-gray-100"
               >
                 <div className="container mx-auto px-4 py-4 space-y-4">
-                  {isDashboardRoute ? (
-                    <motion.div variants={menuItemVariants}>
-                      <Link 
-                        href="/counselor/dashboard" 
-                        className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
-                      >
-                        Dashboard
-                      </Link>
-                    </motion.div>
+                  {session?.user?.type === "counselor" ? (
+                    <>
+                      <motion.div variants={menuItemVariants}>
+                        <Link 
+                          href="/counselor/dashboard" 
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/counselor/dashboard' ? 'font-bold' : ''
+                          }`}
+                        >
+                          Dashboard
+                        </Link>
+                      </motion.div>
+                      <motion.div variants={menuItemVariants}>
+                        <Link 
+                          href="/counselor/dashboard/chat" 
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/counselor/dashboard/chat' ? 'font-bold' : ''
+                          }`}
+                        >
+                          Chat
+                        </Link>
+                      </motion.div>
+                      <motion.div variants={menuItemVariants}>
+                        <Link 
+                          href="/counselor/dashboard/events" 
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/counselor/dashboard/events' ? 'font-bold' : ''
+                          }`}
+                        >
+                          Events
+                        </Link>
+                      </motion.div>
+                      <motion.div variants={menuItemVariants}>
+                        <Link 
+                          href="/counselor/dashboard/affirmations" 
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/counselor/dashboard/affirmations' ? 'font-bold' : ''
+                          }`}
+                        >
+                          Affirmations
+                        </Link>
+                      </motion.div>
+                    </>
                   ) : (
                     <>
                       <motion.div variants={menuItemVariants}>
                         <Link 
                           href="/" 
-                          className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/' ? 'font-bold' : ''
+                          }`}
                         >
                           Home
                         </Link>
@@ -307,7 +390,9 @@ export default function Navbar() {
                       <motion.div variants={menuItemVariants}>
                         <Link 
                           href="/chat" 
-                          className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/chat' ? 'font-bold' : ''
+                          }`}
                         >
                           Chat
                         </Link>
@@ -315,7 +400,9 @@ export default function Navbar() {
                       <motion.div variants={menuItemVariants}>
                         <Link 
                           href="/about" 
-                          className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/about' ? 'font-bold' : ''
+                          }`}
                         >
                           About
                         </Link>
@@ -323,7 +410,9 @@ export default function Navbar() {
                       <motion.div variants={menuItemVariants}>
                         <Link 
                           href="/events" 
-                          className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
+                          className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                            pathname === '/events' ? 'font-bold' : ''
+                          }`}
                         >
                           Events
                         </Link>
@@ -332,7 +421,9 @@ export default function Navbar() {
                         <motion.div variants={menuItemVariants}>
                           <Link 
                             href="/screening" 
-                            className="block text-[#a8738b] hover:text-[#9d92f] font-medium py-2"
+                            className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
+                              pathname === '/screening' ? 'font-bold' : ''
+                            }`}
                           >
                             Screening
                           </Link>
@@ -340,7 +431,7 @@ export default function Navbar() {
                       )}
                     </>
                   )}
-        </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

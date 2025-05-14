@@ -16,23 +16,36 @@ export default function AboutCollege() {
           className="flex flex-col items-center gap-12"
         >
           {/* Title Section */}
-          <div className="w-full max-w-4xl mx-auto text-center">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
-            >
-              About St. Claret College
-            </motion.h1>
-            <motion.div 
-              initial={{ width: 0 }}
-              whileInView={{ width: "100%" }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="h-1 bg-gradient-to-r from-[#a8738b] to-[#9d92f] mx-auto rounded-full"
-            />
+          <div className="w-full max-w-6xl mx-auto text-center flex flex-col md:flex-row md:items-center md:justify-center gap-4 mb-4">
+            <div className="flex justify-center md:justify-end md:w-[50%] md:mr-6 mb-2 md:mb-0">
+              <div className="relative w-24 h-24 md:w-full md:h-56">
+                <Image 
+                  src="/SCCLogo.jpeg" 
+                  alt="St. Claret College Logo"
+                  fill
+                  className="object-contain shadow-lg border-2 border-[#a8738b]/40"
+                  priority
+                />
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col justify-center items-center md:w-full md:items-start">
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-5xl md:w-full font-bold text-gray-900 mb-2 md:mb-0"
+              >
+                About St. Claret College
+              </motion.h1>
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="h-1 bg-gradient-to-r from-[#a8738b] to-[#9d92f] mx-auto rounded-full w-2/3 md:w-full"
+              />
+            </div>
           </div>
 
           {/* Content Section */}

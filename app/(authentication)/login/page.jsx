@@ -116,6 +116,15 @@ const StudentLogin = () => {
 
     return (
         <div className="flex flex-col items-center gap-6">
+            <div className="relative w-24 h-24 mb-2">
+                <Image 
+                    src="/care_logo.png" 
+                    alt="CARE Logo" 
+                    fill
+                    className="object-cover"
+                    priority
+                />
+            </div>
             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[#a8738b]">Login</h1>
             
             <div className="w-full space-y-6">
@@ -232,7 +241,16 @@ const CouncilLogin = () => {
     console.log(error)
     return (
         <div className="flex flex-col items-center gap-6">
-            <h1 className="text-3xl font-bold text-[#a8738b]">Login</h1>
+            <div className="relative w-24 h-24">
+                <Image 
+                    src="/care_logo.png" 
+                    alt="CARE Logo" 
+                    fill
+                    className="object-cover"
+                    priority
+                />
+            </div>
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[#a8738b]">Login</h1>
             
             <div className="w-full space-y-6">
                 <div className="space-y-2">

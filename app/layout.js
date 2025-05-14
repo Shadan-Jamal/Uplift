@@ -12,6 +12,10 @@ const onest = Onest({
 export const metadata = {
   title: "CARE",
   description: "Keep your spirits lifted!",
+  icons: {
+    icon: '/care_logo.png',
+    apple: '/care_logo.png',
+  },
 };
 
 export default function RootLayout({ children }) {
