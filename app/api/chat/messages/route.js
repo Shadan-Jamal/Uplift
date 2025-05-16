@@ -141,56 +141,56 @@ export async function POST(request) {
   }
 }
 
-export async function GET_ALL_FACULTY_FOR_STUDENT(request) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+// export async function GET_ALL_FACULTY_FOR_STUDENT(request) {
+//   try {
+//     const session = await getServerSession(authOptions);
+//     if (!session) {
+//       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+//     }
 
-    const { searchParams } = new URL(request.url);
-    let studentId = searchParams.get('studentId') || session.user.id;
-    if (!studentId) {
-      return NextResponse.json({ error: 'Student ID is required' }, { status: 400 });
-    }
+//     const { searchParams } = new URL(request.url);
+//     let studentId = searchParams.get('studentId') || session.user.id;
+//     if (!studentId) {
+//       return NextResponse.json({ error: 'Student ID is required' }, { status: 400 });
+//     }
 
-    await connectToDB();
+//     await connectToDB();
 
-    // Find all conversations for this student
-    const conversations = await Message.find({ studentId });
+//     // Find all conversations for this student
+//     const conversations = await Message.find({ studentId });
 
-    // Import faculty list
-    const { faculty } = await import('../../../../public/faculty/faculty.js');
+//     // Import faculty list
+//     const { faculty } = await import('../../../../public/faculty/faculty.js');
 
-    // Map faculty email to faculty details
-    const facultyMap = {};
-    faculty.forEach(f => { facultyMap[f.email] = f; });
+//     // Map faculty email to faculty details
+//     const facultyMap = {};
+//     faculty.forEach(f => { facultyMap[f.email] = f; });
 
-    // Format the response with conversation details
-    const facultyWithMessages = conversations.map(conv => {
-      const lastMessage = conv.conversation[conv.conversation.length - 1];
-      // Count unread messages (messages not read by the student)
-      const unreadCount = conv.conversation.filter(msg => 
-        msg.senderId === conv.facultyId && !msg.read
-      ).length || 0;
-      return {
-        facultyId: conv.facultyId,
-        lastMessageTime: conv.lastMessage,
-        lastMessage: lastMessage?.text || null,
-        unreadCount,
-        faculty: facultyMap[conv.facultyId] || null,
-        conversationId: conv._id
-      };
-    });
+//     // Format the response with conversation details
+//     const facultyWithMessages = conversations.map(conv => {
+//       const lastMessage = conv.conversation[conv.conversation.length - 1];
+//       // Count unread messages (messages not read by the student)
+//       const unreadCount = conv.conversation.filter(msg => 
+//         msg.senderId === conv.facultyId && !msg.read
+//       ).length || 0;
+//       return {
+//         facultyId: conv.facultyId,
+//         lastMessageTime: conv.lastMessage,
+//         lastMessage: lastMessage?.text || null,
+//         unreadCount,
+//         faculty: facultyMap[conv.facultyId] || null,
+//         conversationId: conv._id
+//       };
+//     });
 
-    // Sort by last message time
-    facultyWithMessages.sort((a, b) => 
-      new Date(b.lastMessageTime || 0) - new Date(a.lastMessageTime || 0)
-    );
+//     // Sort by last message time
+//     facultyWithMessages.sort((a, b) => 
+//       new Date(b.lastMessageTime || 0) - new Date(a.lastMessageTime || 0)
+//     );
 
-    return NextResponse.json(facultyWithMessages);
-  } catch (error) {
-    console.error('Error fetching faculty for student:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-} 
+//     return NextResponse.json(facultyWithMessages);
+//   } catch (error) {
+//     console.error('Error fetching faculty for student:', error);
+//     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+//   }
+// } 

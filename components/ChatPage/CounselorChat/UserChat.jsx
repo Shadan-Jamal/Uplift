@@ -113,7 +113,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
       studentId: selectedStudent.studentId,
       senderId: session.user.email,
       facultyId: session.user.email,
-      timestamp: new Date().toLocaleString({ hour: 'numeric', minute: 'numeric', hour12: true }),
+      timestamp: new Date().toISOString(),
       senderName: session.user.name || 'Counselor',
       receiverName: selectedStudent.studentName,
       senderType: 'counselor',
@@ -254,9 +254,14 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
               }`}
             >
               <p>{message.text}</p>
-              <p className="text-xs mt-1 opacity-70 text-right">
-                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
-              </p>
+              {/* <p className="text-xs mt-1 opacity-70 text-right">
+                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString('en-IN', { 
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                  timeZone: 'Asia/Kolkata'
+                }) : ''}
+              </p> */}
             </div>
           </motion.div>
         ))}

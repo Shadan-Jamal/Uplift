@@ -119,7 +119,7 @@ export default function UserChat({
       studentId: session.user.id,
       senderId: session.user.id,
       facultyId: selectedFaculty.email,
-      timestamp: new Date().toLocaleString({ hour: 'numeric', minute: 'numeric', hour12: true }),
+      timestamp: new Date().toISOString(),
       senderName: session.user.name || 'Student',
       receiverName: selectedFaculty.name,
       senderType: 'student',
@@ -208,9 +208,14 @@ export default function UserChat({
               }`}
             >
               <p className="text-sm text-gray-900">{message.text}</p>
-              <p className="text-xs mt-1 text-gray-500 text-right">
-                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
-              </p>
+               {/* <p className="text-xs mt-1 text-gray-500 text-right">
+                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString('en-IN', { 
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                  timeZone: 'Asia/Kolkata'
+                }) : ''}
+              </p> */}
             </div>
           </motion.div>
         ))}
