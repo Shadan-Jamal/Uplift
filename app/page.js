@@ -8,7 +8,7 @@ import FAQs from "../components/HomePage/FAQs";
 
 export default function Home() {
   return (
-    <section>
+    <section className="w-screen">
         <Hero />
         <AboutCollege />
         <Services />

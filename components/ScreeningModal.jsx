@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,12 @@ export default function ScreeningModal({ isOpen, onClose }) {
   }, [isOpen]);
 
   const handleTakeTest = () => {
+    // Close modal first
+    setShowModal(false);
+    onClose();
+    // Store in localStorage that user has seen the modal
+    localStorage.setItem("screeningModalShown", "true");
+    // Then redirect
     router.push("/screening");
   };
 

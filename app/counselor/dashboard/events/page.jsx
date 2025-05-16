@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import EventCard from '../../../../components/EventPage/EventCard';
 import EventForm from '../../../../components/EventPage/EventForm';
 import Modal from '../../../../components/EventPage/Modal';
@@ -70,16 +69,8 @@ export default function EventsPage() {
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
       <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
-            <Link href="/counselor/dashboard" className="text-[#a8738b] hover:text-[#9d92f] transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </Link>
-            <h1 className="text-3xl font-bold text-gray-800">Events Management</h1>
-          </div>
+        {/* Add Event Button */}
+        <div className="flex justify-end mb-8">
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors shadow-md"

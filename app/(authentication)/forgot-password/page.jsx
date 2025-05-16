@@ -211,7 +211,8 @@ export default function ForgotPasswordPage() {
                                             disabled={isLoading}
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
-                                            className={`w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                            className={`w-full py-3 bg-[#a8738b] text-white rounded-lg hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl 
+                                            ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                                         >
                                             {isLoading ? "Sending..." : "Send Verification Code"}
                                         </motion.button>

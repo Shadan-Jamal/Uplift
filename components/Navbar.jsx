@@ -16,6 +16,7 @@ export default function Navbar() {
   const [userData, setUserData] = useState(null);
   const [showScreeningModal, setShowScreeningModal] = useState(false);
   const { data: session } = useSession();
+  const [navbarPosition, setNavbarPosition] = useState(false);
   const pathname = usePathname();
 
   // Check if we should show the screening modal
@@ -54,6 +55,16 @@ export default function Navbar() {
   
   // Check if we're on the dashboard route
   const isLoginRoute = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password';
+
+  //Set Navbar to static position if under chat directory
+  // useEffect(() => {
+  //     if(pathname.includes("/chat")){
+  //       setNavbarPosition(true);
+  //     }
+  //     else{
+  //       setNavbarPosition(false);
+  //     }
+  // },[])
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
@@ -100,7 +111,7 @@ export default function Navbar() {
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed top-0 z-50 w-full"
+          className={`fixed top-0 z-50 w-[100dvw]`}
         >
           <div className="bg-white/90 backdrop-blur-sm shadow-lg">
             <div className="container mx-auto px-4">
@@ -123,14 +134,14 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center space-x-8">
                   {session?.user?.type === "counselor" ? (
                     <>
-                      <Link 
-                        href="/counselor/dashboard" 
+                    <Link 
+                      href="/counselor/dashboard" 
                         className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
                           pathname === '/counselor/dashboard' ? 'font-bold' : ''
                         }`}
-                      >
-                        Dashboard
-                      </Link>
+                    >
+                      Dashboard
+                    </Link>
                       <Link 
                         href="/counselor/dashboard/chat" 
                         className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
@@ -148,7 +159,7 @@ export default function Navbar() {
                         Events
                       </Link>
                       <Link 
-                        href="/counselor/dashboard/events" 
+                        href="/counselor/dashboard/affirmations" 
                         className={`text-[#a8738b] hover:scale-110 transition-all duration-200 ease-in-out hover:text-[#9d92f] font-medium ${
                           pathname === '/counselor/dashboard/events' ? 'font-bold' : ''
                         }`}
@@ -200,9 +211,9 @@ export default function Navbar() {
                           Screening
                         </Link>
                       )}
-                    </>
-                  )}
-                </div>
+                  </>
+                )}
+              </div>
 
                 {/* Auth Buttons */}
                 <div className="flex items-center space-x-4">
@@ -334,16 +345,16 @@ export default function Navbar() {
                 <div className="container mx-auto px-4 py-4 space-y-4">
                   {session?.user?.type === "counselor" ? (
                     <>
-                      <motion.div variants={menuItemVariants}>
-                        <Link 
-                          href="/counselor/dashboard" 
+                    <motion.div variants={menuItemVariants}>
+                      <Link 
+                        href="/counselor/dashboard" 
                           className={`block text-[#a8738b] hover:text-[#9d92f] font-medium py-2 ${
                             pathname === '/counselor/dashboard' ? 'font-bold' : ''
                           }`}
-                        >
-                          Dashboard
-                        </Link>
-                      </motion.div>
+                      >
+                        Dashboard
+                      </Link>
+                    </motion.div>
                       <motion.div variants={menuItemVariants}>
                         <Link 
                           href="/counselor/dashboard/chat" 

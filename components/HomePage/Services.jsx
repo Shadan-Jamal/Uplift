@@ -96,7 +96,7 @@ export default function Services() {
               <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border-2 border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300">
                 {/* Icon */}
                 <motion.div 
-                  className="absolute top-6 right-6 z-10"
+                  className="absolute bottom-5 right-5 z-10"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >

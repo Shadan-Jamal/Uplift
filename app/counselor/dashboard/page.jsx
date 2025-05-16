@@ -15,9 +15,10 @@ export default function CounselorDashboard() {
         {/* Header */}
         <div className="flex flex-col items-center gap-8">
           <div className="relative flex items-center gap-6">
-            <div className="relative w-24 h-24">
-              <Image 
-                src="/cats12-Photoroom.png" 
+            <div className="relative w-32 h-32 md:w-36 md:h-36 lg:w-44 lg:h-44">
+              <Image
+                quality={100}
+                src="/care_logo.png" 
                 alt="CARE Logo" 
                 fill
                 className="object-contain drop-shadow-lg"

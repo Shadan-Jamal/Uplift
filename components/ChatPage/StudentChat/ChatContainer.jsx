@@ -14,7 +14,7 @@ export default function ChatContainer() {
         isSideBarOpen={isSideBarOpen}
         setIsSideBarOpen={setIsSideBarOpen}
         selectedFaculty={selectedFaculty}
-        onSelectFaculty={setSelectedFaculty}
+        onSelectFaculty={facultyObj => setSelectedFaculty(facultyObj)}
         />
 
       <UserChat 

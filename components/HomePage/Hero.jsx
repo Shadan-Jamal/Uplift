@@ -98,21 +98,22 @@ export default function Hero() {
                             initial={{y : 100, opacity : 0}}
                             className="w-fit h-fit"
                             >
-                                <p className="text-2xl md:text-3xl lg:text-6xl text-purple-400 font-light">{term}</p>
+                                <p className="text-3xl md:text-3xl lg:text-6xl text-purple-400 font-light">{term}</p>
                             </motion.div>
                         })}
                     </div>
                     
                     {/* Department Badge */}
-                    <div className="flex flex-row items-center gap-4">
+                    <div className="flex flex-col md:flex-row items-center gap-7 md:gap-4 mx-4">
                         <motion.div 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3}}
                             className="px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full border-2 border-indigo-200 shadow-lg"
                         >
-                            <p className="text-md font-semibold text-indigo-900 tracking-wide">
-                                Department of Psychology • St. Claret College, Autonomous
+                            <p className="text-md font-semibold text-indigo-900 tracking-wide text-wrap">
+                                Department of Psychology 
+                                • St. Claret College, Autonomous
                             </p>
                         </motion.div>
 

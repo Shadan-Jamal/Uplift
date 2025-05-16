@@ -33,20 +33,15 @@ export default function page() {
     
     const getScoreColor = (score) => {
         if (score >= 1 && score <= 4) {
-            return {"label" : "Minimal", "color" : "bg-red-300"};
-
+            return {"label" : "Minimal", "color" : "bg-emerald-200"};
         } else if (score >= 5 && score <= 9) {
-            return {"label" : "Mild", "color" : "bg-red-400"};
-
+            return {"label" : "Mild", "color" : "bg-yellow-300"};
         } else if (score >= 10 && score <= 14) {
-            return {"label" : "Moderate", "color" : "bg-red-500/70"};
-
+            return {"label" : "Moderate", "color" : "bg-orange-400"};
         } else if (score >= 15 && score <= 19) {
-            return {"label" : "Moderately Severe", "color" : "bg-red-500"};
-
+            return {"label" : "Moderately Severe", "color" : "bg-red-400"};
         } else if (score >= 20 && score <= 27) {
             return {"label" : "Severe", "color" : "bg-red-600"};
-
         }
     }
 
@@ -161,7 +156,9 @@ export default function page() {
                 >
                     <h2 className="text-3xl font-bold text-[#86a4c2] mb-4">Your Score</h2>
                     <div className="text-6xl font-bold text-[#a8738b] mb-6">{scoreRef.current / 2}</div>
-                    <div className={`${getScoreColor(scoreRef.current / 2).color} px-5 py-3 rounded-lg text-white`}>{getScoreColor(scoreRef.current / 2).label}</div>
+                    <div className={`${getScoreColor(scoreRef.current / 2).color} px-5 py-3 rounded-lg text-white font-medium shadow-md`}>
+                        {getScoreColor(scoreRef.current / 2).label}
+                    </div>
                     <p className="text-lg text-gray-600 mt-4">
                         Redirecting to home page in {countdown} seconds...
                     </p>
@@ -171,7 +168,7 @@ export default function page() {
     }
     
     return (
-        <section className="min-h-screen w-full flex flex-col items-center justify-center py-12 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#e4f3ff] from-80% to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
+        <section className="min-h-screen w-full flex flex-col items-center justify-center py-20 px-4 bg-gradient-to-bl lg:bg-gradient-to-br from-[#e4f3ff] from-80% to-[#b18deb] backdrop-blur-3xl relative overflow-hidden">
             {/* Decorative background elements */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
             
@@ -188,10 +185,10 @@ export default function page() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-12"
                 >
-                    <h1 className="text-5xl font-bold text-[#6caafa] mb-4">
+                    <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-[#6caafa] mb-4">
                         Mental Health Analysis
                     </h1>
-                    <p className="text-xl text-[#a8738b] font-medium">Please read the statements and indicate how often have you been bothered by any of the following in the last 2 weeks:</p>
+                    <p className="text-lg md:text-xl text-[#a8738b] font-medium">Please read the statements and indicate how often have you been bothered by any of the following in the last 2 weeks:</p>
                 </motion.div>
 
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-6 border-2 border-[#a8738b] relative overflow-hidden">

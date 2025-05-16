@@ -45,8 +45,8 @@ export default function Events() {
   };
 
   return (
-    <div className="h-screen w-full relative overflow-hidden bg-gray-100">
-      <header className="text-3xl md:text-4xl lg:text-6xl w-full text-center py-4 text-black">
+    <div className="min-h-[50dvh] md:min-h-[90dvh] w-full relative overflow-hidden bg-gray-100">
+      <header className="text-4xl md:text-4xl lg:text-6xl w-full text-center py-4 text-black">
         <span className="text-purple-700">CARE</span> Events
       </header>
       <div className="absolute inset-0 flex items-center justify-center">
@@ -74,9 +74,9 @@ export default function Events() {
                 paginate(-1);
               }
             }}
-            className="absolute max-w-[75%] h-full flex items-center justify-center"
+            className="absolute min-w-[75%] h-full flex items-center justify-center"
           >
-            <div className="relative max-w-4xl mx-auto px-4">
+            <div className="relative min-w-96 md:min-w-4xl mx-auto px-4">
               <div className="relative aspect-[16/9] w-full">
                 <Image
                   quality={100}
@@ -87,23 +87,13 @@ export default function Events() {
                   priority
                 />
               </div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mt-4 text-center"
-              >
-                <p className="text-xl font-semibold text-gray-800">
-                  {events_data[currentIndex].description}
-                </p>
-              </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
       
       {/* Navigation Dots */}
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
+      <div className="absolute bottom-10 md:bottom-28 left-0 right-0 flex justify-center gap-2">
         {events_data.map((_, index) => (
           <button
             key={index}

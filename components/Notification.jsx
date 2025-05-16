@@ -132,10 +132,10 @@ export default function Notification() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+            className={`absolute -right-28 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50`}
           >
             <div className="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-900">Notifications</h3>
+              <h3 className="font-semibold text-gray-900 lg">Notifications</h3>
               <div className="flex gap-2">
                 <button
                   onClick={markAllAsRead}

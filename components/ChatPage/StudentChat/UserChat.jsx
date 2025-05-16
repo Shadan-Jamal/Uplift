@@ -169,7 +169,7 @@ export default function UserChat({
   }
 
   return (
-    <div className={`w-full md:w-3/4 h-full flex flex-col ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl relative`}>
+    <div className={`w-full md:w-3/4 h-screen flex flex-col ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl relative`}>
       {/* Chat Header */}
       <div className="p-4 border-b border-[#a8738b]/20 flex items-center gap-3">
         <div className="relative">
@@ -208,9 +208,9 @@ export default function UserChat({
               }`}
             >
               <p className="text-sm text-gray-900">{message.text}</p>
-              {/* <p className="text-xs mt-1 text-gray-500">
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </p> */}
+              <p className="text-xs mt-1 text-gray-500 text-right">
+                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
+              </p>
             </div>
           </motion.div>
         ))}

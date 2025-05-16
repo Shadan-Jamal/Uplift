@@ -6,9 +6,7 @@ export default function Footer() {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Query submitted:", query);
-    setQuery("");
+    
   };
 
   return (
@@ -36,10 +34,10 @@ export default function Footer() {
           {/* Contact Information Section */}
           <div className="space-y-4">
             <h3 className="text-xl font-semibold text-blue-400">Contact Us</h3>
-            <div className="space-y-2">
-              <p className="text-gray-300">Department Head</p>
+            <div className="space-y-2 ">
+              <p className="text-gray-300">Department Head:-</p>
               <p className="text-gray-300">Ms. Angela Jean Mary E.</p>
-              <p className="text-gray-300">Email: angela@claretcollege.edu.in</p>
+              <p className="text-gray-300">Email: angela@claretcollege<br/>.edu.in</p>
             </div>
           </div>
 

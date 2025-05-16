@@ -254,9 +254,9 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
               }`}
             >
               <p>{message.text}</p>
-              {/* <p className="text-xs mt-1 opacity-70">
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </p> */}
+              <p className="text-xs mt-1 opacity-70 text-right">
+                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}
+              </p>
             </div>
           </motion.div>
         ))}
