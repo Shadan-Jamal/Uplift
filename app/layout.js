@@ -1,9 +1,8 @@
 import { Onest } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import { AuthProvider } from "./Providers";
-
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const onest = Onest({
   variable : "--font-onest-sans",
