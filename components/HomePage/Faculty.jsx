@@ -5,6 +5,12 @@ import { faculty } from "../../public/faculty/faculty.js";
 import Image from "next/image";
 
 export default function Faculty() {
+  const technicalTeam = ["Mr. Shadan Jamal",
+    "Mr. Prem Kumar Choudhary",
+    "Mr. Ritesh Sanjay Kulkarni",
+    "Mr. Mohammad Parveez",
+    "Ms. Krishnapriya",
+  ]
   return (
     <section className="py-20 px-4 md:px-8 lg:px-16">
       {/* Header with animation */}
@@ -76,6 +82,34 @@ export default function Faculty() {
           </motion.div>
         ))}
       </div>
+
+      {/* Technical Team Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        className="mt-20 text-center"
+      >
+        <h3 className="text-3xl md:text-4xl font-bold text-[#a21caf] mb-6 tracking-tight drop-shadow-lg">
+          Technical Team
+        </h3>
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          {technicalTeam.map((name,idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className="bg-white shadow-lg rounded-xl px-8 py-4 min-w-[300px] text-lg font-semibold text-black hover:scale-105 hover:shadow-2xl transition-transform duration-300 cursor-pointer select-none"
+            >
+              {/* Replace 'Name' with actual names */}
+              {name}
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }
