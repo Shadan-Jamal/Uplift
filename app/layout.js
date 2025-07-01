@@ -1,4 +1,5 @@
 import { Onest } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import { AuthProvider } from "./Providers";
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
           </main>
         </AuthProvider>
       </body>
+      <GoogleAnalytics gaId="G-9NGW777J0V" />
     </html>
   );
 }
