@@ -16,7 +16,7 @@ export default function Notification() {
     if (!session) return;
 
     const socketUrl = SOCKET_URL.SOCKET_URL;
-    console.log('Connecting to socket for notifications:', socketUrl);
+    // console.log('Connecting to socket for notifications:', socketUrl);
     const socket = io(socketUrl, {
       cors: {
         origin: "*",
@@ -27,15 +27,15 @@ export default function Notification() {
 
     // Listen for new message notifications
     socket.on('new_message_notification', (data) => {
-      console.log('Received notification:', data);
-      console.log('Current session user:', session.user);
+      // console.log('Received notification:', data);
+      // console.log('Current session user:', session.user);
       
       // Determine the correct user identifier based on user type
       const currentUserId = session.user.type === 'counselor' ? session.user.email : session.user.id;
-      console.log('Checking notification for user:', currentUserId);
+      // console.log('Checking notification for user:', currentUserId);
       
       if (data.receiverId === currentUserId) {
-        console.log('Creating notification for user:', currentUserId);
+        // console.log('Creating notification for user:', currentUserId);
         const notification = {
           id: Date.now(),
           type: 'message',
@@ -48,16 +48,16 @@ export default function Notification() {
         setNotifications(prev => [notification, ...prev]);
         setUnreadCount(prev => prev + 1);
       } else {
-        console.log('Notification not for current user:', {
-          receiverId: data.receiverId,
-          currentUserId: currentUserId
-        });
+        // console.log('Notification not for current user:', {
+        //   receiverId: data.receiverId,
+        //   currentUserId: currentUserId
+        // });
       }
     });
 
     // Listen for new event notifications
     socket.on('new_event_notification', (data) => {
-      console.log('Received event notification:', data);
+      // console.log('Received event notification:', data);
       const notification = {
         id: Date.now(),
         type: 'event',
@@ -70,7 +70,7 @@ export default function Notification() {
     });
 
     return () => {
-      console.log('Disconnecting notification socket');
+      // console.log('Disconnecting notification socket');
       socket.disconnect();
     };
   }, [session]);
