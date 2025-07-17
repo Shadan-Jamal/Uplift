@@ -22,7 +22,6 @@ export default function UserChat({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  console.log(session?.user)
   // Fetch existing messages when a faculty is selected
   useEffect(() => {
     if (!selectedFaculty) return;
@@ -37,7 +36,6 @@ export default function UserChat({
         const response = await fetch(`/api/chat/messages?email=${selectedFaculty.email}`);
         if (response.ok) {
           const data = await response.json();
-          console.log('Fetched messages:', data);
           setMessages(Array.isArray(data) ? data : []);
         }
       } catch (error) {
@@ -54,8 +52,6 @@ export default function UserChat({
     // const socketUrl = "http://localhost:3001";
     const socketUrl = SOCKET_URL.SOCKET_URL;
 
-    console.log("Socket URL", SOCKET_URL)
-    console.log('Connecting to socket at:', SOCKET_URL);
     const newSocket = io(socketUrl, {
       cors: {
         origin: "*",
@@ -81,13 +77,13 @@ export default function UserChat({
 
     // Listen for faculty status changes
     newSocket.on('counselor_status_change', (onlineFacultyIds) => {
-      console.log('Received faculty status change in chat:', onlineFacultyIds);
+      // console.log('Received faculty status change in chat:', onlineFacultyIds);
       setIsFacultyOnline(onlineFacultyIds.includes(selectedFaculty.email));
     });
 
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
-      console.log("Received message:", message);
+      // console.log("Received message:", message);
       // Only add message if it's for the current conversation
       if (
         (message.studentId === session?.user?.id && message.facultyId === selectedFaculty?.email) ||

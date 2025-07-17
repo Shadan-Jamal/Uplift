@@ -67,7 +67,7 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent, isSideB
       reconnectionDelay: 1000,
       timeout: 10000,
     });
-    console.log('Connecting to socket at:', socketUrl);
+    // console.log('Connecting to socket at:', socketUrl);
     setSocket(newSocket);
 
     // Register user with socket
@@ -75,23 +75,23 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent, isSideB
       userId: session.user.email,
       userType: 'counselor'
     });
-    console.log("inside useEffect to check event ")
+    // console.log("inside useEffect to check event ")
     // Listen for student status changes
     newSocket.on('student_status_change', (onlineStudentIds) => {
-      console.log('Received student status change:', onlineStudentIds);
+      // console.log('Received student status change:', onlineStudentIds);
       setOnlineStudents(new Set(onlineStudentIds));
     });
 
     // Listen for new student messages
     newSocket.on('new_student_message', async (data) => {
-      console.log('Received new_student_message event:', data);
+      // console.log('Received new_student_message event:', data);
       if (data.facultyId === session.user.email) {
         try {
           setLoading(true);
           const response = await fetch(`/api/chat/students?email=${session.user.email}`);
           if (response.ok) {
             const updatedStudents = await response.json();
-            console.log('Updated students list:', updatedStudents);
+            // console.log('Updated students list:', updatedStudents);
             setStudents(updatedStudents);
             
             // Update unread count for the student who sent the message
@@ -184,7 +184,7 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent, isSideB
     };
   }, [socket, session]);
 
-  console.log("onlineStudents", onlineStudents)
+  // console.log("onlineStudents", onlineStudents)
   if (loading) {
     return (
       <div className="w-1/4 h-full flex items-center justify-center bg-white/90 backdrop-blur-3xl">

@@ -49,7 +49,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
     
     const socketUrl = SOCKET_URL.SOCKET_URL;
     
-    console.log('Connecting to socket at:', socketUrl);
+    // console.log('Connecting to socket at:', socketUrl);
     const newSocket = io(socketUrl, {
       cors: {
         origin: "*",
@@ -75,14 +75,14 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
     
     // Listen for student status changes
     newSocket.on('student_status_change', (onlineStudentIds) => {
-      console.log('Received student status change in chat:', onlineStudentIds);
-      console.log(selectedStudent.studentId, onlineStudentIds)
+      // console.log('Received student status change in chat:', onlineStudentIds);
+      // console.log(selectedStudent.studentId, onlineStudentIds)
       setIsStudentOnline(onlineStudentIds.includes(selectedStudent.studentId));
     });
     
     // Listen for incoming messages
     newSocket.on('receive_message', (message) => {
-      console.log("Received message:", message);
+      // console.log("Received message:", message);
       setMessages(prev => {
         const currentMessages = Array.isArray(prev) ? prev : [];
         if (
@@ -188,7 +188,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
     }
   };
 
-  console.log("Messages in counselor chat", messages)
+  // console.log("Messages in counselor chat", messages)
   if (!selectedStudent) {
     return (
       <div className={`w-full h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
