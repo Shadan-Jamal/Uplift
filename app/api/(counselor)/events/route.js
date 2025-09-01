@@ -55,8 +55,9 @@ export async function POST(request) {
 export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url);
+    console.log(searchParams)
     const id = searchParams.get('id');
-
+    console.log("id is" + id)
     if (!id) {
       return NextResponse.json(
         { error: 'Event ID is required' },
@@ -66,7 +67,7 @@ export async function DELETE(request) {
 
     await connectToDB();
     const event = await Event.findByIdAndDelete(id);
-
+    console.log("event is" + event)
     if (!event) {
       return NextResponse.json(
         { error: 'Event not found' },

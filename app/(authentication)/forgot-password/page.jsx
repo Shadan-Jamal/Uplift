@@ -23,24 +23,25 @@ export default function ForgotPasswordPage() {
     const router = useRouter();
 
     const handleEmailVerification = async () => {
+        console.log("RESETTING")
         try {
-            if (email === "") {
-                error.current = true;
-                setErrorState("Please enter your email");
-                return;
-            }
+            // if (email === "") {
+            //     error.current = true;
+            //     setErrorState("Please enter your email");
+            //     return;
+            // }
 
-            if (!email.includes('@')) {
-                error.current = true;
-                setErrorState("Invalid Email Format");
-                return;
-            }
+            // if (!email.includes('@')) {
+            //     error.current = true;
+            //     setErrorState("Invalid Email Format");
+            //     return;
+            // }
 
-            if (!email.includes("claretcollege.edu.in")) {
-                error.current = true;
-                setErrorState("Please use your college email");
-                return;
-            }
+            // if (!email.includes("claretcollege.edu.in")) {
+            //     error.current = true;
+            //     setErrorState("Please use your college email");
+            //     return;
+            // }
 
             setIsLoading(true);
             
@@ -70,7 +71,6 @@ export default function ForgotPasswordPage() {
         } catch (error) {
             setIsLoading(false);
             setErrorState("Email verification failed. Please try again.");
-            console.log(error);
         }
     };
 
@@ -157,7 +157,6 @@ export default function ForgotPasswordPage() {
         } catch (error) {
             setIsLoading(false);
             setErrorState("Password reset failed. Please try again.");
-            console.log(error);
         }
     };
 
@@ -196,7 +195,7 @@ export default function ForgotPasswordPage() {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 type="email" 
-                                                placeholder="Email" 
+                                                placeholder="College Email" 
                                                 className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
                                                     email ? "border-green-500" : "border-[#a8738b]"
                                                 }`}

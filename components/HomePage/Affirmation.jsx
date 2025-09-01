@@ -15,7 +15,6 @@ export default function Affirmation() {
                     throw new Error('Failed to fetch affirmations');
                 }
                 const data = await response.json();
-                console.log(data)
                 if (data.length > 0) {
                     const randomIndex = Math.floor(Math.random() * data.length);
                     setAffirmation(data[randomIndex].text);

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import EventCard from '../../../../components/EventPage/EventCard';
 import EventForm from '../../../../components/EventPage/EventForm';
 import Modal from '../../../../components/EventPage/Modal';

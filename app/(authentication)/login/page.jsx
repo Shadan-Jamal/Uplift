@@ -66,7 +66,7 @@ const StudentLogin = () => {
     const [error, setError] = useState(null)
     const router  = useRouter()
     const [isLoading, setIsLoading] = useState(false)  
-
+    const [showPW, setPW] = useState(false)
     const handleLogin = async () => {
         setError(null)
         if(!userData.email || !userData.password){
@@ -133,23 +133,32 @@ const StudentLogin = () => {
                         value={userData.email}
                         onChange={(e) => setUserData({...userData, email: e.target.value})}
                         type="email" 
-                        placeholder="Email" 
+                        placeholder="College Email" 
                         className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
                             userData.email ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
 
-                <div className="space-y-2">
+                <div className={`space-y-2 flex items-center gap-2 w-full border-b-2 text-[#a8738b] 
+                ${ userData.password ? "border-[#9d92f]" : "border-[#a8738b]"}`}>
                     <input 
                         value={userData.password}
                         onChange={(e) => setUserData({...userData , password : e.target.value})}
-                        type="password" 
+                        type={showPW ? "text" : "password"}
                         placeholder="Password" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
-                            userData.password ? "border-[#9d92f]" : "border-[#a8738b]"
+                        className={`w-full p-3 bg-transparent  placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 
                         }`}
                     />
+                    <button 
+                        className="hover:cursor-pointer"
+                        onClick={() => setPW(!showPW)}>
+                        {showPW ?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8738b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye-off"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                        : 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8738b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                        }
+                    </button>
                 </div>
 
                 <div className="flex justify-end">
@@ -191,7 +200,7 @@ const CouncilLogin = () => {
     const [error, setError] = useState(null);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-
+    const [showPW, setPW] = useState(false)
     const handleLogin = async () => {
         setError(null)
         if(!userData.email || !userData.password){
@@ -231,7 +240,6 @@ const CouncilLogin = () => {
             setError("Logged in successfully.");
             router.replace("/counselor/dashboard");
         } catch (error) {
-            console.error("Login error:", error);
             setError(error.message || "An unexpected error occurred");
         }
         finally {
@@ -258,23 +266,32 @@ const CouncilLogin = () => {
                         value={userData.email}
                         onChange={(e) => setUserData({...userData, email: e.target.value})}
                         type="email" 
-                        placeholder="Email" 
+                        placeholder="College Email" 
                         className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
                             userData.email ? "border-[#9d92f]" : "border-[#a8738b]"
                         }`}
                     />
                 </div>
 
-                <div className="space-y-2">
+                <div className={`space-y-2 flex items-center gap-2 w-full border-b-2 text-[#a8738b] 
+                ${ userData.password ? "border-[#9d92f]" : "border-[#a8738b]"}`}>
                     <input 
                         value={userData.password}
                         onChange={(e) => setUserData({...userData , password : e.target.value})}
-                        type="password" 
+                        type={showPW ? "text" : "password"}
                         placeholder="Password" 
-                        className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
-                            userData.password ? "border-[#9d92f]" : "border-[#a8738b]"
+                        className={`w-full p-3 bg-transparent  placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 
                         }`}
                     />
+                    <button 
+                        className="hover:cursor-pointer"
+                        onClick={() => setPW(!showPW)}>
+                        {showPW ?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8738b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye-off"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                        : 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a8738b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                        }
+                    </button>
                 </div>
 
                 <div className="flex justify-end">

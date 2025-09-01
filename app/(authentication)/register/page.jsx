@@ -236,7 +236,7 @@ export default function RegisterPage() {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 type="email" 
-                                                placeholder="Email" 
+                                                placeholder="College Email" 
                                                 className={`w-full p-3 bg-transparent border-b-2 text-[#a8738b] placeholder:text-[#a8738b]/50 focus:outline-none transition-all duration-300 ${
                                                     email ? "border-green-500" : "border-[#a8738b]"
                                                 }`}
