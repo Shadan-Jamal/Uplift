@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
 import SOCKET_URL from '../../../lib/config.js';
+import ChatMessage from '../ChatMessage.jsx';
 
 export default function UserChat({ selectedStudent, isSideBarOpen }) {
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
         const response = await fetch(`/api/chat/messages?userId=${selectedStudent.studentId}`);
         if (response.ok) {
           const data = await response.json();
+          console.log(data)
           setMessages(Array.isArray(data) ? data : []);
         }
       } catch (error) {
@@ -204,7 +206,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
     );
   }
   return (
-    <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
+    <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl pe-3`}>
       {/* Chat header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">
@@ -228,7 +230,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowReportModal(true)}
-            className="px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            className="cursor-pointer px-4 py-2 text-red-500 hover:bg-red-500/20 rounded-lg transition-colors"
           >
             Report
           </motion.button>
@@ -237,33 +239,11 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
 
       {/* Messages container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`flex ${
-              message.senderId === session?.user?.email ? 'justify-end' : 'justify-start'
-            }`}
-          >
-            <div
-              className={`max-w-[70%] rounded-lg p-3 ${
-                message.senderId === session?.user?.email
-                  ? 'bg-[#eba1c2]/30 text-gray-900'
-                  : 'bg-gray-100 text-gray-800'
-              }`}
-            >
-              <p>{message.text}</p>
-              {/* <p className="text-xs mt-1 opacity-70 text-right">
-                {message.timestamp ? new Date(message.timestamp).toLocaleTimeString('en-IN', { 
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: true,
-                  timeZone: 'Asia/Kolkata'
-                }) : ''}
-              </p> */}
-            </div>
-          </motion.div>
+        { messages.map((message, index) => (
+          <ChatMessage
+          key={index} 
+          {...message} 
+          />
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -345,7 +325,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
                         setReportReason('');
                         setReportStatus(null);
                       }}
-                      className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="cursor-pointer px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       disabled={reporting}
                     >
                       Cancel
@@ -355,7 +335,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
                       whileTap={{ scale: 0.98 }}
                       type="submit"
                       disabled={reporting}
-                      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                      className="cursor-pointer px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
                     >
                       {reporting ? 'Sending...' : 'Send Report'}
                     </motion.button>
