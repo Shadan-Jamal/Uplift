@@ -206,7 +206,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
     );
   }
   return (
-    <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl pe-3`}>
+    <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl pt-3 pe-3`}>
       {/* Chat header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between">

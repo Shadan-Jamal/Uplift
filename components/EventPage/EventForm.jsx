@@ -120,7 +120,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       onSubmit={handleSubmit}
-      className="space-y-4 min-w-[400px] max-w-lg mx-auto"
+      className="space-y-4 min-w-[120px] max-w-lg w-full mx-auto sm:min-w-[400px] px-2 sm:px-0 "
     >
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -133,7 +133,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.title}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
           placeholder="Enter event title"
         />
       </div>
@@ -149,7 +149,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           onChange={handleChange}
           required
           rows={3}
-          className="w-full px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
           placeholder="Enter event description"
         />
       </div>
@@ -165,7 +165,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.venue}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
           placeholder="Enter event venue"
         />
       </div>
@@ -181,7 +181,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.date}
           onChange={handleChange}
           required
-          className="w-full px-4 py-2 border text-black border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 border text-black border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
         />
       </div>
 
@@ -195,7 +195,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           name="image"
           accept="image/*"
           onChange={handleImageChange}
-          className="w-full px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
         />
         <p className="text-xs text-gray-500 mt-1">
           Accepted formats: JPEG, PNG, GIF. Max size: 5MB
@@ -223,13 +223,13 @@ const EventForm = ({ onClose, onEventAdded }) => {
         <div className="text-red-500 text-sm">{error}</div>
       )}
       
-      <div className="flex justify-end gap-3 pt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={onClose}
-          className="px-4 py-2 border border-[#a8738b]/20 rounded-lg text-[#a8738b] hover:bg-[#a8738b]/10 transition-colors"
+          className="px-4 py-2 border border-[#a8738b]/20 rounded-lg text-[#a8738b] hover:bg-[#a8738b]/10 transition-colors w-full sm:w-auto"
         >
           Cancel
         </motion.button>
@@ -238,7 +238,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors disabled:opacity-50 w-full sm:w-auto"
         >
           {loading ? 'Adding...' : 'Add Event'}
         </motion.button>

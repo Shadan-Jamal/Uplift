@@ -206,7 +206,7 @@ export default function AffirmationsPage() {
                       value={newAffirmation}
                       onChange={(e) => setNewAffirmation(e.target.value)}
                       placeholder="Enter a new affirmation..."
-                      className="flex-1 px-4 py-2 border border-gray-200 text-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent"
+                      className="min-w-[4em] flex-1 px-4 py-2 border border-gray-200 text-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent"
                     />
                     <button
                       type="submit"
