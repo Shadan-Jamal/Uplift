@@ -88,7 +88,6 @@ const EventForm = ({ onClose, onEventAdded }) => {
       }
 
       const data = await response.json();
-      console.log(data)
       // Reset form and close modal
       setFormData({
         title: '',
