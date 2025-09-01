@@ -16,7 +16,6 @@ export default function Notification() {
     if (!session) return;
 
     const socketUrl = SOCKET_URL.SOCKET_URL;
-    // console.log('Connecting to socket for notifications:', socketUrl);
     const socket = io(socketUrl, {
       cors: {
         origin: "*",
@@ -27,15 +26,11 @@ export default function Notification() {
 
     // Listen for new message notifications
     socket.on('new_message_notification', (data) => {
-      // console.log('Received notification:', data);
-      // console.log('Current session user:', session.user);
       
       // Determine the correct user identifier based on user type
       const currentUserId = session.user.type === 'counselor' ? session.user.email : session.user.id;
-      // console.log('Checking notification for user:', currentUserId);
       
       if (data.receiverId === currentUserId) {
-        // console.log('Creating notification for user:', currentUserId);
         const notification = {
           id: Date.now(),
           type: 'message',
@@ -47,11 +42,6 @@ export default function Notification() {
         };
         setNotifications(prev => [notification, ...prev]);
         setUnreadCount(prev => prev + 1);
-      } else {
-        // console.log('Notification not for current user:', {
-        //   receiverId: data.receiverId,
-        //   currentUserId: currentUserId
-        // });
       }
     });
 
@@ -104,7 +94,7 @@ export default function Notification() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowNotifications(!showNotifications)}
-        className="relative p-2 text-[#a8738b] hover:text-[#9d92f] transition-colors"
+        className="cursor-pointer rounded-full bg-[#a8738b]/30 md:bg-transparent relative p-2 text-[#a8738b] hover:text-[#9d92f] transition-colors"
       >
         <svg
           className="w-6 h-6"

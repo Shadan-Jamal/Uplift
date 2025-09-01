@@ -224,7 +224,7 @@ export default function Navbar() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setShowProfile(!showProfile)}
-                        className="flex items-center justify-center w-10 h-10 rounded-full bg-[#a8738b] hover:bg-[#9d92f] transition-colors"
+                        className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-[#a8738b] hover:bg-[#9d92f] transition-colors"
                       >
                         <svg
                           className="w-6 h-6 text-white"

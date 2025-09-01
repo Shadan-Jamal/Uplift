@@ -151,7 +151,7 @@ export default function AffirmationsPage() {
     <section className="relative min-h-[100dvh] w-[100dvw] overflow-hidden bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb]">
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
-      <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
+      <div className="relative z-10 container mx-auto px-4 pt-20 pb-8">
         {/* View Mode Toggle */}
         <div className="flex justify-end gap-2 mb-8">
           <button
@@ -160,7 +160,7 @@ export default function AffirmationsPage() {
               setEditingAffirmation(null);
               setNewAffirmation('');
             }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`cursor-pointer hover:scale-105 ease-in-out px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               viewMode === 'add' 
                 ? 'bg-[#a8738b] text-white shadow-md' 
                 : 'bg-white text-[#a8738b] hover:bg-[#a8738b]/10'
@@ -174,7 +174,7 @@ export default function AffirmationsPage() {
               setEditingAffirmation(null);
               setNewAffirmation('');
             }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`cursor-pointer hover:scale-105 ease-in-out px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               viewMode === 'view' 
                 ? 'bg-[#a8738b] text-white shadow-md' 
                 : 'bg-white text-[#a8738b] hover:bg-[#a8738b]/10'
@@ -210,7 +210,7 @@ export default function AffirmationsPage() {
                     />
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors"
+                      className="hover:scale-105 ease-in-out cursor-pointer px-6 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors"
                     >
                       {editingAffirmation ? 'Update' : 'Add'}
                     </button>
@@ -256,7 +256,7 @@ export default function AffirmationsPage() {
                             <div className="flex gap-2 ml-4">
                               <button
                                 onClick={() => handleEditClick(affirmation)}
-                                className="text-[#a8738b] hover:text-[#9d92f] transition-colors"
+                                className="hover:cursor-pointer p-1 hover:bg-[#a8738b]/30 rounded-full ease-in-out duration-75 text-[#a8738b] hover:text-[#9d92f] transition-colors"
                                 aria-label="Edit affirmation"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +265,7 @@ export default function AffirmationsPage() {
                               </button>
                               <button
                                 onClick={() => handleDeleteAffirmation(affirmation._id)}
-                                className="text-red-500 hover:text-red-700 transition-colors"
+                                className="hover:cursor-pointer p-1 hover:bg-red-500/30 rounded-full text-red-500 hover:text-red-700 transition-colors"
                                 aria-label="Delete affirmation"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
