@@ -23,6 +23,14 @@ const eventSchema = new mongoose.Schema({
     poster: {
         type: String, // URL to the stored image
     },
+    image: {
+        type: String, // Base64 encoded image data
+        required: false
+    },
+    imageType: {
+        type: String, // MIME type of the image (e.g., 'image/jpeg', 'image/png')
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

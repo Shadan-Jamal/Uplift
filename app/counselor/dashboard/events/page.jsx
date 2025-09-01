@@ -5,6 +5,7 @@ import EventCard from '../../../../components/EventPage/EventCard';
 import EventForm from '../../../../components/EventPage/EventForm';
 import Modal from '../../../../components/EventPage/Modal';
 import { toast } from 'react-hot-toast';
+import {motion} from "motion/react"
 
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
@@ -47,7 +48,7 @@ export default function EventsPage() {
     }
 
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await fetch(`/api/events?id=${id}`, {
         method: 'DELETE',
       });
 
@@ -67,26 +68,26 @@ export default function EventsPage() {
     <section className="relative min-h-[100dvh] w-[100dvw] overflow-hidden bg-gradient-to-bl lg:bg-gradient-to-br from-[#eba1c2] via-[#f8fcff] to-[#b18deb]">
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
-      <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
+      <div className="relative z-10 container mx-auto px-4 pt-20 pb-8">
         {/* Add Event Button */}
         <div className="flex justify-end mb-8">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors shadow-md"
+            className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f]shadow-md  hover:scale-105 cursor-pointer transition-all ease-in-out"
           >
             Add New Event
           </button>
         </div>
 
         {/* Events List */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           {loading ? (
             <div className="bg-white rounded-lg p-8 text-center text-gray-500">
               Loading events...
             </div>
           ) : events.length === 0 ? (
             <div className="bg-white rounded-lg p-8 text-center text-gray-500">
-              No events found. Add your first event!
+              No events found.
             </div>
           ) : (
             <div className="space-y-4">
@@ -97,6 +98,8 @@ export default function EventsPage() {
                   description={event.description}
                   venue={event.venue}
                   date={event.date}
+                  image={event.image}
+                  imageType={event.imageType}
                   onDelete={() => handleDeleteEvent(event._id)}
                 />
               ))}

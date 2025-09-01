@@ -7,9 +7,12 @@ const EventForm = ({ onClose, onEventAdded }) => {
     description: '',
     venue: '',
     date: '',
+    image: null,
+    imageType: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
     console.log(e.target)
@@ -19,6 +22,51 @@ const EventForm = ({ onClose, onEventAdded }) => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB');
+        return;
+      }
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Convert to base64
+      const base64Reader = new FileReader();
+      base64Reader.onload = (e) => {
+        setFormData(prev => ({
+          ...prev,
+          image: e.target.result,
+          imageType: file.type
+        }));
+      };
+      base64Reader.readAsDataURL(file);
+      setError('');
+    }
+  };
+
+  const removeImage = () => {
+    setFormData(prev => ({
+      ...prev,
+      image: null,
+      imageType: ''
+    }));
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e) => {
@@ -40,14 +88,17 @@ const EventForm = ({ onClose, onEventAdded }) => {
       }
 
       const data = await response.json();
-      
+      console.log(data)
       // Reset form and close modal
       setFormData({
         title: '',
         description: '',
         venue: '',
         date: '',
+        image: null,
+        imageType: ''
       });
+      setImagePreview(null);
       
       // Notify parent component about the new event
       if (onEventAdded) {
@@ -64,7 +115,6 @@ const EventForm = ({ onClose, onEventAdded }) => {
       setLoading(false);
     }
   };
-
   return (
     <motion.form
       initial={{ opacity: 0, scale: 0.95 }}
@@ -135,6 +185,40 @@ const EventForm = ({ onClose, onEventAdded }) => {
           className="w-full px-4 py-2 border text-black border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
         />
       </div>
+
+      <div>
+        <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+          Event Image
+        </label>
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-full px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Accepted formats: JPEG, PNG, GIF. Max size: 5MB
+        </p>
+      </div>
+
+      {imagePreview && (
+        <div className="relative">
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="w-full h-32 object-cover rounded-lg border border-[#a8738b]/20"
+          />
+          <button
+            type="button"
+            onClick={removeImage}
+            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="text-red-500 text-sm">{error}</div>
