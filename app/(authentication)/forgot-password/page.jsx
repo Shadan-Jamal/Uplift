@@ -25,23 +25,23 @@ export default function ForgotPasswordPage() {
     const handleEmailVerification = async () => {
         console.log("RESETTING")
         try {
-            // if (email === "") {
-            //     error.current = true;
-            //     setErrorState("Please enter your email");
-            //     return;
-            // }
+            if (email === "") {
+                error.current = true;
+                setErrorState("Please enter your email");
+                return;
+            }
 
-            // if (!email.includes('@')) {
-            //     error.current = true;
-            //     setErrorState("Invalid Email Format");
-            //     return;
-            // }
+            if (!email.includes('@')) {
+                error.current = true;
+                setErrorState("Invalid Email Format");
+                return;
+            }
 
-            // if (!email.includes("claretcollege.edu.in")) {
-            //     error.current = true;
-            //     setErrorState("Please use your college email");
-            //     return;
-            // }
+            if (!email.includes("claretcollege.edu.in")) {
+                error.current = true;
+                setErrorState("Please use your college email");
+                return;
+            }
 
             setIsLoading(true);
             
