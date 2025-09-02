@@ -130,7 +130,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       onSubmit={handleSubmit}
-      className="space-y-2 md:space-y-4 mx-auto max-w-[20em] md:max-w-[30em] px-2 sm:px-0 "
+      className="space-y-2 md:space-y-4 mx-auto max-w-[20em] md:min-w-[30em] px-2 sm:px-0"
     >
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
