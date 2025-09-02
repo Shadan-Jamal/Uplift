@@ -211,12 +211,12 @@ const CouncilLogin = () => {
             setError("Password must be at least 6 characters long")
             return
         }
-        // if(!userData.email.includes("@") || 
-        // !userData.email.includes(".") || 
-        // !userData.email.includes("claretcollege.edu.in")){
-        //     setError("Please enter a valid email")
-        //     return
-        // }
+        if(!userData.email.includes("@") || 
+        !userData.email.includes(".") || 
+        !userData.email.includes("claretcollege.edu.in")){
+            setError("Please enter a valid email")
+            return
+        }
         if(userData.password.includes(" ")){
             setError("Password must not contain spaces")
             return
