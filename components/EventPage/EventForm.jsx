@@ -145,7 +145,11 @@ const EventForm = ({ onClose, onEventAdded }) => {
           required
           className="w-full px-3 md:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
           placeholder="Enter event title"
-        />
+        /> Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, dicta. Velit quis culpa ratione, saepe blanditiis delectus dicta quod possimus architecto repudiandae sit ipsam facere ex aspernatur, eveniet ea odio.
+        Mollitia, ut. Autem dolorum distinctio amet nulla necessitatibus sequi assumenda nam natus praesentium ducimus saepe pariatur nihil quos nobis delectus sit reprehenderit, architecto tempora odit nemo. Similique, eaque molestias? Possimus?
+        Dolore molestias facilis culpa saepe dolores fuga corporis esse est voluptatem reiciendis? Repellat minus a placeat iste nisi explicabo voluptate harum praesentium laboriosam pariatur. Id dolor excepturi eveniet sequi ipsam.
+        A consequuntur nulla qui error eveniet cupiditate nesciunt. Repudiandae deserunt accusamus corrupti enim, harum voluptatum cumque vitae ipsa molestiae reprehenderit tenetur nemo sed sapiente explicabo doloribus, provident exercitationem officia maiores.
+        Libero maiores similique, ullam doloribus, non recusandae aut esse nemo facilis commodi error minima incidunt necessitatibus vero rem? Quidem quae ipsa quas ea magnam beatae odit qui libero non harum.
       </div>
       
       <div>

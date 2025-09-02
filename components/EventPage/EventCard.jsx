@@ -16,7 +16,7 @@ const EventCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
-      className="w-fit max-h-[30em] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-5 md:p-6 mb-4 border border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300"
+      className="w-full max-h-[30em] overflow-auto bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-5 md:p-6 mb-4 border border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300"
     >
       <div className="flex flex-row gap-6 items-stretch">
         {/* Event Image on the left */}
