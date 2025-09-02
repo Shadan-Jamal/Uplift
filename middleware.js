@@ -8,6 +8,7 @@ const protectedRoutes = [
   '/counselor/dashboard/chat',
   '/counselor/dashboard/events',
   '/counselor/dashboard/affirmations',
+  '/counselor/dashboard/reports',
   '/screening',
   '/events'
 ];
@@ -18,6 +19,7 @@ const counselorRoutes = [
   '/counselor/dashboard/chat',
   '/counselor/dashboard/events',
   '/counselor/dashboard/affirmations',
+  '/counselor/dashboard/reports',
 ];
 
 // Define student-only routes

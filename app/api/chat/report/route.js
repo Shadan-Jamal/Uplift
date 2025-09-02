@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 import { connectToDB } from '../../../../lib/mongo';
 import User from '../../../../models/user';
+import Report from '../../../../models/report';
 import { sendReportEmail } from '../../../../lib/email';
 
 export async function POST(request) {
@@ -27,6 +28,16 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Student not found' }, { status: 404 });
     }
 
+    // Create and save the report
+    const report = new Report({
+      studentId: studentId,
+      studentEmail: student.email,
+      reportedBy: session.user.email,
+      reason: reason
+    });
+
+    await report.save();
+
     // Send email to counselor
     try {
       await sendReportEmail({
@@ -37,7 +48,8 @@ export async function POST(request) {
       });
 
       return NextResponse.json({
-        message: 'Report sent successfully via email',
+        message: 'Report submitted successfully',
+        reportId: report._id,
         details: {
           studentId,
           studentEmail: student.email,
@@ -46,10 +58,16 @@ export async function POST(request) {
       });
     } catch (emailError) {
       console.error('Error sending report email:', emailError);
+      // Even if email fails, the report is still saved in database
       return NextResponse.json({ 
-        error: 'Failed to send report email',
-        details: emailError.message 
-      }, { status: 500 });
+        message: 'Report saved but email notification failed',
+        reportId: report._id,
+        details: {
+          studentId,
+          studentEmail: student.email,
+          counselorEmail: session.user.email
+        }
+      });
     }
 
   } catch (error) {
