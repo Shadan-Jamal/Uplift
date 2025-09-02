@@ -150,8 +150,10 @@ export default function UserChat({
   
   if (!selectedFaculty) {
     return (
-      <div className={`w-full md:w-3/4 h-full flex items-center justify-center ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
-        <p className="text-gray-500 text-lg">Select a faculty member to start chatting</p>
+      <div className={`w-full md:w-3/4 h-full flex items-center justify-end ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl`}>
+        <p className="text-gray-500 text-lg w-[70%]">
+          Select a faculty member to start chatting
+        </p>
       </div>
     );
   }
@@ -204,14 +206,14 @@ export default function UserChat({
               }`}
             >
               <p className="text-sm text-gray-900">{message.text}</p>
-               {/* <p className="text-xs mt-1 text-gray-500 text-right">
+               <p className="text-xs mt-1 text-gray-500 text-right">
                 {message.timestamp ? new Date(message.timestamp).toLocaleTimeString('en-IN', { 
                   hour: 'numeric',
                   minute: '2-digit',
                   hour12: true,
                   timeZone: 'Asia/Kolkata'
                 }) : ''}
-              </p> */}
+              </p>
             </div>
           </motion.div>
         ))}

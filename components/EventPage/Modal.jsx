@@ -11,7 +11,7 @@ const Modal = ({ isOpen, onClose, children }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 mt-20 md:mt-10"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -28,7 +28,7 @@ const Modal = ({ isOpen, onClose, children }) => {
           >
             <button
               onClick={onClose}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              className="md:hover:bg-[#a8738b]/40 transition-all duration-150 ease-out cursor-pointer rounded-full p-1 absolute top-2 right-2 text-gray-500 hover:text-gray-900"
             >
               <svg
                 className="w-6 h-6"

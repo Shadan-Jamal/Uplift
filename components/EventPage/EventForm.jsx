@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
 
 const EventForm = ({ onClose, onEventAdded }) => {
   const [formData, setFormData] = useState({
@@ -13,11 +14,15 @@ const EventForm = ({ onClose, onEventAdded }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
+  const portalFileInputRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleChange = (e) => {
-    console.log(e.target)
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -25,38 +30,42 @@ const EventForm = ({ onClose, onEventAdded }) => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        setError('Please select a valid image file');
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Image size must be less than 5MB');
-        return;
-      }
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      
-      // Convert to base64
-      const base64Reader = new FileReader();
-      base64Reader.onload = (e) => {
-        setFormData(prev => ({
-          ...prev,
-          image: e.target.result,
-          imageType: file.type
-        }));
-      };
-      base64Reader.readAsDataURL(file);
+    console.log("Image selected")
+    const input = e.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+  
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      input.value = '';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size must be less than 5MB');
+      input.value = '';
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target.result; // base64 string
+      setImagePreview(dataUrl);
+      setFormData(prev => ({ ...prev, image: dataUrl, imageType: file.type }));
       setError('');
+      input.value = '';
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const openPicker = () => {
+    const input = portalFileInputRef.current;
+    if (!input) return;
+    // Ensure input is focusable and visible to the accessibility tree
+    input.tabIndex = -1;
+    try {
+      input.click();
+    } catch {
+      setTimeout(() => input.click(), 0);
     }
   };
 
@@ -114,13 +123,14 @@ const EventForm = ({ onClose, onEventAdded }) => {
       setLoading(false);
     }
   };
+
   return (
     <motion.form
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       onSubmit={handleSubmit}
-      className="space-y-4 min-w-[120px] max-w-lg w-full mx-auto sm:min-w-[400px] px-2 sm:px-0 "
+      className="space-y-2 md:space-y-4 mx-auto max-w-[20em] md:max-w-[30em] px-2 sm:px-0 "
     >
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -133,7 +143,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.title}
           onChange={handleChange}
           required
-          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 md:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
           placeholder="Enter event title"
         />
       </div>
@@ -149,7 +159,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           onChange={handleChange}
           required
           rows={3}
-          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
           placeholder="Enter event description"
         />
       </div>
@@ -165,7 +175,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.venue}
           onChange={handleChange}
           required
-          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
           placeholder="Enter event venue"
         />
       </div>
@@ -181,22 +191,40 @@ const EventForm = ({ onClose, onEventAdded }) => {
           value={formData.date}
           onChange={handleChange}
           required
-          className="w-full px-3 sm:px-4 py-2 border text-black border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
+          className="w-full px-3 sm:px-4 py-2 border text-black border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
         />
       </div>
 
       <div>
-        <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-          Event Image
-        </label>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50"
-        />
+        <button
+          type="button"
+          onClick={openPicker}
+          className="cursor-pointer px-3 sm:px-4 py-2 border border-[#a8738b]/20 rounded-lg text-[#a8738b]"
+          style={{ pointerEvents: 'auto' }}
+        >
+          Choose Image
+        </button>
+        {isMounted && createPortal(
+          <input
+            ref={portalFileInputRef}
+            type="file"
+            id="event-image-portal"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            // visually hidden; avoid display:none for mobile reliability
+            style={{
+              position: 'fixed',
+              top: '-10000px',
+              left: '-10000px',
+              width: '1px',
+              height: '1px',
+              opacity: 0,
+              pointerEvents: 'none'
+            }}
+          />,
+          document.body
+        )}
         <p className="text-xs text-gray-500 mt-1">
           Accepted formats: JPEG, PNG, GIF. Max size: 5MB
         </p>
@@ -223,13 +251,13 @@ const EventForm = ({ onClose, onEventAdded }) => {
         <div className="text-red-500 text-sm">{error}</div>
       )}
       
-      <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
+      <div className="flex flex-row lg:flex-col justify-end gap-3 pt-4">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={onClose}
-          className="px-4 py-2 border border-[#a8738b]/20 rounded-lg text-[#a8738b] hover:bg-[#a8738b]/10 transition-colors w-full sm:w-auto"
+          className="cursor-pointer px-4 py-2 border border-[#a8738b]/20 rounded-lg text-[#a8738b] hover:bg-[#a8738b]/10 transition-colors w-full sm:w-auto text-sm md:text-base"
         >
           Cancel
         </motion.button>
@@ -238,7 +266,7 @@ const EventForm = ({ onClose, onEventAdded }) => {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors disabled:opacity-50 w-full sm:w-auto"
+          className="cursor-pointer px-4 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors disabled:opacity-50 w-full sm:w-auto"
         >
           {loading ? 'Adding...' : 'Add Event'}
         </motion.button>

@@ -16,7 +16,7 @@ const EventCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
-      className="w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 mb-4 border border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300"
+      className="w-fit max-h-[30em] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-5 md:p-6 mb-4 border border-[#a8738b]/20 hover:border-[#a8738b]/40 transition-all duration-300"
     >
       <div className="flex flex-row gap-6 items-stretch">
         {/* Event Image on the left */}
@@ -31,10 +31,10 @@ const EventCard = ({
         )}
 
         {/* Event Details in a column */}
-        <div className="flex flex-col flex-1 gap-3 justify-between">
+        <div className="flex flex-col flex-wrap flex-1 gap-3 justify-between">
           {/* Title and Actions */}
           <div className="flex items-start justify-between gap-2">
-            <h3 className="md:text-xl lg:text-3xl font-semibold text-[#a8738b]">{title}</h3>
+            <h3 className="text-lg md:text-xl lg:text-3xl font-semibold text-[#a8738b]">{title}</h3>
             <div className="flex gap-2">
               {onEdit && (
                 <button
@@ -62,7 +62,9 @@ const EventCard = ({
           </div>
 
           {/* Description */}
-          <p className="text-gray-600 text-lg">{description}</p>
+          <p className="text-gray-600 text-sm md:text-lg text-balance ">
+            {description}
+          </p>
 
           {/* Date and Venue */}
           <div className="flex flex-row gap-6 text-sm text-gray-500 mt-2">
