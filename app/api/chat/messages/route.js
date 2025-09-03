@@ -143,13 +143,9 @@ export async function POST(request) {
 
 export async function PATCH(request){
   try{
-    const {senderId, text, editedMessage} = await request.json()
+    const {senderId, studentId, text, editedMessage} = await request.json()
     await connectToDB()
-    // Fix: correct typo, fix query, and update the message text in the conversation array
-    let userType = senderId.startsWith("SCC") ? "student" : "counselor";
-    const query = userType === "student"
-      ? { studentId: senderId }
-      : { facultyId: senderId };
+    const query = { facultyId: senderId, studentId: studentId };
 
     // Update the message text in the conversation array
     // Find the message with the given text and senderId, and update its text to editedMessage

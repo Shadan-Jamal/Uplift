@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
+import InputBox from '../InputBox.jsx';
 import SOCKET_URL from '../../../lib/config.js';
 import ChatMessage from '../ChatMessage.jsx';
 
@@ -241,7 +242,8 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         { messages.map((message, index) => (
           <ChatMessage
-          key={index} 
+          key={index}
+          studentId={selectedStudent.studentId} 
           {...message} 
           />
         ))}
@@ -249,26 +251,12 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
       </div>
 
       {/* Message input */}
-      <form onSubmit={handleSendMessage} className="p-4">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 p-2 rounded-lg border text-gray-900 placeholder:text-gray-500 border-[#a8738b]/20 focus:outline-none focus:border-[#a8738b]"
-          />
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            className="px-6 py-2 bg-[#a8738b] text-white rounded-lg hover:bg-[#9d92f] transition-colors duration-200"
-          >
-            Send
-          </motion.button>
-        </div>
-      </form>
-
+      <InputBox 
+      handleSendMessage={handleSendMessage}
+      newMessage={newMessage}
+      setNewMessage={setNewMessage}
+      />
+        
       {/* Report Modal */}
       <AnimatePresence>
         {showReportModal && (
