@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import { AuthProvider } from "./Providers";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics"
 
 const onest = Onest({
   variable : "--font-onest-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
             {children}
           </main>
         </AuthProvider>
+        <Analytics />
       </body>
       <GoogleAnalytics gaId="G-9NGW777J0V" />
     </html>
