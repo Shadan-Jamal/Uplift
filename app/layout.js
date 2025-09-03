@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import { AuthProvider } from "./Providers";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { Analytics } from "@vercel/analytics"
+import { Analytics } from "@vercel/analytics/next"
 
 const onest = Onest({
   variable : "--font-onest-sans",
