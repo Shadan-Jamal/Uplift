@@ -41,7 +41,7 @@ const ChatMessage = ({
                 : 'bg-gray-100 text-gray-800'
             }`}
                 >
-                <p className="w-fit text-justify h-auto text-sm md:text-base">
+                <p className="w-fit text-justify h-auto text-sm md:text-base select-none">
                     {text}
                 </p>
         
