@@ -84,7 +84,6 @@ export async function POST(request) {
     }
 
     await connectToDB();
-    console.log(session?.user)
     // Determine student and faculty IDs based on user types
     const studentId = session.user.type === 'student' ? session.user.id : receiverId;
     const facultyId = session.user.type === 'counselor' ? session.user.email : receiverId;
@@ -126,6 +125,7 @@ export async function POST(request) {
           conversation: {
             text,
             senderId : session.user.type === 'student' ? session.user.id : session.user.email,
+            edited: false,
             timestamp: new Date()
           }
         },
@@ -133,7 +133,7 @@ export async function POST(request) {
       },
       { upsert: true, new: true }
     );
-
+    console.log(conversation.conversation[conversation.conversation.length - 1])
     return NextResponse.json(conversation.conversation[conversation.conversation.length - 1]);
   } catch (error) {
     console.error('Error creating message:', error);
@@ -156,10 +156,10 @@ export async function PATCH(request){
         "conversation.senderId": senderId
       },
       {
-        $set: { "conversation.$.text": editedMessage }
+        $set: { "conversation.$.text": editedMessage, "conversation.$.edited": true }
       }
     );
-    return NextResponse.json("Message Edited")
+    return NextResponse.json({ message: "Message Edited", matched: update.matchedCount, modified: update.modifiedCount })
   }
   catch(err){
     console.error(err)

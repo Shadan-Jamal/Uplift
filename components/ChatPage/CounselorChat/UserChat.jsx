@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { io } from 'socket.io-client';
@@ -20,6 +20,11 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
   const [reportReason, setReportReason] = useState('');
   const [reporting, setReporting] = useState(false);
   const [reportStatus, setReportStatus] = useState(null);
+
+  // Single-edit state (WhatsApp-like)
+  const [editingState, setEditingState] = useState({ active: false, index: null, originalText: '', senderId: '' });
+  const [hoverEditIndex, setHoverEditIndex] = useState(null);
+  const autoHideTimerRef = useRef(null);
 
   useEffect(() => {
     if (!selectedStudent) return;
@@ -106,6 +111,69 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Edit controls
+  const startEditing = useCallback((index, text, senderId) => {
+    setEditingState({ active: true, index, originalText: text, senderId });
+    setNewMessage(text);
+  }, []);
+
+  const cancelEditing = useCallback(() => {
+    setEditingState({ active: false, index: null, originalText: '', senderId: '' });
+    setNewMessage('');
+  }, []);
+
+  const submitEditedMessage = useCallback(async () => {
+    // safeguard
+    if (!editingState.active || editingState.index == null) return;
+    const message = messages[editingState.index];
+    if (!message) return;
+    try {
+      const response = await fetch('/api/chat/messages', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          senderId: editingState.senderId,
+          studentId: selectedStudent.studentId,
+          text: editingState.originalText,
+          editedMessage: newMessage
+        })
+      });
+      if (response.ok) {
+        // Update local state
+        setMessages(prev => {
+          const next = Array.isArray(prev) ? [...prev] : [];
+          if (next[editingState.index]) {
+            next[editingState.index] = {
+              ...next[editingState.index],
+              text: newMessage,
+              edited: true,
+            };
+          }
+          return next;
+        });
+        cancelEditing();
+      }
+    } catch (e) {
+      console.error('Failed to update message', e);
+    }
+  }, [editingState, messages, newMessage, selectedStudent?.studentId, cancelEditing]);
+
+  // Show edit button controls (desktop hover OR mobile long press)
+  const showEditFor = useCallback((index) => {
+    setHoverEditIndex(index);
+  }, []);
+
+  const hideEditButton = useCallback(() => {
+    setHoverEditIndex(null);
+  }, []);
+
+  // Mobile auto-hide after long-press if not clicked
+  const showEditTemporarily = useCallback((index, timeoutMs = 1200) => {
+    setHoverEditIndex(index);
+    if (autoHideTimerRef.current) clearTimeout(autoHideTimerRef.current);
+    autoHideTimerRef.current = setTimeout(() => setHoverEditIndex(null), timeoutMs);
+  }, []);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -206,6 +274,7 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
       </div>
     );
   }
+
   return (
     <div className={`flex flex-col h-full w-full ${isSideBarOpen ? 'blur-xs bg-white/90' : 'bg-white/90'} backdrop-blur-3xl pt-3 pe-3`}>
       {/* Chat header */}
@@ -242,9 +311,18 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         { messages.map((message, index) => (
           <ChatMessage
-          key={index}
-          studentId={selectedStudent.studentId} 
-          {...message} 
+            key={index}
+            index={index}
+            studentId={selectedStudent.studentId}
+            senderId={message.senderId}
+            text={message.text}
+            timestamp={message.timestamp}
+            edited={message.edited}
+            showEdit={hoverEditIndex === index}
+            onHoverShow={() => showEditFor(index)}
+            onHoverHide={() => hideEditButton()}
+            onEditClick={() => startEditing(index, message.text, message.senderId)}
+            onLongPress={() => showEditTemporarily(index)}
           />
         ))}
         <div ref={messagesEndRef} />
@@ -252,9 +330,12 @@ export default function UserChat({ selectedStudent, isSideBarOpen }) {
 
       {/* Message input */}
       <InputBox 
-      handleSendMessage={handleSendMessage}
-      newMessage={newMessage}
-      setNewMessage={setNewMessage}
+        handleSendMessage={handleSendMessage}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        isEditing={editingState.active}
+        onCancelEdit={cancelEditing}
+        onSubmitEdit={submitEditedMessage}
       />
         
       {/* Report Modal */}

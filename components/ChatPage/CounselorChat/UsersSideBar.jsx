@@ -278,7 +278,7 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent, isSideB
           <div className="absolute left-0 top-0 bottom-0 w-full bg-white shadow-xl pt-16">
             <div className="h-full flex flex-col relative">
               {/* Toggle Button - Centered */}
-              <div className='absolute top-1/2 -right-12 transform -translate-y-1/2 h-24 w-12 bg-white flex items-center justify-center rounded-r-full shadow-lg'>
+              <div className='absolute top-1/2 -right-8 transform -translate-y-1/2 h-14 w-8 bg-white flex items-center justify-center rounded-r-full shadow-lg'>
                 {isSideBarOpen ? (
                   <motion.svg
                     onClick={() => setIsSideBarOpen(false)}
@@ -297,8 +297,8 @@ export default function UsersSideBar({ onSelectStudent, selectedStudent, isSideB
                   <motion.svg
                     onClick={() => setIsSideBarOpen(true)}
                     xmlns="http://www.w3.org/2000/svg" 
-                    width="32" 
-                    height="32" 
+                    width="27" 
+                    height="27" 
                     viewBox="0 0 24 24"
                     initial={{ rotate: 0 }}
                     animate={{ rotate: 180 }}
