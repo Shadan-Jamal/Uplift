@@ -48,10 +48,10 @@ export const faculty = [
         designation: "Assistant Professor",
     },
     //Testing purpose
-    {
-        name: "Mr. GUEST",
-        image: "/faculty/Saptarshee_Mazumdar_inner.jpg",
-        email: "frostshadowsj@gmail.com",
-        designation: "Assistant Professor",
-    },
+    // {
+    //     name: "Mr. GUEST",
+    //     image: "/faculty/Saptarshee_Mazumdar_inner.jpg",
+    //     email: "frostshadowsj@gmail.com",
+    //     designation: "Assistant Professor",
+    // },
 ]

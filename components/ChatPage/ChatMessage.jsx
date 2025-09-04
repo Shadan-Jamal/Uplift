@@ -52,7 +52,7 @@ const ChatMessage = ({
             session={session}
             /> 
             }
-              <p className="w-fit h-fit text-[10px] md:text-xs mt-1 opacity-70 text-left">
+              <p className="w-fit h-fit text-[10px] md:text-xs mt-1 opacity-70 text-left select-none">
                 {timestamp ? new Date(timestamp).toLocaleTimeString('en-US', { 
                     hour: 'numeric',
                     minute: '2-digit',
