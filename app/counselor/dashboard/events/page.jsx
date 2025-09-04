@@ -94,12 +94,14 @@ export default function EventsPage() {
               {events.map(event => (
                 <EventCard
                   key={event._id}
+                  id={event._id}
                   title={event.title}
                   description={event.description}
                   venue={event.venue}
                   date={event.date}
                   image={event.image}
                   imageType={event.imageType}
+                  link={event.link}
                   onDelete={() => handleDeleteEvent(event._id)}
                 />
               ))}

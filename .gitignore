@@ -23,7 +23,6 @@
 # misc
 .DS_Store
 *.pem
-public/faculty/faculty.js
 
 # debug
 npm-debug.log*
@@ -40,4 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/node_modules

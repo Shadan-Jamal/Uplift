@@ -9,7 +9,8 @@ const EventForm = ({ onClose, onEventAdded }) => {
     venue: '',
     date: '',
     image: null,
-    imageType: ''
+    imageType: '',
+    link: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -84,12 +85,17 @@ const EventForm = ({ onClose, onEventAdded }) => {
     setError('');
 
     try {
+      const links = [formData.link];
+      console.log({...formData, link: links})
       const response = await fetch('/api/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          link: links
+        }),
       });
 
       if (!response.ok) {
@@ -104,7 +110,8 @@ const EventForm = ({ onClose, onEventAdded }) => {
         venue: '',
         date: '',
         image: null,
-        imageType: ''
+        imageType: '',
+        link: ''
       });
       setImagePreview(null);
       
@@ -254,21 +261,20 @@ const EventForm = ({ onClose, onEventAdded }) => {
         <div className="text-red-500 text-sm">{error}</div>
       )}
 
-      //TODO - LINKS
-      {/* <div>
-        <label htmlFor="socialLinks" className="block text-sm font-medium text-gray-700 mb-1">
+      <div>
+        <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-1">
           Links <span className="text-xs text-[#a8738b]">(Optional)</span>
         </label>
         <input
           type="text"
-          id="links"
-          name="links"
-          value={formData.links || ""}
+          id="link"
+          name="link"
+          value={formData.link}
           onChange={handleChange}
           className="w-full px-3 sm:px-4 py-2 text-black border border-[#a8738b]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a8738b] focus:border-transparent bg-white/50 placeholder:text-sm md:placeholder:text-base text-sm md:text-lg"
-          placeholder="Add one or more links, separated by commas"
+          placeholder="Add a link"
         />
-      </div> */}
+      </div>
 
       <div className="flex flex-row lg:flex-col justify-end gap-3 pt-4">
         <motion.button

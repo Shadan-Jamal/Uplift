@@ -1,13 +1,16 @@
-import React from 'react';
+"use client";
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const EventCard = ({
+  id,
   title,
   description,
   venue,
   date,
   image,
   imageType,
+  link,
   onEdit,
   onDelete,
 }) => {
@@ -66,7 +69,7 @@ const EventCard = ({
             {description}
           </p>
 
-          {/* Date and Venue */}
+          {/* Date, Venue and Links */}
           <div className="flex flex-row gap-6 text-sm text-gray-500 mt-2">
             <div className="flex items-center">
               <svg className="w-4 h-4 mr-2 text-[#a8738b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,10 +84,73 @@ const EventCard = ({
               </svg>
               <span>{venue}</span>
             </div>
+            {link && (
+            <div className='w-full flex items-center gap-2'>
+              <div
+              className='flex items-center gap-2 w-full'
+              >
+
+                <span className='flex items-center flex-wrap'>
+                  {link.map(link => <a key={link} href={link} target='_blank' rel='noopener noreferrer' className='hover:underline text-xs cursor-pointer'>{link}</a>)
+                  }
+                  
+                </span>
+              </div>
+            </div>
+            )}
           </div>
         </div>
       </div>
     </motion.div>
+  );
+};
+
+const AddMoreLinks = () => {
+  const [showInput, setShowInput] = useState(false);
+  const [newLink, setNewLink] = useState('');
+  const handleAddLink = () => {
+    setShowInput(false);
+    setNewLink('');
+  };
+  const handleCancel = () => {
+    setShowInput(false);
+    setNewLink('');
+  };
+  return (
+    <div className='max-w-[10em] bg-red-600'>
+     {showInput ? <div className="flex items-center w-full">
+          <input
+            type="text"
+            className="w-auto h-6 text-xs border border-[#a8738b]/20 rounded-md focus:outline-none focus:border-[#a8738b] text-black bg-white/50 px-2"
+            placeholder="Enter link"
+            value={newLink}
+            onChange={(e) => setNewLink(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            className="cursor-pointer px-2 py-1 bg-[#a8738b] text-white rounded hover:bg-[#9d92f] text-xs transition-colors"
+            onClick={handleAddLink}
+          >
+            Add
+          </button>
+          <button
+            type="button"
+            className="cursor-pointer px-2 py-1 bg-[#a8738b] text-white rounded hover:bg-[#9d92f] text-xs transition-colors"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+        </div>
+       : (
+        <button
+      type="button"
+      className="cursor-pointer ml-2 px-2 py-1 hover:bg-[#a8738b] bg-[#a8738b]/50 text-white rounded text-xs transition-colors"
+      onClick={() => setShowInput(true)}
+    >
+      Add more links
+    </button>)}
+    </div>
   );
 };
 

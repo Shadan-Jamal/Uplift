@@ -20,7 +20,7 @@ export async function GET() {
 // POST new event
 export async function POST(request) {
   try {
-    const { title, description, venue, date, image, imageType } = await request.json();
+    const { title, description, venue, date, image, imageType, link } = await request.json();
     // Validate required fields
     if (!title || !description || !venue || !date) {
       return NextResponse.json(
@@ -51,14 +51,21 @@ export async function POST(request) {
     }
 
     await connectToDB();
-    const event = await Event.create({
-      title,
-      description,
-      venue,
-      date,
+
+    // Normalize incoming link(s) -> array of non-empty strings
+    const linksArray = Array.isArray(link)
+      ? link.filter(l => typeof l === 'string' && l.trim().length > 0).map(l => l.trim())
+      : (typeof link === 'string' && link.trim().length > 0 ? [link.trim()] : []);
+    const data = {
+      title: title,
+      description: description,
+      venue: venue,
+      date: date,
+      link: linksArray,
       image: image || null,
-      imageType: imageType || null,
-    });
+      imageType: imageType || null
+    }
+    const event = await Event.create(data);
 
     return NextResponse.json(
       { event },
@@ -73,6 +80,51 @@ export async function POST(request) {
   }
 }
 
+export async function PATCH(request) {
+  try {
+    const { id, link } = await request.json();
+    console.log(link)
+    await connectToDB();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Event ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Normalize to array for $each
+    const linksArray = Array.isArray(link)
+      ? link.filter(l => typeof l === 'string' && l.trim().length > 0).map(l => l.trim())
+      : (typeof link === 'string' && link.trim().length > 0 ? [link.trim()] : []);
+
+    if (linksArray.length === 0) {
+      return NextResponse.json(
+        { error: 'Link is empty' },
+        { status: 400 }
+      );
+    }
+
+    // Ensure we push as array and avoid duplicates if needed (can switch to $addToSet)
+    const event = await Event.findByIdAndUpdate(
+      id,
+      { $push: { link: { $each: linksArray } } },
+      { new: true }
+    );
+
+    return NextResponse.json(
+      { event },
+      { status: 200 }
+    );
+  }
+  catch (error) {
+    console.error('Error updating event:', error);
+    return NextResponse.json(
+      { error: 'Failed to update event' },
+      { status: 500 }
+    );
+  }
+}
 // DELETE event
 export async function DELETE(request) {
   try {
