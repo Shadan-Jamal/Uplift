@@ -31,6 +31,10 @@ const eventSchema = new mongoose.Schema({
         type: String, // MIME type of the image (e.g., 'image/jpeg', 'image/png')
         required: false
     },
+    link: {
+        type: [String],
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
